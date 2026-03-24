@@ -1,176 +1,249 @@
-interface ContactInfo {
-  email: string;
-  phone: string;
-  location: string;
-  linkedin: string;
-  github: string;
-}
-
 interface ExperienceEntry {
   title: string;
   company: string;
   period: string;
-  bullets: string[];
+  description: string;
 }
 
 interface EducationEntry {
   degree: string;
   institution: string;
   period: string;
+  description: string;
 }
 
-interface ResumeData {
+interface SkillGroup {
+  category: string;
+  items: string[];
+}
+
+interface SiteData {
   name: string;
   tagline: string;
-  contact: ContactInfo;
-  summary: string;
+  about: string[];
   experience: ExperienceEntry[];
-  skills: Record<string, string[]>;
   education: EducationEntry[];
+  skills: SkillGroup[];
+  contact: { email: string; linkedin: string; github: string };
 }
 
-const resume: ResumeData = {
+const data: SiteData = {
   name: "Eddie Cohanim",
   tagline: "Software Engineer",
-  contact: {
-    email: "eddie@example.com",
-    phone: "(555) 000-0000",
-    location: "New York, NY",
-    linkedin: "linkedin.com/in/eddiecohanim",
-    github: "github.com/ecoha",
-  },
-  summary:
-    "Software engineer with experience building full-stack web applications. " +
-    "Passionate about clean architecture, developer tooling, and AI-assisted development workflows.",
+  about: [
+    "I build full-stack web applications and care deeply about clean, maintainable code. I enjoy working at the intersection of good engineering and thoughtful product design.",
+    "When I am not coding, you can find me exploring new technologies, contributing to side projects, or thinking about how AI is changing the way software gets built.",
+  ],
   experience: [
     {
       title: "Software Engineer",
       company: "Company Name",
-      period: "Jan 2023 - Present",
-      bullets: [
-        "Built and maintained full-stack features using React, Node.js, and PostgreSQL.",
-        "Led migration of legacy REST endpoints to a typed GraphQL API, reducing client-side data over-fetching by 40%.",
-        "Collaborated with product and design to ship features on a two-week sprint cadence.",
-      ],
+      period: "2023 - Present",
+      description:
+        "Built and maintained full-stack features across a React and Node.js codebase. Led a migration from REST to a typed GraphQL API, improving data efficiency by 40%.",
     },
     {
       title: "Junior Developer",
       company: "Previous Company",
-      period: "Jun 2021 - Dec 2022",
-      bullets: [
-        "Developed reusable UI component library adopted across three internal products.",
-        "Automated deployment pipelines using GitHub Actions, cutting release time in half.",
-        "Wrote unit and integration tests, raising overall code coverage from 45% to 80%.",
-      ],
+      period: "2021 - 2022",
+      description:
+        "Developed a reusable component library used across three products. Automated CI/CD pipelines with GitHub Actions and increased test coverage from 45% to 80%.",
     },
   ],
-  skills: {
-    Languages: ["TypeScript", "JavaScript", "Python", "SQL"],
-    "Frameworks & Libraries": ["Next.js", "React", "Node.js", "Tailwind CSS"],
-    "Tools & Platforms": ["Git", "Docker", "Vercel", "AWS", "PostgreSQL"],
-  },
   education: [
     {
       degree: "B.S. Computer Science",
       institution: "University Name",
       period: "2017 - 2021",
+      description:
+        "Focused on algorithms, systems programming, and software engineering. Graduated with honors.",
     },
   ],
+  skills: [
+    { category: "Languages", items: ["TypeScript", "JavaScript", "Python", "SQL"] },
+    { category: "Frameworks", items: ["Next.js", "React", "Node.js", "Tailwind CSS"] },
+    { category: "Tools", items: ["Git", "Docker", "Vercel", "AWS", "PostgreSQL"] },
+  ],
+  contact: {
+    email: "eddie@example.com",
+    linkedin: "linkedin.com/in/eddiecohanim",
+    github: "github.com/ecoha",
+  },
 };
 
-function SectionHeading({ children }: { children: React.ReactNode }) {
+function NavBar() {
   return (
-    <h2 className="mb-3 border-b border-gray-300 pb-1 text-xs font-bold uppercase tracking-widest text-gray-500">
-      {children}
-    </h2>
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm border-b border-gray-100">
+      <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+        <span className="font-semibold text-gray-900 tracking-tight">EC</span>
+        <div className="flex gap-6 text-sm text-gray-600">
+          <a href="#about" className="hover:text-gray-900 transition-colors">About</a>
+          <a href="#experience" className="hover:text-gray-900 transition-colors">Experience</a>
+          <a href="#skills" className="hover:text-gray-900 transition-colors">Skills</a>
+          <a href="#education" className="hover:text-gray-900 transition-colors">Education</a>
+          <a href="#contact" className="hover:text-gray-900 transition-colors">Contact</a>
+        </div>
+      </div>
+    </nav>
   );
 }
 
-function ExperienceBlock({ entry }: { entry: ExperienceEntry }) {
+function Hero() {
   return (
-    <div className="mb-5">
-      <div className="flex items-baseline justify-between">
-        <div>
-          <span className="font-semibold text-gray-900">{entry.title}</span>
-          <span className="mx-2 text-gray-400">&mdash;</span>
-          <span className="text-gray-700">{entry.company}</span>
-        </div>
-        <span className="text-sm text-gray-500">{entry.period}</span>
+    <section className="flex min-h-screen flex-col items-center justify-center bg-white px-6 text-center">
+      <p className="mb-4 text-sm font-medium uppercase tracking-widest text-gray-400">
+        Hello, I am
+      </p>
+      <h1 className="text-6xl font-bold tracking-tight text-gray-900 sm:text-7xl md:text-8xl">
+        {data.name}
+      </h1>
+      <p className="mt-4 text-xl text-gray-500">{data.tagline}</p>
+      <div className="mt-10 flex gap-4">
+        <a
+          href="#about"
+          className="rounded-full bg-gray-900 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-gray-700"
+        >
+          Learn more
+        </a>
+        <a
+          href="#contact"
+          className="rounded-full border border-gray-300 px-6 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+        >
+          Get in touch
+        </a>
       </div>
-      <ul className="mt-2 space-y-1 pl-4">
-        {entry.bullets.map((bullet, i) => (
-          <li key={i} className="relative text-sm text-gray-700 before:absolute before:-left-4 before:content-['-']">
-            {bullet}
-          </li>
-        ))}
-      </ul>
+    </section>
+  );
+}
+
+function About() {
+  return (
+    <section id="about" className="bg-gray-50 px-6 py-24">
+      <div className="mx-auto max-w-3xl">
+        <h2 className="mb-8 text-3xl font-bold text-gray-900">About Me</h2>
+        <div className="space-y-4">
+          {data.about.map((paragraph, i) => (
+            <p key={i} className="text-lg leading-relaxed text-gray-600">
+              {paragraph}
+            </p>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ExperienceCard({ entry }: { entry: ExperienceEntry }) {
+  return (
+    <div className="relative border-l-2 border-gray-200 pl-8">
+      <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full border-2 border-gray-900 bg-white" />
+      <div className="mb-1 flex items-baseline gap-3">
+        <h3 className="text-lg font-semibold text-gray-900">{entry.title}</h3>
+        <span className="text-sm text-gray-400">{entry.period}</span>
+      </div>
+      <p className="mb-2 text-sm font-medium text-gray-500">{entry.company}</p>
+      <p className="text-gray-600 leading-relaxed">{entry.description}</p>
     </div>
   );
 }
 
-export default function ResumePage() {
+function Experience() {
   return (
-    <div className="min-h-screen bg-gray-100 py-10 px-4">
-      <div className="mx-auto max-w-3xl bg-white p-10 shadow-md">
-
-        {/* Header */}
-        <header className="mb-8 border-b border-gray-200 pb-6">
-          <h1 className="text-5xl font-bold tracking-tight text-gray-900">
-            {resume.name}
-          </h1>
-          <p className="mt-1 text-lg text-gray-500">{resume.tagline}</p>
-          <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm text-gray-600">
-            <span>{resume.contact.email}</span>
-            <span>{resume.contact.phone}</span>
-            <span>{resume.contact.location}</span>
-            <span>{resume.contact.linkedin}</span>
-            <span>{resume.contact.github}</span>
-          </div>
-        </header>
-
-        {/* Summary */}
-        <section className="mb-7">
-          <SectionHeading>Summary</SectionHeading>
-          <p className="text-sm leading-relaxed text-gray-700">{resume.summary}</p>
-        </section>
-
-        {/* Experience */}
-        <section className="mb-7">
-          <SectionHeading>Experience</SectionHeading>
-          {resume.experience.map((entry, i) => (
-            <ExperienceBlock key={i} entry={entry} />
+    <section id="experience" className="bg-white px-6 py-24">
+      <div className="mx-auto max-w-3xl">
+        <h2 className="mb-12 text-3xl font-bold text-gray-900">Experience</h2>
+        <div className="space-y-10">
+          {data.experience.map((entry, i) => (
+            <ExperienceCard key={i} entry={entry} />
           ))}
-        </section>
+        </div>
+      </div>
+    </section>
+  );
+}
 
-        {/* Skills */}
-        <section className="mb-7">
-          <SectionHeading>Skills</SectionHeading>
-          <div className="space-y-1">
-            {Object.entries(resume.skills).map(([category, items]) => (
-              <div key={category} className="flex gap-2 text-sm">
-                <span className="w-44 shrink-0 font-medium text-gray-800">{category}:</span>
-                <span className="text-gray-700">{items.join(", ")}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Education */}
-        <section>
-          <SectionHeading>Education</SectionHeading>
-          {resume.education.map((entry, i) => (
-            <div key={i} className="flex items-baseline justify-between">
-              <div>
-                <span className="font-semibold text-gray-900">{entry.degree}</span>
-                <span className="mx-2 text-gray-400">&mdash;</span>
-                <span className="text-gray-700">{entry.institution}</span>
-              </div>
-              <span className="text-sm text-gray-500">{entry.period}</span>
+function Skills() {
+  return (
+    <section id="skills" className="bg-gray-50 px-6 py-24">
+      <div className="mx-auto max-w-3xl">
+        <h2 className="mb-12 text-3xl font-bold text-gray-900">Skills</h2>
+        <div className="grid gap-8 sm:grid-cols-3">
+          {data.skills.map((group) => (
+            <div key={group.category}>
+              <h3 className="mb-4 text-xs font-bold uppercase tracking-widest text-gray-400">
+                {group.category}
+              </h3>
+              <ul className="space-y-2">
+                {group.items.map((item) => (
+                  <li key={item} className="text-gray-700">
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </div>
           ))}
-        </section>
-
+        </div>
       </div>
-    </div>
+    </section>
+  );
+}
+
+function Education() {
+  return (
+    <section id="education" className="bg-white px-6 py-24">
+      <div className="mx-auto max-w-3xl">
+        <h2 className="mb-12 text-3xl font-bold text-gray-900">Education</h2>
+        <div className="space-y-10">
+          {data.education.map((entry, i) => (
+            <div key={i} className="relative border-l-2 border-gray-200 pl-8">
+              <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full border-2 border-gray-900 bg-white" />
+              <div className="mb-1 flex items-baseline gap-3">
+                <h3 className="text-lg font-semibold text-gray-900">{entry.degree}</h3>
+                <span className="text-sm text-gray-400">{entry.period}</span>
+              </div>
+              <p className="mb-2 text-sm font-medium text-gray-500">{entry.institution}</p>
+              <p className="text-gray-600 leading-relaxed">{entry.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Contact() {
+  return (
+    <section id="contact" className="bg-gray-900 px-6 py-24 text-center">
+      <div className="mx-auto max-w-xl">
+        <h2 className="mb-4 text-3xl font-bold text-white">Get In Touch</h2>
+        <p className="mb-10 text-gray-400">
+          I am open to new opportunities. Whether you have a question or just want to say hi, my inbox is always open.
+        </p>
+        <a
+          href={`mailto:${data.contact.email}`}
+          className="inline-block rounded-full bg-white px-8 py-3 text-sm font-semibold text-gray-900 transition-colors hover:bg-gray-100"
+        >
+          {data.contact.email}
+        </a>
+        <div className="mt-8 flex justify-center gap-6 text-sm text-gray-500">
+          <span>{data.contact.linkedin}</span>
+          <span>{data.contact.github}</span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <>
+      <NavBar />
+      <Hero />
+      <About />
+      <Experience />
+      <Skills />
+      <Education />
+      <Contact />
+    </>
   );
 }
