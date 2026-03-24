@@ -78,15 +78,14 @@ function AboutContent() {
 
 function ExperienceContent() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-4">
       {data.experience.map((entry, i) => (
-        <div key={i} className="relative border-l-2 border-gray-200 dark:border-gray-700 pl-8">
-          <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full border-2 border-gray-900 dark:border-white bg-white dark:bg-gray-900" />
-          <div className="mb-1 flex items-baseline gap-3">
+        <div key={i} className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-5">
+          <div className="flex items-baseline justify-between mb-1">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{entry.title}</h3>
             <span className="text-sm text-gray-400 dark:text-gray-500">{entry.period}</span>
           </div>
-          <p className="mb-2 text-sm font-medium text-gray-500 dark:text-gray-400">{entry.company}</p>
+          <p className="mb-3 text-sm font-medium text-gray-500 dark:text-gray-400">{entry.company}</p>
           <ul className="space-y-1 list-disc list-inside">
             {entry.bullets.map((b, j) => (
               <li key={j} className="text-gray-600 dark:text-gray-300">{b}</li>
@@ -100,15 +99,14 @@ function ExperienceContent() {
 
 function EducationContent() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-4">
       {data.education.map((entry, i) => (
-        <div key={i} className="relative border-l-2 border-gray-200 dark:border-gray-700 pl-8">
-          <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full border-2 border-gray-900 dark:border-white bg-white dark:bg-gray-900" />
-          <div className="mb-1 flex items-baseline gap-3">
+        <div key={i} className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-5">
+          <div className="flex items-baseline justify-between mb-1">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{entry.degree}</h3>
             <span className="text-sm text-gray-400 dark:text-gray-500">{entry.period}</span>
           </div>
-          <p className="mb-2 text-sm font-medium text-gray-500 dark:text-gray-400">{entry.institution}</p>
+          <p className="mb-3 text-sm font-medium text-gray-500 dark:text-gray-400">{entry.institution}</p>
           {entry.honors.length > 0 && (
             <ul className="space-y-1 list-disc list-inside">
               {entry.honors.map((honor, j) => (
@@ -175,19 +173,17 @@ function RecommendationsContent() {
 
 function ContactContent() {
   return (
-    <div className="space-y-2">
-      <ul className="space-y-2 list-disc list-inside">
-        <li className="text-gray-600 dark:text-gray-300">
-          Email:{" "}
-          <a href={`mailto:${data.contact.email}`} className="underline hover:text-gray-900 dark:hover:text-white">
-            {data.contact.email}
-          </a>
-        </li>
-        <li className="text-gray-600 dark:text-gray-300">Phone: {data.contact.phone}</li>
-        <li className="text-gray-600 dark:text-gray-300">LinkedIn: {data.contact.linkedin}</li>
-        <li className="text-gray-600 dark:text-gray-300">GitHub: {data.contact.github}</li>
-      </ul>
-    </div>
+    <ul className="space-y-2 list-disc list-inside">
+      <li className="text-gray-600 dark:text-gray-300">
+        Email:{" "}
+        <a href={`mailto:${data.contact.email}`} className="underline hover:text-gray-900 dark:hover:text-white">
+          {data.contact.email}
+        </a>
+      </li>
+      <li className="text-gray-600 dark:text-gray-300">Phone: {data.contact.phone}</li>
+      <li className="text-gray-600 dark:text-gray-300">LinkedIn: {data.contact.linkedin}</li>
+      <li className="text-gray-600 dark:text-gray-300">GitHub: {data.contact.github}</li>
+    </ul>
   );
 }
 
@@ -208,16 +204,28 @@ const sections: SectionDef[] = [
   { id: "contact", label: "Contact", Content: ContactContent },
 ];
 
-function NavBar({ darkMode, onToggle }: { darkMode: boolean; onToggle: () => void }) {
+function NavBar({
+  darkMode,
+  onToggle,
+  onNavigate,
+}: {
+  darkMode: boolean;
+  onToggle: () => void;
+  onNavigate: (id: string) => void;
+}) {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-gray-100 dark:border-gray-800">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
         <span className="font-semibold text-gray-900 dark:text-white tracking-tight">EC</span>
         <div className="flex flex-wrap items-center gap-x-6 gap-y-1 text-sm text-gray-600 dark:text-gray-400">
           {sections.map((s) => (
-            <a key={s.id} href={`#${s.id}`} className="hover:text-gray-900 dark:hover:text-white transition-colors">
+            <button
+              key={s.id}
+              onClick={() => onNavigate(s.id)}
+              className="hover:text-gray-900 dark:hover:text-white transition-colors"
+            >
               {s.label}
-            </a>
+            </button>
           ))}
           <button
             onClick={onToggle}
@@ -231,7 +239,7 @@ function NavBar({ darkMode, onToggle }: { darkMode: boolean; onToggle: () => voi
   );
 }
 
-function Hero() {
+function Hero({ onNavigate }: { onNavigate: (id: string) => void }) {
   return (
     <section className="flex min-h-screen flex-col items-center justify-center bg-white dark:bg-gray-900 px-6 text-center">
       <p className="mb-4 text-sm font-medium uppercase tracking-widest text-gray-400 dark:text-gray-500">
@@ -242,18 +250,18 @@ function Hero() {
       </h1>
       <p className="mt-4 text-xl text-gray-500 dark:text-gray-400">{data.tagline}</p>
       <div className="mt-10 flex gap-4">
-        <a
-          href="#about"
+        <button
+          onClick={() => onNavigate("about")}
           className="rounded-full bg-gray-900 dark:bg-white px-6 py-3 text-sm font-medium text-white dark:text-gray-900 transition-colors hover:bg-gray-700 dark:hover:bg-gray-100"
         >
           Learn more
-        </a>
-        <a
-          href="#contact"
+        </button>
+        <button
+          onClick={() => onNavigate("contact")}
           className="rounded-full border border-gray-300 dark:border-gray-600 px-6 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800"
         >
           Get in touch
-        </a>
+        </button>
       </div>
     </section>
   );
@@ -261,7 +269,7 @@ function Hero() {
 
 export default function HomePage() {
   const [openSections, setOpenSections] = useState<Set<string>>(new Set());
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
 
   useEffect(() => {
     if (darkMode) {
@@ -283,10 +291,22 @@ export default function HomePage() {
     });
   }
 
+  function navigateToSection(id: string) {
+    setOpenSections((prev) => {
+      if (prev.has(id)) return prev;
+      const next = new Set(prev);
+      next.add(id);
+      return next;
+    });
+    setTimeout(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
+  }
+
   return (
     <div className="bg-white dark:bg-gray-900 min-h-screen">
-      <NavBar darkMode={darkMode} onToggle={() => setDarkMode((d) => !d)} />
-      <Hero />
+      <NavBar darkMode={darkMode} onToggle={() => setDarkMode((d) => !d)} onNavigate={navigateToSection} />
+      <Hero onNavigate={navigateToSection} />
       <div className="mx-auto max-w-3xl px-6 pb-24">
         {sections.map(({ id, label, Content }) => {
           const isOpen = openSections.has(id);
@@ -294,9 +314,8 @@ export default function HomePage() {
             <section key={id} id={id} className="border-b border-gray-200 dark:border-gray-700">
               <button
                 onClick={() => toggleSection(id)}
-                className="w-full flex items-center justify-between py-6 text-left"
+                className="w-full flex items-center gap-4 py-6 text-left"
               >
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{label}</h2>
                 <span
                   className={`inline-block text-gray-500 dark:text-gray-400 transition-transform duration-300 ${
                     isOpen ? "rotate-0" : "-rotate-90"
@@ -304,6 +323,7 @@ export default function HomePage() {
                 >
                   &#9660;
                 </span>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{label}</h2>
               </button>
               <div
                 className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${
