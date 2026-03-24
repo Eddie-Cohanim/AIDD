@@ -27,7 +27,7 @@ interface SiteData {
   skills: SkillGroup[];
   hobbies: string[];
   recommendations: string[];
-  contact: { email: string; linkedin: string; github: string };
+  contact: { email: string; phone: string; linkedin: string; github: string };
 }
 
 const data: SiteData = {
@@ -59,7 +59,8 @@ const data: SiteData = {
   hobbies: ["TODO"],
   recommendations: ["TODO"],
   contact: {
-    email: "TODO",
+    email: "eddieco19@gmail.com",
+    phone: "+972 54-474-2122",
     linkedin: "TODO",
     github: "TODO",
   },
@@ -73,8 +74,8 @@ function NavBar() {
         <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-gray-600">
           <a href="#about" className="hover:text-gray-900 transition-colors">About</a>
           <a href="#experience" className="hover:text-gray-900 transition-colors">Experience</a>
-          <a href="#army" className="hover:text-gray-900 transition-colors">Army</a>
           <a href="#education" className="hover:text-gray-900 transition-colors">Education</a>
+          <a href="#army" className="hover:text-gray-900 transition-colors">Army</a>
           <a href="#skills" className="hover:text-gray-900 transition-colors">Skills</a>
           <a href="#hobbies" className="hover:text-gray-900 transition-colors">Hobbies</a>
           <a href="#recommendations" className="hover:text-gray-900 transition-colors">Recommendations</a>
@@ -274,6 +275,7 @@ function Contact() {
           {data.contact.email}
         </a>
         <div className="mt-8 flex justify-center gap-6 text-sm text-gray-500">
+          <span>{data.contact.phone}</span>
           <span>{data.contact.linkedin}</span>
           <span>{data.contact.github}</span>
         </div>
@@ -289,8 +291,8 @@ export default function HomePage() {
       <Hero />
       <About />
       <Experience />
-      <Army />
       <Education />
+      <Army />
       <Skills />
       <Hobbies />
       <Recommendations />
