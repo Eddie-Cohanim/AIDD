@@ -1,3 +1,8 @@
+---
+name: pull
+description: Pull the latest changes from the remote origin main branch into the current local branch
+---
+
 Pull the latest changes from the remote origin main branch into the current local branch.
 
 Steps:
