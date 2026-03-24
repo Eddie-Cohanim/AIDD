@@ -9,7 +9,7 @@ interface EducationEntry {
   degree: string;
   institution: string;
   period: string;
-  description: string;
+  honors: string[];
 }
 
 interface SkillGroup {
@@ -22,8 +22,11 @@ interface SiteData {
   tagline: string;
   about: string[];
   experience: ExperienceEntry[];
+  army: string;
   education: EducationEntry[];
   skills: SkillGroup[];
+  hobbies: string[];
+  recommendations: string[];
   contact: { email: string; linkedin: string; github: string };
 }
 
@@ -31,43 +34,34 @@ const data: SiteData = {
   name: "Eddie Cohanim",
   tagline: "AI Engineer and Data Scientist",
   about: [
-    "I build full-stack web applications and care deeply about clean, maintainable code. I enjoy working at the intersection of good engineering and thoughtful product design.",
-    "When I am not coding, you can find me exploring new technologies, contributing to side projects, or thinking about how AI is changing the way software gets built.",
+    "TODO",
   ],
   experience: [
     {
-      title: "Software Engineer",
-      company: "Company Name",
-      period: "2023 - Present",
-      description:
-        "Built and maintained full-stack features across a React and Node.js codebase. Led a migration from REST to a typed GraphQL API, improving data efficiency by 40%.",
-    },
-    {
-      title: "Junior Developer",
-      company: "Previous Company",
-      period: "2021 - 2022",
-      description:
-        "Developed a reusable component library used across three products. Automated CI/CD pipelines with GitHub Actions and increased test coverage from 45% to 80%.",
+      title: "Junior AI Engineer",
+      company: "Constrol",
+      period: "September 2025 - Present",
+      description: "TODO",
     },
   ],
+  army: "TODO",
   education: [
     {
-      degree: "B.S. Computer Science",
-      institution: "University Name",
-      period: "2017 - 2021",
-      description:
-        "Focused on algorithms, systems programming, and software engineering. Graduated with honors.",
+      degree: "B.Sc. Mathematics with Computer Science",
+      institution: "Technion - Israel Institute of Technology",
+      period: "TBD",
+      honors: ["Dean's List (x2)"],
     },
   ],
   skills: [
-    { category: "Languages", items: ["TypeScript", "JavaScript", "Python", "SQL"] },
-    { category: "Frameworks", items: ["Next.js", "React", "Node.js", "Tailwind CSS"] },
-    { category: "Tools", items: ["Git", "Docker", "Vercel", "AWS", "PostgreSQL"] },
+    { category: "TODO", items: ["TODO"] },
   ],
+  hobbies: ["TODO"],
+  recommendations: ["TODO"],
   contact: {
-    email: "eddie@example.com",
-    linkedin: "linkedin.com/in/eddiecohanim",
-    github: "github.com/ecoha",
+    email: "TODO",
+    linkedin: "TODO",
+    github: "TODO",
   },
 };
 
@@ -76,11 +70,14 @@ function NavBar() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm border-b border-gray-100">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
         <span className="font-semibold text-gray-900 tracking-tight">EC</span>
-        <div className="flex gap-6 text-sm text-gray-600">
+        <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-gray-600">
           <a href="#about" className="hover:text-gray-900 transition-colors">About</a>
           <a href="#experience" className="hover:text-gray-900 transition-colors">Experience</a>
-          <a href="#skills" className="hover:text-gray-900 transition-colors">Skills</a>
+          <a href="#army" className="hover:text-gray-900 transition-colors">Army</a>
           <a href="#education" className="hover:text-gray-900 transition-colors">Education</a>
+          <a href="#skills" className="hover:text-gray-900 transition-colors">Skills</a>
+          <a href="#hobbies" className="hover:text-gray-900 transition-colors">Hobbies</a>
+          <a href="#recommendations" className="hover:text-gray-900 transition-colors">Recommendations</a>
           <a href="#contact" className="hover:text-gray-900 transition-colors">Contact</a>
         </div>
       </div>
@@ -162,6 +159,48 @@ function Experience() {
   );
 }
 
+function Army() {
+  return (
+    <section id="army" className="bg-gray-50 px-6 py-24">
+      <div className="mx-auto max-w-3xl">
+        <h2 className="mb-8 text-3xl font-bold text-gray-900">Army Service</h2>
+        <p className="text-lg leading-relaxed text-gray-600">{data.army}</p>
+      </div>
+    </section>
+  );
+}
+
+function Education() {
+  return (
+    <section id="education" className="bg-white px-6 py-24">
+      <div className="mx-auto max-w-3xl">
+        <h2 className="mb-12 text-3xl font-bold text-gray-900">Education</h2>
+        <div className="space-y-10">
+          {data.education.map((entry, i) => (
+            <div key={i} className="relative border-l-2 border-gray-200 pl-8">
+              <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full border-2 border-gray-900 bg-white" />
+              <div className="mb-1 flex items-baseline gap-3">
+                <h3 className="text-lg font-semibold text-gray-900">{entry.degree}</h3>
+                <span className="text-sm text-gray-400">{entry.period}</span>
+              </div>
+              <p className="mb-2 text-sm font-medium text-gray-500">{entry.institution}</p>
+              {entry.honors.length > 0 && (
+                <ul className="mt-2 space-y-1">
+                  {entry.honors.map((honor, j) => (
+                    <li key={j} className="text-sm text-gray-600">
+                      {honor}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Skills() {
   return (
     <section id="skills" className="bg-gray-50 px-6 py-24">
@@ -188,22 +227,31 @@ function Skills() {
   );
 }
 
-function Education() {
+function Hobbies() {
   return (
-    <section id="education" className="bg-white px-6 py-24">
+    <section id="hobbies" className="bg-white px-6 py-24">
       <div className="mx-auto max-w-3xl">
-        <h2 className="mb-12 text-3xl font-bold text-gray-900">Education</h2>
-        <div className="space-y-10">
-          {data.education.map((entry, i) => (
-            <div key={i} className="relative border-l-2 border-gray-200 pl-8">
-              <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full border-2 border-gray-900 bg-white" />
-              <div className="mb-1 flex items-baseline gap-3">
-                <h3 className="text-lg font-semibold text-gray-900">{entry.degree}</h3>
-                <span className="text-sm text-gray-400">{entry.period}</span>
-              </div>
-              <p className="mb-2 text-sm font-medium text-gray-500">{entry.institution}</p>
-              <p className="text-gray-600 leading-relaxed">{entry.description}</p>
-            </div>
+        <h2 className="mb-8 text-3xl font-bold text-gray-900">Hobbies</h2>
+        <div className="space-y-4">
+          {data.hobbies.map((item, i) => (
+            <p key={i} className="text-lg leading-relaxed text-gray-600">{item}</p>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Recommendations() {
+  return (
+    <section id="recommendations" className="bg-gray-50 px-6 py-24">
+      <div className="mx-auto max-w-3xl">
+        <h2 className="mb-8 text-3xl font-bold text-gray-900">Recommendations</h2>
+        <div className="space-y-6">
+          {data.recommendations.map((rec, i) => (
+            <blockquote key={i} className="border-l-4 border-gray-300 pl-6 text-lg italic text-gray-600">
+              {rec}
+            </blockquote>
           ))}
         </div>
       </div>
@@ -241,8 +289,11 @@ export default function HomePage() {
       <Hero />
       <About />
       <Experience />
-      <Skills />
+      <Army />
       <Education />
+      <Skills />
+      <Hobbies />
+      <Recommendations />
       <Contact />
     </>
   );
