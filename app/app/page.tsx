@@ -29,7 +29,7 @@ interface SiteData {
 
 const data: SiteData = {
   name: "Eddie Cohanim",
-  tagline: "AI Engineer",
+  tagline: "AI Engineer and Data Scientist",
   about: [
     "I build full-stack web applications and care deeply about clean, maintainable code. I enjoy working at the intersection of good engineering and thoughtful product design.",
     "When I am not coding, you can find me exploring new technologies, contributing to side projects, or thinking about how AI is changing the way software gets built.",
