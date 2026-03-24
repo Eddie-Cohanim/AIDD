@@ -1,65 +1,176 @@
-import Image from "next/image";
+interface ContactInfo {
+  email: string;
+  phone: string;
+  location: string;
+  linkedin: string;
+  github: string;
+}
 
-export default function Home() {
+interface ExperienceEntry {
+  title: string;
+  company: string;
+  period: string;
+  bullets: string[];
+}
+
+interface EducationEntry {
+  degree: string;
+  institution: string;
+  period: string;
+}
+
+interface ResumeData {
+  name: string;
+  tagline: string;
+  contact: ContactInfo;
+  summary: string;
+  experience: ExperienceEntry[];
+  skills: Record<string, string[]>;
+  education: EducationEntry[];
+}
+
+const resume: ResumeData = {
+  name: "Eddie Cohanim",
+  tagline: "Software Engineer",
+  contact: {
+    email: "eddie@example.com",
+    phone: "(555) 000-0000",
+    location: "New York, NY",
+    linkedin: "linkedin.com/in/eddiecohanim",
+    github: "github.com/ecoha",
+  },
+  summary:
+    "Software engineer with experience building full-stack web applications. " +
+    "Passionate about clean architecture, developer tooling, and AI-assisted development workflows.",
+  experience: [
+    {
+      title: "Software Engineer",
+      company: "Company Name",
+      period: "Jan 2023 - Present",
+      bullets: [
+        "Built and maintained full-stack features using React, Node.js, and PostgreSQL.",
+        "Led migration of legacy REST endpoints to a typed GraphQL API, reducing client-side data over-fetching by 40%.",
+        "Collaborated with product and design to ship features on a two-week sprint cadence.",
+      ],
+    },
+    {
+      title: "Junior Developer",
+      company: "Previous Company",
+      period: "Jun 2021 - Dec 2022",
+      bullets: [
+        "Developed reusable UI component library adopted across three internal products.",
+        "Automated deployment pipelines using GitHub Actions, cutting release time in half.",
+        "Wrote unit and integration tests, raising overall code coverage from 45% to 80%.",
+      ],
+    },
+  ],
+  skills: {
+    Languages: ["TypeScript", "JavaScript", "Python", "SQL"],
+    "Frameworks & Libraries": ["Next.js", "React", "Node.js", "Tailwind CSS"],
+    "Tools & Platforms": ["Git", "Docker", "Vercel", "AWS", "PostgreSQL"],
+  },
+  education: [
+    {
+      degree: "B.S. Computer Science",
+      institution: "University Name",
+      period: "2017 - 2021",
+    },
+  ],
+};
+
+function SectionHeading({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <h2 className="mb-3 border-b border-gray-300 pb-1 text-xs font-bold uppercase tracking-widest text-gray-500">
+      {children}
+    </h2>
+  );
+}
+
+function ExperienceBlock({ entry }: { entry: ExperienceEntry }) {
+  return (
+    <div className="mb-5">
+      <div className="flex items-baseline justify-between">
+        <div>
+          <span className="font-semibold text-gray-900">{entry.title}</span>
+          <span className="mx-2 text-gray-400">&mdash;</span>
+          <span className="text-gray-700">{entry.company}</span>
+        </div>
+        <span className="text-sm text-gray-500">{entry.period}</span>
+      </div>
+      <ul className="mt-2 space-y-1 pl-4">
+        {entry.bullets.map((bullet, i) => (
+          <li key={i} className="relative text-sm text-gray-700 before:absolute before:-left-4 before:content-['-']">
+            {bullet}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default function ResumePage() {
+  return (
+    <div className="min-h-screen bg-gray-100 py-10 px-4">
+      <div className="mx-auto max-w-3xl bg-white p-10 shadow-md">
+
+        {/* Header */}
+        <header className="mb-8 border-b border-gray-200 pb-6">
+          <h1 className="text-5xl font-bold tracking-tight text-gray-900">
+            {resume.name}
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+          <p className="mt-1 text-lg text-gray-500">{resume.tagline}</p>
+          <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm text-gray-600">
+            <span>{resume.contact.email}</span>
+            <span>{resume.contact.phone}</span>
+            <span>{resume.contact.location}</span>
+            <span>{resume.contact.linkedin}</span>
+            <span>{resume.contact.github}</span>
+          </div>
+        </header>
+
+        {/* Summary */}
+        <section className="mb-7">
+          <SectionHeading>Summary</SectionHeading>
+          <p className="text-sm leading-relaxed text-gray-700">{resume.summary}</p>
+        </section>
+
+        {/* Experience */}
+        <section className="mb-7">
+          <SectionHeading>Experience</SectionHeading>
+          {resume.experience.map((entry, i) => (
+            <ExperienceBlock key={i} entry={entry} />
+          ))}
+        </section>
+
+        {/* Skills */}
+        <section className="mb-7">
+          <SectionHeading>Skills</SectionHeading>
+          <div className="space-y-1">
+            {Object.entries(resume.skills).map(([category, items]) => (
+              <div key={category} className="flex gap-2 text-sm">
+                <span className="w-44 shrink-0 font-medium text-gray-800">{category}:</span>
+                <span className="text-gray-700">{items.join(", ")}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Education */}
+        <section>
+          <SectionHeading>Education</SectionHeading>
+          {resume.education.map((entry, i) => (
+            <div key={i} className="flex items-baseline justify-between">
+              <div>
+                <span className="font-semibold text-gray-900">{entry.degree}</span>
+                <span className="mx-2 text-gray-400">&mdash;</span>
+                <span className="text-gray-700">{entry.institution}</span>
+              </div>
+              <span className="text-sm text-gray-500">{entry.period}</span>
+            </div>
+          ))}
+        </section>
+
+      </div>
     </div>
   );
 }
