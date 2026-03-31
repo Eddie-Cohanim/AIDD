@@ -345,7 +345,6 @@ export default function HomePage() {
     mouseRef.current = { x: centerX, y: centerY };
     posRef.current = { x: centerX, y: centerY };
     velRef.current = { x: 0, y: 0 };
-    trailRef.current = [];
 
     function onMouseMove(e: MouseEvent) {
       mouseRef.current = { x: e.clientX, y: e.clientY };
@@ -417,8 +416,9 @@ export default function HomePage() {
         }
       }
 
-      for (let i = 0; i < trail.length; i++) {
-        const progress = i / (trail.length - 1);
+      const trailCount = trail.length;
+      for (let i = 0; i < trailCount; i++) {
+        const progress = trailCount > 1 ? i / (trailCount - 1) : 1;
         const trailAlpha = gradAlpha * progress * TRAIL_ALPHA_SCALE;
         const trailRadius = GRADIENT_RADIUS * (TRAIL_RADIUS_MIN_SCALE + (1 - TRAIL_RADIUS_MIN_SCALE) * progress);
         drawBlob(trail[i].x, trail[i].y, trailRadius, trailAlpha);
