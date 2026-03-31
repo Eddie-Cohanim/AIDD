@@ -207,7 +207,8 @@ const PARTICLE_COLOR_G = 150;
 const PARTICLE_COLOR_B = 255;
 
 const GRADIENT_RADIUS = 260;
-const GRADIENT_LERP_FACTOR = 0.14;
+const GRADIENT_SPRING_STRENGTH = 0.055;
+const GRADIENT_SPRING_DAMPING = 0.80;
 const GRADIENT_ALPHA_DARK = 0.16;
 const GRADIENT_ALPHA_LIGHT = 0.14;
 const GRADIENT_COLOR_R = 99;
@@ -313,6 +314,7 @@ export default function HomePage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: MOUSE_INITIAL_OFFSET, y: MOUSE_INITIAL_OFFSET });
   const posRef = useRef({ x: 0, y: 0 });
+  const velRef = useRef({ x: 0, y: 0 });
   const trailRef = useRef<Array<{ x: number; y: number }>>([]);
   const timeRef = useRef(0);
 
@@ -375,8 +377,12 @@ export default function HomePage() {
       const cx: CanvasRenderingContext2D = ctx;
       cx.clearRect(0, 0, c.width, c.height);
 
-      posRef.current.x += (mouseRef.current.x - posRef.current.x) * GRADIENT_LERP_FACTOR;
-      posRef.current.y += (mouseRef.current.y - posRef.current.y) * GRADIENT_LERP_FACTOR;
+      velRef.current.x += (mouseRef.current.x - posRef.current.x) * GRADIENT_SPRING_STRENGTH;
+      velRef.current.y += (mouseRef.current.y - posRef.current.y) * GRADIENT_SPRING_STRENGTH;
+      velRef.current.x *= GRADIENT_SPRING_DAMPING;
+      velRef.current.y *= GRADIENT_SPRING_DAMPING;
+      posRef.current.x += velRef.current.x;
+      posRef.current.y += velRef.current.y;
 
       const trail = trailRef.current;
       trail.push({ x: posRef.current.x, y: posRef.current.y });
