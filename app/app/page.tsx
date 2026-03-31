@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface ExperienceEntry {
   title: string;
@@ -271,12 +271,42 @@ export default function HomePage() {
   const [openSections, setOpenSections] = useState<Set<string>>(new Set());
   const [darkMode, setDarkMode] = useState(true);
 
+  const gradientRef = useRef<HTMLDivElement>(null);
+  const mouseRef = useRef({ x: 0, y: 0 });
+  const posRef = useRef({ x: 0, y: 0 });
+
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
     }
+  }, [darkMode]);
+
+  useEffect(() => {
+    function onMouseMove(e: MouseEvent) {
+      mouseRef.current = { x: e.clientX, y: e.clientY };
+    }
+    window.addEventListener("mousemove", onMouseMove);
+
+    let animId: number;
+    function animate() {
+      posRef.current.x += (mouseRef.current.x - posRef.current.x) * 0.07;
+      posRef.current.y += (mouseRef.current.y - posRef.current.y) * 0.07;
+      if (gradientRef.current) {
+        const color = darkMode
+          ? "rgba(99, 102, 241, 0.18)"
+          : "rgba(99, 102, 241, 0.10)";
+        gradientRef.current.style.background = `radial-gradient(600px circle at ${posRef.current.x}px ${posRef.current.y}px, ${color}, transparent 80%)`;
+      }
+      animId = requestAnimationFrame(animate);
+    }
+    animId = requestAnimationFrame(animate);
+
+    return () => {
+      window.removeEventListener("mousemove", onMouseMove);
+      cancelAnimationFrame(animId);
+    };
   }, [darkMode]);
 
   function toggleSection(id: string) {
@@ -305,6 +335,7 @@ export default function HomePage() {
 
   return (
     <div className="bg-white dark:bg-gray-900 min-h-screen">
+      <div ref={gradientRef} className="fixed inset-0 z-0 pointer-events-none" />
       <NavBar darkMode={darkMode} onToggle={() => setDarkMode((d) => !d)} onNavigate={navigateToSection} />
       <Hero onNavigate={navigateToSection} />
       <div className="mx-auto max-w-3xl px-6 pb-24">
