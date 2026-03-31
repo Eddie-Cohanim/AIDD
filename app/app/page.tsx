@@ -201,7 +201,7 @@ const PARTICLE_ATTRACT_FORCE = 0.025;
 const PARTICLE_HORIZONTAL_DAMPING = 0.06;
 const PARTICLE_VERTICAL_DAMPING = 0.04;
 const PARTICLE_ALPHA_DARK = 0.55;
-const PARTICLE_ALPHA_LIGHT = 0.28;
+const PARTICLE_ALPHA_LIGHT = 0.50;
 const PARTICLE_COLOR_R = 148;
 const PARTICLE_COLOR_G = 150;
 const PARTICLE_COLOR_B = 255;
@@ -209,10 +209,19 @@ const PARTICLE_COLOR_B = 255;
 const GRADIENT_RADIUS = 260;
 const GRADIENT_LERP_FACTOR = 0.14;
 const GRADIENT_ALPHA_DARK = 0.16;
-const GRADIENT_ALPHA_LIGHT = 0.09;
+const GRADIENT_ALPHA_LIGHT = 0.14;
 const GRADIENT_COLOR_R = 99;
 const GRADIENT_COLOR_G = 102;
 const GRADIENT_COLOR_B = 241;
+
+const TRAIL_LENGTH = 16;
+const TRAIL_ALPHA_SCALE = 0.5;
+const TRAIL_RADIUS_MIN_SCALE = 0.35;
+
+const BLOB_OSCILLATION_SPEED = 0.018;
+const BLOB_LOBE_OFFSET = 38;
+const BLOB_LOBE_RADIUS_SCALE = 0.72;
+const BLOB_LOBE_ALPHA_SCALE = 0.45;
 
 const MOUSE_INITIAL_OFFSET = -1000;
 const NAVIGATE_SCROLL_DELAY_MS = 50;
@@ -304,6 +313,8 @@ export default function HomePage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: MOUSE_INITIAL_OFFSET, y: MOUSE_INITIAL_OFFSET });
   const posRef = useRef({ x: 0, y: 0 });
+  const trailRef = useRef<Array<{ x: number; y: number }>>([]);
+  const timeRef = useRef(0);
 
   useEffect(() => {
     if (darkMode) {
@@ -360,20 +371,45 @@ export default function HomePage() {
     let animId: number;
     function animate() {
       if (!canvas || !ctx) return;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const c: HTMLCanvasElement = canvas;
+      const cx: CanvasRenderingContext2D = ctx;
+      cx.clearRect(0, 0, c.width, c.height);
 
       posRef.current.x += (mouseRef.current.x - posRef.current.x) * GRADIENT_LERP_FACTOR;
       posRef.current.y += (mouseRef.current.y - posRef.current.y) * GRADIENT_LERP_FACTOR;
 
+      const trail = trailRef.current;
+      trail.push({ x: posRef.current.x, y: posRef.current.y });
+      if (trail.length > TRAIL_LENGTH) trail.shift();
+
+      timeRef.current += BLOB_OSCILLATION_SPEED;
+      const t = timeRef.current;
+
       const gradAlpha = darkMode ? GRADIENT_ALPHA_DARK : GRADIENT_ALPHA_LIGHT;
-      const grad = ctx.createRadialGradient(
-        posRef.current.x, posRef.current.y, 0,
-        posRef.current.x, posRef.current.y, GRADIENT_RADIUS
-      );
-      grad.addColorStop(0, `rgba(${GRADIENT_COLOR_R}, ${GRADIENT_COLOR_G}, ${GRADIENT_COLOR_B}, ${gradAlpha})`);
-      grad.addColorStop(1, "rgba(0,0,0,0)");
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      const gc = `${GRADIENT_COLOR_R}, ${GRADIENT_COLOR_G}, ${GRADIENT_COLOR_B}`;
+
+      function drawBlob(x: number, y: number, radius: number, alpha: number) {
+        const lobes = [
+          { dx: Math.sin(t * 0.7) * BLOB_LOBE_OFFSET, dy: Math.cos(t * 0.5) * BLOB_LOBE_OFFSET, r: radius },
+          { dx: Math.sin(t * 0.4 + 1.0) * BLOB_LOBE_OFFSET, dy: Math.cos(t * 0.9 + 2.0) * BLOB_LOBE_OFFSET, r: radius * BLOB_LOBE_RADIUS_SCALE },
+          { dx: Math.sin(t * 1.1 + 3.5) * BLOB_LOBE_OFFSET, dy: Math.cos(t * 0.3 + 1.2) * BLOB_LOBE_OFFSET, r: radius * BLOB_LOBE_RADIUS_SCALE },
+        ];
+        for (const lobe of lobes) {
+          const lobeAlpha = lobe.r < radius ? alpha * BLOB_LOBE_ALPHA_SCALE : alpha;
+          const g = cx.createRadialGradient(x + lobe.dx, y + lobe.dy, 0, x + lobe.dx, y + lobe.dy, lobe.r);
+          g.addColorStop(0, `rgba(${gc}, ${lobeAlpha})`);
+          g.addColorStop(1, "rgba(0,0,0,0)");
+          cx.fillStyle = g;
+          cx.fillRect(0, 0, c.width, c.height);
+        }
+      }
+
+      for (let i = 0; i < trail.length; i++) {
+        const progress = i / (trail.length - 1);
+        const trailAlpha = gradAlpha * progress * TRAIL_ALPHA_SCALE;
+        const trailRadius = GRADIENT_RADIUS * (TRAIL_RADIUS_MIN_SCALE + (1 - TRAIL_RADIUS_MIN_SCALE) * progress);
+        drawBlob(trail[i].x, trail[i].y, trailRadius, trailAlpha);
+      }
 
       const mx = mouseRef.current.x;
       const my = mouseRef.current.y;
@@ -395,19 +431,19 @@ export default function HomePage() {
         p.y += p.vy;
 
         if (
-          p.y > canvas.height + PARTICLE_BOTTOM_MARGIN ||
+          p.y > c.height + PARTICLE_BOTTOM_MARGIN ||
           p.x < -PARTICLE_BOUNDARY_MARGIN ||
-          p.x > canvas.width + PARTICLE_BOUNDARY_MARGIN
+          p.x > c.width + PARTICLE_BOUNDARY_MARGIN
         ) {
-          const fresh = makeParticle(canvas.width, canvas.height, true);
+          const fresh = makeParticle(c.width, c.height, true);
           Object.assign(p, fresh);
         }
 
         const particleAlpha = darkMode ? PARTICLE_ALPHA_DARK : PARTICLE_ALPHA_LIGHT;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${PARTICLE_COLOR_R}, ${PARTICLE_COLOR_G}, ${PARTICLE_COLOR_B}, ${particleAlpha})`;
-        ctx.fill();
+        cx.beginPath();
+        cx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        cx.fillStyle = `rgba(${PARTICLE_COLOR_R}, ${PARTICLE_COLOR_G}, ${PARTICLE_COLOR_B}, ${particleAlpha})`;
+        cx.fill();
       }
 
       animId = requestAnimationFrame(animate);

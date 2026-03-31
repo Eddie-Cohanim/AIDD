@@ -26,6 +26,7 @@ Custom slash commands live in `.claude/commands/`. Each `.md` file becomes a `/s
 - Keep components and modules single-responsibility.
 - Use only ASCII-compatible characters in all code, config files, and documentation. Do not use special Unicode characters, smart quotes, or non-ASCII symbols.
 - Never use magic numbers. All numeric literals must be assigned to a named constant with a descriptive name that explains their purpose.
+- Any visual or behavioral change made for dark mode must have a corresponding equivalent change made for light mode. The two modes must always be kept in sync.
 
 ## Claude Behavior Rules
 
