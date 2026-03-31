@@ -187,6 +187,36 @@ function ContactContent() {
   );
 }
 
+const PARTICLE_COUNT = 90;
+const PARTICLE_MIN_SIZE = 1;
+const PARTICLE_SIZE_RANGE = 1.5;
+const PARTICLE_MIN_FALL_SPEED = 0.5;
+const PARTICLE_FALL_SPEED_RANGE = 1.0;
+const PARTICLE_HORIZONTAL_SPREAD = 0.4;
+const PARTICLE_SPAWN_TOP_OFFSET = 20;
+const PARTICLE_BOUNDARY_MARGIN = 30;
+const PARTICLE_BOTTOM_MARGIN = 10;
+const PARTICLE_ATTRACT_RADIUS = 130;
+const PARTICLE_ATTRACT_FORCE = 0.025;
+const PARTICLE_HORIZONTAL_DAMPING = 0.06;
+const PARTICLE_VERTICAL_DAMPING = 0.04;
+const PARTICLE_ALPHA_DARK = 0.55;
+const PARTICLE_ALPHA_LIGHT = 0.28;
+const PARTICLE_COLOR_R = 148;
+const PARTICLE_COLOR_G = 150;
+const PARTICLE_COLOR_B = 255;
+
+const GRADIENT_RADIUS = 260;
+const GRADIENT_LERP_FACTOR = 0.14;
+const GRADIENT_ALPHA_DARK = 0.16;
+const GRADIENT_ALPHA_LIGHT = 0.09;
+const GRADIENT_COLOR_R = 99;
+const GRADIENT_COLOR_G = 102;
+const GRADIENT_COLOR_B = 241;
+
+const MOUSE_INITIAL_OFFSET = -1000;
+const NAVIGATE_SCROLL_DELAY_MS = 50;
+
 interface SectionDef {
   id: string;
   label: string;
@@ -272,7 +302,7 @@ export default function HomePage() {
   const [darkMode, setDarkMode] = useState(true);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mouseRef = useRef({ x: -1000, y: -1000 });
+  const mouseRef = useRef({ x: MOUSE_INITIAL_OFFSET, y: MOUSE_INITIAL_OFFSET });
   const posRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -312,17 +342,17 @@ export default function HomePage() {
     }
 
     function makeParticle(w: number, h: number, fromTop: boolean): Particle {
+      const baseVy = PARTICLE_MIN_FALL_SPEED + Math.random() * PARTICLE_FALL_SPEED_RANGE;
       return {
         x: Math.random() * w,
-        y: fromTop ? -Math.random() * 20 : Math.random() * h,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: 0.5 + Math.random() * 1.0,
-        size: 1 + Math.random() * 1.5,
-        baseVy: 0.5 + Math.random() * 1.0,
+        y: fromTop ? -Math.random() * PARTICLE_SPAWN_TOP_OFFSET : Math.random() * h,
+        vx: (Math.random() - 0.5) * PARTICLE_HORIZONTAL_SPREAD,
+        vy: baseVy,
+        size: PARTICLE_MIN_SIZE + Math.random() * PARTICLE_SIZE_RANGE,
+        baseVy,
       };
     }
 
-    const PARTICLE_COUNT = 90;
     const particles: Particle[] = Array.from({ length: PARTICLE_COUNT }, () =>
       makeParticle(canvas.width, canvas.height, false)
     );
@@ -332,48 +362,51 @@ export default function HomePage() {
       if (!canvas || !ctx) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      posRef.current.x += (mouseRef.current.x - posRef.current.x) * 0.14;
-      posRef.current.y += (mouseRef.current.y - posRef.current.y) * 0.14;
+      posRef.current.x += (mouseRef.current.x - posRef.current.x) * GRADIENT_LERP_FACTOR;
+      posRef.current.y += (mouseRef.current.y - posRef.current.y) * GRADIENT_LERP_FACTOR;
 
-      const gradAlpha = darkMode ? 0.16 : 0.09;
+      const gradAlpha = darkMode ? GRADIENT_ALPHA_DARK : GRADIENT_ALPHA_LIGHT;
       const grad = ctx.createRadialGradient(
         posRef.current.x, posRef.current.y, 0,
-        posRef.current.x, posRef.current.y, 260
+        posRef.current.x, posRef.current.y, GRADIENT_RADIUS
       );
-      grad.addColorStop(0, `rgba(99, 102, 241, ${gradAlpha})`);
+      grad.addColorStop(0, `rgba(${GRADIENT_COLOR_R}, ${GRADIENT_COLOR_G}, ${GRADIENT_COLOR_B}, ${gradAlpha})`);
       grad.addColorStop(1, "rgba(0,0,0,0)");
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       const mx = mouseRef.current.x;
       const my = mouseRef.current.y;
-      const attractRadius = 130;
 
       for (const p of particles) {
         const dx = mx - p.x;
         const dy = my - p.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
 
-        if (dist < attractRadius) {
-          const force = ((attractRadius - dist) / attractRadius) * 0.025;
+        if (dist < PARTICLE_ATTRACT_RADIUS) {
+          const force = ((PARTICLE_ATTRACT_RADIUS - dist) / PARTICLE_ATTRACT_RADIUS) * PARTICLE_ATTRACT_FORCE;
           p.vx += dx * force;
           p.vy += dy * force;
         }
-        p.vx += -p.vx * 0.06;
-        p.vy += (p.baseVy - p.vy) * 0.04;
+        p.vx += -p.vx * PARTICLE_HORIZONTAL_DAMPING;
+        p.vy += (p.baseVy - p.vy) * PARTICLE_VERTICAL_DAMPING;
 
         p.x += p.vx;
         p.y += p.vy;
 
-        if (p.y > canvas.height + 10 || p.x < -30 || p.x > canvas.width + 30) {
+        if (
+          p.y > canvas.height + PARTICLE_BOTTOM_MARGIN ||
+          p.x < -PARTICLE_BOUNDARY_MARGIN ||
+          p.x > canvas.width + PARTICLE_BOUNDARY_MARGIN
+        ) {
           const fresh = makeParticle(canvas.width, canvas.height, true);
           Object.assign(p, fresh);
         }
 
-        const particleAlpha = darkMode ? 0.55 : 0.28;
+        const particleAlpha = darkMode ? PARTICLE_ALPHA_DARK : PARTICLE_ALPHA_LIGHT;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(148, 150, 255, ${particleAlpha})`;
+        ctx.fillStyle = `rgba(${PARTICLE_COLOR_R}, ${PARTICLE_COLOR_G}, ${PARTICLE_COLOR_B}, ${particleAlpha})`;
         ctx.fill();
       }
 
@@ -409,7 +442,7 @@ export default function HomePage() {
     });
     setTimeout(() => {
       document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 50);
+    }, NAVIGATE_SCROLL_DELAY_MS);
   }
 
   return (

@@ -25,6 +25,7 @@ Custom slash commands live in `.claude/commands/`. Each `.md` file becomes a `/s
 - Use TypeScript classes and interfaces to model domain entities.
 - Keep components and modules single-responsibility.
 - Use only ASCII-compatible characters in all code, config files, and documentation. Do not use special Unicode characters, smart quotes, or non-ASCII symbols.
+- Never use magic numbers. All numeric literals must be assigned to a named constant with a descriptive name that explains their purpose.
 
 ## Claude Behavior Rules
 
