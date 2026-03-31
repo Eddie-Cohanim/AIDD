@@ -215,7 +215,7 @@ const GRADIENT_COLOR_R = 99;
 const GRADIENT_COLOR_G = 102;
 const GRADIENT_COLOR_B = 241;
 
-const TRAIL_LENGTH = 16;
+const TRAIL_LENGTH = 8;
 const TRAIL_ALPHA_SCALE = 0.5;
 const TRAIL_RADIUS_MIN_SCALE = 0.35;
 
@@ -223,6 +223,8 @@ const BLOB_OSCILLATION_SPEED = 0.018;
 const BLOB_LOBE_OFFSET = 15;
 const BLOB_LOBE_RADIUS_SCALE = 0.72;
 const BLOB_LOBE_ALPHA_SCALE = 0.45;
+
+const CANVAS_RESOLUTION_SCALE = 0.5;
 
 const MOUSE_INITIAL_OFFSET = -1000;
 const NAVIGATE_SCROLL_DELAY_MS = 50;
@@ -334,14 +336,14 @@ export default function HomePage() {
 
     function resize() {
       if (!canvas) return;
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      canvas.width = Math.floor(window.innerWidth * CANVAS_RESOLUTION_SCALE);
+      canvas.height = Math.floor(window.innerHeight * CANVAS_RESOLUTION_SCALE);
     }
     resize();
     window.addEventListener("resize", resize);
 
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
     mouseRef.current = { x: centerX, y: centerY };
     posRef.current = { x: centerX, y: centerY };
     velRef.current = { x: 0, y: 0 };
@@ -373,7 +375,7 @@ export default function HomePage() {
     }
 
     const particles: Particle[] = Array.from({ length: PARTICLE_COUNT }, () =>
-      makeParticle(canvas.width, canvas.height, false)
+      makeParticle(window.innerWidth, window.innerHeight, false)
     );
 
     let animId: number;
@@ -381,7 +383,10 @@ export default function HomePage() {
       if (!canvas || !ctx) return;
       const c: HTMLCanvasElement = canvas;
       const cx: CanvasRenderingContext2D = ctx;
-      cx.clearRect(0, 0, c.width, c.height);
+      const screenW = c.width / CANVAS_RESOLUTION_SCALE;
+      const screenH = c.height / CANVAS_RESOLUTION_SCALE;
+      cx.setTransform(CANVAS_RESOLUTION_SCALE, 0, 0, CANVAS_RESOLUTION_SCALE, 0, 0);
+      cx.clearRect(0, 0, screenW, screenH);
 
       velRef.current.x += (mouseRef.current.x - posRef.current.x) * GRADIENT_SPRING_STRENGTH;
       velRef.current.y += (mouseRef.current.y - posRef.current.y) * GRADIENT_SPRING_STRENGTH;
@@ -404,7 +409,6 @@ export default function HomePage() {
         const lobes = [
           { dx: Math.sin(t * 0.7) * BLOB_LOBE_OFFSET, dy: Math.cos(t * 0.5) * BLOB_LOBE_OFFSET, r: radius },
           { dx: Math.sin(t * 0.4 + 1.0) * BLOB_LOBE_OFFSET, dy: Math.cos(t * 0.9 + 2.0) * BLOB_LOBE_OFFSET, r: radius * BLOB_LOBE_RADIUS_SCALE },
-          { dx: Math.sin(t * 1.1 + 3.5) * BLOB_LOBE_OFFSET, dy: Math.cos(t * 0.3 + 1.2) * BLOB_LOBE_OFFSET, r: radius * BLOB_LOBE_RADIUS_SCALE },
         ];
         for (const lobe of lobes) {
           const lobeAlpha = lobe.r < radius ? alpha * BLOB_LOBE_ALPHA_SCALE : alpha;
@@ -412,7 +416,7 @@ export default function HomePage() {
           g.addColorStop(0, `rgba(${gc}, ${lobeAlpha})`);
           g.addColorStop(1, "rgba(0,0,0,0)");
           cx.fillStyle = g;
-          cx.fillRect(0, 0, c.width, c.height);
+          cx.fillRect(0, 0, screenW, screenH);
         }
       }
 
@@ -444,20 +448,23 @@ export default function HomePage() {
         p.y += p.vy;
 
         if (
-          p.y > c.height + PARTICLE_BOTTOM_MARGIN ||
+          p.y > screenH + PARTICLE_BOTTOM_MARGIN ||
           p.x < -PARTICLE_BOUNDARY_MARGIN ||
-          p.x > c.width + PARTICLE_BOUNDARY_MARGIN
+          p.x > screenW + PARTICLE_BOUNDARY_MARGIN
         ) {
-          const fresh = makeParticle(c.width, c.height, true);
+          const fresh = makeParticle(screenW, screenH, true);
           Object.assign(p, fresh);
         }
-
-        const particleAlpha = darkMode ? PARTICLE_ALPHA_DARK : PARTICLE_ALPHA_LIGHT;
-        cx.beginPath();
-        cx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        cx.fillStyle = `rgba(${PARTICLE_COLOR_R}, ${PARTICLE_COLOR_G}, ${PARTICLE_COLOR_B}, ${particleAlpha})`;
-        cx.fill();
       }
+
+      const particleAlpha = darkMode ? PARTICLE_ALPHA_DARK : PARTICLE_ALPHA_LIGHT;
+      cx.fillStyle = `rgba(${PARTICLE_COLOR_R}, ${PARTICLE_COLOR_G}, ${PARTICLE_COLOR_B}, ${particleAlpha})`;
+      cx.beginPath();
+      for (const p of particles) {
+        cx.moveTo(p.x + p.size, p.y);
+        cx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      }
+      cx.fill();
 
       animId = requestAnimationFrame(animate);
     }
