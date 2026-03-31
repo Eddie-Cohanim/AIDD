@@ -271,8 +271,8 @@ export default function HomePage() {
   const [openSections, setOpenSections] = useState<Set<string>>(new Set());
   const [darkMode, setDarkMode] = useState(true);
 
-  const gradientRef = useRef<HTMLDivElement>(null);
-  const mouseRef = useRef({ x: 0, y: 0 });
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const mouseRef = useRef({ x: -1000, y: -1000 });
   const posRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -284,27 +284,106 @@ export default function HomePage() {
   }, [darkMode]);
 
   useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    function resize() {
+      if (!canvas) return;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener("resize", resize);
+
     function onMouseMove(e: MouseEvent) {
       mouseRef.current = { x: e.clientX, y: e.clientY };
     }
     window.addEventListener("mousemove", onMouseMove);
 
+    interface Particle {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      size: number;
+      baseVy: number;
+    }
+
+    function makeParticle(w: number, h: number, fromTop: boolean): Particle {
+      return {
+        x: Math.random() * w,
+        y: fromTop ? -Math.random() * 20 : Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: 0.5 + Math.random() * 1.0,
+        size: 1 + Math.random() * 1.5,
+        baseVy: 0.5 + Math.random() * 1.0,
+      };
+    }
+
+    const PARTICLE_COUNT = 90;
+    const particles: Particle[] = Array.from({ length: PARTICLE_COUNT }, () =>
+      makeParticle(canvas.width, canvas.height, false)
+    );
+
     let animId: number;
     function animate() {
-      posRef.current.x += (mouseRef.current.x - posRef.current.x) * 0.07;
-      posRef.current.y += (mouseRef.current.y - posRef.current.y) * 0.07;
-      if (gradientRef.current) {
-        const color = darkMode
-          ? "rgba(99, 102, 241, 0.18)"
-          : "rgba(99, 102, 241, 0.10)";
-        gradientRef.current.style.background = `radial-gradient(600px circle at ${posRef.current.x}px ${posRef.current.y}px, ${color}, transparent 80%)`;
+      if (!canvas || !ctx) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      posRef.current.x += (mouseRef.current.x - posRef.current.x) * 0.14;
+      posRef.current.y += (mouseRef.current.y - posRef.current.y) * 0.14;
+
+      const gradAlpha = darkMode ? 0.16 : 0.09;
+      const grad = ctx.createRadialGradient(
+        posRef.current.x, posRef.current.y, 0,
+        posRef.current.x, posRef.current.y, 260
+      );
+      grad.addColorStop(0, `rgba(99, 102, 241, ${gradAlpha})`);
+      grad.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const mx = mouseRef.current.x;
+      const my = mouseRef.current.y;
+      const attractRadius = 130;
+
+      for (const p of particles) {
+        const dx = mx - p.x;
+        const dy = my - p.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < attractRadius) {
+          const force = ((attractRadius - dist) / attractRadius) * 0.025;
+          p.vx += dx * force;
+          p.vy += dy * force;
+        }
+        p.vx += -p.vx * 0.06;
+        p.vy += (p.baseVy - p.vy) * 0.04;
+
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.y > canvas.height + 10 || p.x < -30 || p.x > canvas.width + 30) {
+          const fresh = makeParticle(canvas.width, canvas.height, true);
+          Object.assign(p, fresh);
+        }
+
+        const particleAlpha = darkMode ? 0.55 : 0.28;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(148, 150, 255, ${particleAlpha})`;
+        ctx.fill();
       }
+
       animId = requestAnimationFrame(animate);
     }
     animId = requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("resize", resize);
       cancelAnimationFrame(animId);
     };
   }, [darkMode]);
@@ -335,7 +414,7 @@ export default function HomePage() {
 
   return (
     <div className="bg-white dark:bg-gray-900 min-h-screen">
-      <div ref={gradientRef} className="fixed inset-0 z-0 pointer-events-none" />
+      <canvas ref={canvasRef} className="fixed inset-0 z-0 pointer-events-none" />
       <NavBar darkMode={darkMode} onToggle={() => setDarkMode((d) => !d)} onNavigate={navigateToSection} />
       <Hero onNavigate={navigateToSection} />
       <div className="mx-auto max-w-3xl px-6 pb-24">
