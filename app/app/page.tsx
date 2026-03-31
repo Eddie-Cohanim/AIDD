@@ -340,6 +340,13 @@ export default function HomePage() {
     resize();
     window.addEventListener("resize", resize);
 
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    mouseRef.current = { x: centerX, y: centerY };
+    posRef.current = { x: centerX, y: centerY };
+    velRef.current = { x: 0, y: 0 };
+    trailRef.current = [];
+
     function onMouseMove(e: MouseEvent) {
       mouseRef.current = { x: e.clientX, y: e.clientY };
     }
