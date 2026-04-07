@@ -274,14 +274,16 @@ export default function HomePage() {
 
     function resize() {
       if (!canvas) return;
-      canvas.width = Math.floor(window.innerWidth * CANVAS_RESOLUTION_SCALE);
-      canvas.height = Math.floor(window.innerHeight * CANVAS_RESOLUTION_SCALE);
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = Math.floor(rect.width * CANVAS_RESOLUTION_SCALE);
+      canvas.height = Math.floor(rect.height * CANVAS_RESOLUTION_SCALE);
     }
     resize();
     window.addEventListener("resize", resize);
 
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
+    const rect = canvas.getBoundingClientRect();
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
     mouseRef.current = { x: centerX, y: centerY };
     posRef.current = { x: centerX, y: centerY };
     velRef.current = { x: 0, y: 0 };
@@ -441,7 +443,7 @@ export default function HomePage() {
 
   return (
     <div className="bg-white dark:bg-gray-900 min-h-screen">
-      <canvas ref={canvasRef} className="fixed inset-0 z-0 pointer-events-none" />
+      <canvas ref={canvasRef} className="fixed inset-0 z-0 pointer-events-none w-full h-full" />
       <NavBar darkMode={darkMode} onToggle={() => setDarkMode((d) => !d)} onNavigate={navigateToSection} />
       <Hero onNavigate={navigateToSection} />
       <div className="mx-auto max-w-3xl px-6 pb-24">
