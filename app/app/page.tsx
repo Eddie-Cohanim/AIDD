@@ -1,75 +1,13 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-
-interface ExperienceEntry {
-  title: string;
-  company: string;
-  period: string;
-  bullets: string[];
-}
-
-interface EducationEntry {
-  degree: string;
-  institution: string;
-  period: string;
-  honors: string[];
-}
-
-interface SkillGroup {
-  category: string;
-  items: string[];
-}
-
-interface SiteData {
-  name: string;
-  tagline: string;
-  about: string[];
-  experience: ExperienceEntry[];
-  army: string[];
-  education: EducationEntry[];
-  skills: SkillGroup[];
-  hobbies: string[];
-  recommendations: string[];
-  contact: { email: string; phone: string; linkedin: string; github: string };
-}
-
-const data: SiteData = {
-  name: "Eddie Cohanim",
-  tagline: "AI Engineer and Data Scientist",
-  about: ["TODO"],
-  experience: [
-    {
-      title: "Junior AI Engineer",
-      company: "Constrol",
-      period: "September 2025 - Present",
-      bullets: ["TODO"],
-    },
-  ],
-  army: ["TODO"],
-  education: [
-    {
-      degree: "B.Sc. Mathematics with Computer Science",
-      institution: "Technion - Israel Institute of Technology",
-      period: "TBD",
-      honors: ["Dean's List (x2)"],
-    },
-  ],
-  skills: [{ category: "TODO", items: ["TODO"] }],
-  hobbies: ["TODO"],
-  recommendations: ["TODO"],
-  contact: {
-    email: "eddieco19@gmail.com",
-    phone: "+972 54-474-2122",
-    linkedin: "TODO",
-    github: "TODO",
-  },
-};
+import { profileData } from "@/lib/profile";
+import ChatWidget from "./components/ChatWidget";
 
 function AboutContent() {
   return (
     <ul className="space-y-2 list-disc list-inside">
-      {data.about.map((item, i) => (
+      {profileData.about.map((item, i) => (
         <li key={i} className="text-gray-600 dark:text-gray-300">{item}</li>
       ))}
     </ul>
@@ -79,7 +17,7 @@ function AboutContent() {
 function ExperienceContent() {
   return (
     <div className="space-y-4">
-      {data.experience.map((entry, i) => (
+      {profileData.experience.map((entry, i) => (
         <div key={i} className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-5">
           <div className="flex items-baseline justify-between mb-1">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{entry.title}</h3>
@@ -100,7 +38,7 @@ function ExperienceContent() {
 function EducationContent() {
   return (
     <div className="space-y-4">
-      {data.education.map((entry, i) => (
+      {profileData.education.map((entry, i) => (
         <div key={i} className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-5">
           <div className="flex items-baseline justify-between mb-1">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{entry.degree}</h3>
@@ -123,7 +61,7 @@ function EducationContent() {
 function ArmyContent() {
   return (
     <ul className="space-y-2 list-disc list-inside">
-      {data.army.map((item, i) => (
+      {profileData.army.map((item, i) => (
         <li key={i} className="text-gray-600 dark:text-gray-300">{item}</li>
       ))}
     </ul>
@@ -133,7 +71,7 @@ function ArmyContent() {
 function SkillsContent() {
   return (
     <div className="grid gap-8 sm:grid-cols-3">
-      {data.skills.map((group) => (
+      {profileData.skills.map((group) => (
         <div key={group.category}>
           <h3 className="mb-3 text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500">
             {group.category}
@@ -152,7 +90,7 @@ function SkillsContent() {
 function HobbiesContent() {
   return (
     <ul className="space-y-2 list-disc list-inside">
-      {data.hobbies.map((item, i) => (
+      {profileData.hobbies.map((item, i) => (
         <li key={i} className="text-gray-600 dark:text-gray-300">{item}</li>
       ))}
     </ul>
@@ -162,7 +100,7 @@ function HobbiesContent() {
 function RecommendationsContent() {
   return (
     <ul className="space-y-4">
-      {data.recommendations.map((rec, i) => (
+      {profileData.recommendations.map((rec, i) => (
         <li key={i} className="border-l-4 border-gray-300 dark:border-gray-600 pl-6 italic text-gray-600 dark:text-gray-300">
           {rec}
         </li>
@@ -176,13 +114,13 @@ function ContactContent() {
     <ul className="space-y-2 list-disc list-inside">
       <li className="text-gray-600 dark:text-gray-300">
         Email:{" "}
-        <a href={`mailto:${data.contact.email}`} className="underline hover:text-gray-900 dark:hover:text-white">
-          {data.contact.email}
+        <a href={`mailto:${profileData.contact.email}`} className="underline hover:text-gray-900 dark:hover:text-white">
+          {profileData.contact.email}
         </a>
       </li>
-      <li className="text-gray-600 dark:text-gray-300">Phone: {data.contact.phone}</li>
-      <li className="text-gray-600 dark:text-gray-300">LinkedIn: {data.contact.linkedin}</li>
-      <li className="text-gray-600 dark:text-gray-300">GitHub: {data.contact.github}</li>
+      <li className="text-gray-600 dark:text-gray-300">Phone: {profileData.contact.phone}</li>
+      <li className="text-gray-600 dark:text-gray-300">LinkedIn: {profileData.contact.linkedin}</li>
+      <li className="text-gray-600 dark:text-gray-300">GitHub: {profileData.contact.github}</li>
     </ul>
   );
 }
@@ -288,9 +226,9 @@ function Hero({ onNavigate }: { onNavigate: (id: string) => void }) {
         Hello, I am
       </p>
       <h1 className="text-6xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-7xl md:text-8xl">
-        {data.name}
+        {profileData.name}
       </h1>
-      <p className="mt-4 text-xl text-gray-500 dark:text-gray-400">{data.tagline}</p>
+      <p className="mt-4 text-xl text-gray-500 dark:text-gray-400">{profileData.tagline}</p>
       <div className="mt-10 flex gap-4">
         <button
           onClick={() => onNavigate("about")}
@@ -539,6 +477,7 @@ export default function HomePage() {
           );
         })}
       </div>
+      <ChatWidget />
     </div>
   );
 }
