@@ -87,6 +87,19 @@ function SkillsContent() {
   );
 }
 
+function LanguagesContent() {
+  return (
+    <ul className="space-y-2 list-disc list-inside">
+      {profileData.languages.map((entry, i) => (
+        <li key={i} className="text-gray-600 dark:text-gray-300">
+          <span className="font-medium text-gray-900 dark:text-white">{entry.language}</span>
+          {" - "}{entry.level}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 function HobbiesContent() {
   return (
     <ul className="space-y-2 list-disc list-inside">
@@ -179,6 +192,7 @@ const sections: SectionDef[] = [
   { id: "education", label: "Education", Content: EducationContent },
   { id: "army", label: "Army Service", Content: ArmyContent },
   { id: "skills", label: "Skills", Content: SkillsContent },
+  { id: "languages", label: "Languages", Content: LanguagesContent },
   { id: "hobbies", label: "Hobbies", Content: HobbiesContent },
   { id: "recommendations", label: "Recommendations", Content: RecommendationsContent },
   { id: "contact", label: "Contact", Content: ContactContent },
@@ -443,8 +457,9 @@ export default function HomePage() {
 
   return (
     <div className="bg-white dark:bg-gray-900 min-h-screen">
-      <canvas ref={canvasRef} className="fixed inset-0 z-0 pointer-events-none w-full h-full" />
+      <canvas ref={canvasRef} aria-hidden="true" className="fixed inset-0 z-0 pointer-events-none w-full h-full" />
       <NavBar darkMode={darkMode} onToggle={() => setDarkMode((d) => !d)} onNavigate={navigateToSection} />
+      <main>
       <Hero onNavigate={navigateToSection} />
       <div className="mx-auto max-w-3xl px-6 pb-24">
         {sections.map(({ id, label, Content }) => {
@@ -479,6 +494,7 @@ export default function HomePage() {
           );
         })}
       </div>
+      </main>
       <ChatWidget />
     </div>
   );

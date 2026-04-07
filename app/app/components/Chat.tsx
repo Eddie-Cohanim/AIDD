@@ -187,6 +187,7 @@ export default function Chat({ onClose }: ChatProps) {
         <form onSubmit={handleSubmit} className="flex gap-2">
           <input
             type="text"
+            aria-label="Message input"
             value={input}
             onChange={(e) => setInput(e.target.value.slice(0, MAX_INPUT_CHARS))}
             onKeyDown={handleKeyDown}

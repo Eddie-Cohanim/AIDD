@@ -1,15 +1,20 @@
-import { streamText, convertToCoreMessages } from "ai";
+import { streamText } from "ai";
+import { google } from "@ai-sdk/google";
 import { buildSystemPrompt } from "@/lib/system-prompt";
 import { profileData } from "@/lib/profile";
 import { MAX_CHAT_MESSAGES, MAX_INPUT_CHARS } from "@/lib/constants";
 
-// Authentication:
-// - Production: Vercel automatically injects VERCEL_OIDC_TOKEN for AI Gateway
-// - Local with `vc dev`: Automatically injects VERCEL_OIDC_TOKEN
-// - Local with `next dev`: Run `vc env pull` first to pull VERCEL_OIDC_TOKEN into .env.local
+// Authentication: requires GOOGLE_GENERATIVE_AI_API_KEY in .env.local (local)
+// and in Vercel environment variables (production).
+// Free tier: https://aistudio.google.com/apikey
+//
+// To revert to Vercel AI Gateway (Anthropic):
+// - Remove @ai-sdk/google import, restore: import { anthropic } from "@ai-sdk/google"  (wrong)
+//   actually use model string "anthropic/claude-3-haiku" directly (no provider import needed)
+//   and replace google("gemini-2.0-flash") with "anthropic/claude-3-haiku"
 export const runtime = "nodejs";
 
-const ANTHROPIC_MODEL = "anthropic/claude-3-haiku";
+const GOOGLE_MODEL = "gemini-2.0-flash";
 
 export async function POST(request: Request): Promise<Response> {
   try {
@@ -41,12 +46,11 @@ export async function POST(request: Request): Promise<Response> {
     }
 
     const systemPrompt = buildSystemPrompt(profileData);
-    const coreMessages = convertToCoreMessages(trimmed);
 
     const result = streamText({
-      model: ANTHROPIC_MODEL,
+      model: google(GOOGLE_MODEL),
       system: systemPrompt,
-      messages: coreMessages,
+      messages: trimmed,
     });
 
     return result.toUIMessageStreamResponse();
