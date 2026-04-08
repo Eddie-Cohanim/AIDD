@@ -54,7 +54,8 @@ export async function POST(request: Request): Promise<Response> {
     });
 
     return result.toUIMessageStreamResponse();
-  } catch {
+  } catch (err) {
+    console.error("[/api/chat]", err);
     return new Response("Internal server error", { status: 500 });
   }
 }
