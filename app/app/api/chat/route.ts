@@ -1,4 +1,4 @@
-import { streamText } from "ai";
+import { streamText, convertToCoreMessages } from "ai";
 import { google } from "@ai-sdk/google";
 import { buildSystemPrompt } from "@/lib/system-prompt";
 import { profileData } from "@/lib/profile";
@@ -50,7 +50,7 @@ export async function POST(request: Request): Promise<Response> {
     const result = streamText({
       model: google(GOOGLE_MODEL),
       system: systemPrompt,
-      messages: trimmed,
+      messages: convertToCoreMessages(trimmed),
     });
 
     return result.toUIMessageStreamResponse();
