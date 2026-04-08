@@ -17,6 +17,11 @@ export interface SkillGroup {
   items: string[];
 }
 
+export interface ProjectEntry {
+  title: string;
+  bullets: string[];
+}
+
 export interface ContactInfo {
   email: string;
   phone: string;
@@ -36,6 +41,7 @@ export interface SiteData {
   experience: ExperienceEntry[];
   army: string[];
   education: EducationEntry[];
+  projects: ProjectEntry[];
   skills: SkillGroup[];
   languages: LanguageEntry[];
   hobbies: string[];
@@ -71,6 +77,28 @@ export const profileData: SiteData = {
       honors: [
         "Dean's List, Spring 2024 and Winter 2025 - Awarded for academic excellence and maintaining a high GPA.",
         "Courses: AI, Deep Learning, Data Structures, OS, Computer Organization and Programming, Algorithms, and Computer Structure.",
+      ],
+    },
+  ],
+  projects: [
+    {
+      title: "Technion CS Hackathon - Finalist",
+      bullets: [
+        "Led a 4-person team to architect and implement a Chrome extension that leveraged advanced AI and large-language models to scan news websites in real time and highlight potential false statements.",
+        "Shortlisted as a finalist among all participating teams for innovation, technical execution, and real-world impact.",
+      ],
+    },
+    {
+      title: "Alcohol Type Identification",
+      bullets: [
+        "Co-implemented a two-stage AI pipeline integrating YOLO for detection and a custom CNN, optimized through hyperparameter research, image augmentation, and custom pre/post-processing workflows.",
+        "Managed development via GitHub (version control) and Jira (task management).",
+      ],
+    },
+    {
+      title: "Local Server",
+      bullets: [
+        "Programmed a working server in C capable of running and interacting with multiple threads simultaneously.",
       ],
     },
   ],

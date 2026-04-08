@@ -87,6 +87,23 @@ function SkillsContent() {
   );
 }
 
+function ProjectsContent() {
+  return (
+    <div className="space-y-4">
+      {profileData.projects.map((entry, i) => (
+        <div key={i} className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-5">
+          <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">{entry.title}</h3>
+          <ul className="space-y-1 list-disc list-inside">
+            {entry.bullets.map((b, j) => (
+              <li key={j} className="text-gray-600 dark:text-gray-300">{b}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function LanguagesContent() {
   return (
     <ul className="space-y-2 list-disc list-inside">
@@ -191,6 +208,7 @@ const sections: SectionDef[] = [
   { id: "experience", label: "Experience", Content: ExperienceContent },
   { id: "education", label: "Education", Content: EducationContent },
   { id: "army", label: "Army Service", Content: ArmyContent },
+  { id: "projects", label: "Projects", Content: ProjectsContent },
   { id: "skills", label: "Skills", Content: SkillsContent },
   { id: "languages", label: "Languages", Content: LanguagesContent },
   { id: "hobbies", label: "Hobbies", Content: HobbiesContent },
@@ -477,7 +495,7 @@ export default function HomePage() {
                 >
                   &#9660;
                 </span>
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{label}</h2>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white ml-auto">{label}</h2>
               </button>
               <div
                 className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${
