@@ -39,7 +39,7 @@ export default function SectionPage({ title, children }: SectionPageProps) {
         style={{ zIndex: OVERLAY_Z_INDEX, opacity: overlayOpacity }}
       />
       <div className="relative" style={{ zIndex: CONTENT_Z_INDEX }}>
-        <h1 className="mb-8 text-6xl font-bold tracking-tight text-gray-900 dark:text-white">{title}</h1>
+        <h1 className="mb-8 text-6xl font-bold tracking-tight text-gray-900 dark:text-white text-center">{title}</h1>
         <div className="text-xl">{children}</div>
       </div>
     </div>
