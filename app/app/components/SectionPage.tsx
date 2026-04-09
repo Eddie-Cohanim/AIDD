@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 
-const BACKGROUND_CYCLE_MS = 5000;
 const OVERLAY_Z_INDEX = 1;
 const CONTENT_Z_INDEX = 2;
+const BACKGROUND_SECTION_COUNT = 4;
 
 interface SectionPageProps {
   title: string;
@@ -12,25 +12,35 @@ interface SectionPageProps {
 }
 
 export default function SectionPage({ title, children }: SectionPageProps) {
-  const [showPhoto, setShowPhoto] = useState(false);
+  const [overlayOpacity, setOverlayOpacity] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setShowPhoto((prev) => !prev);
-    }, BACKGROUND_CYCLE_MS);
-    return () => clearInterval(timer);
+    function handleScroll() {
+      const maxScroll =
+        document.documentElement.scrollHeight - window.innerHeight;
+      const fraction = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+      const zone = Math.min(
+        Math.floor(fraction * BACKGROUND_SECTION_COUNT),
+        BACKGROUND_SECTION_COUNT - 1
+      );
+      setOverlayOpacity(zone % 2 === 0 ? 0 : 1);
+    }
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <div className="mx-auto max-w-3xl px-6 pt-28 pb-24">
+    <div className="mr-auto max-w-3xl px-2 pt-28 pb-24">
       <div
         aria-hidden="true"
-        className="fixed inset-0 bg-white dark:bg-black pointer-events-none transition-opacity duration-1000"
-        style={{ zIndex: OVERLAY_Z_INDEX, opacity: showPhoto ? 1 : 0 }}
+        className="fixed inset-0 bg-white dark:bg-black pointer-events-none transition-opacity duration-500"
+        style={{ zIndex: OVERLAY_Z_INDEX, opacity: overlayOpacity }}
       />
       <div className="relative" style={{ zIndex: CONTENT_Z_INDEX }}>
-        <h1 className="mb-8 text-4xl font-bold tracking-tight text-gray-900 dark:text-white">{title}</h1>
-        {children}
+        <h1 className="mb-8 text-6xl font-bold tracking-tight text-gray-900 dark:text-white">{title}</h1>
+        <div className="text-xl">{children}</div>
       </div>
     </div>
   );
