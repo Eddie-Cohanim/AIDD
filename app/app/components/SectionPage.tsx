@@ -32,15 +32,17 @@ export default function SectionPage({ title, children }: SectionPageProps) {
   }, []);
 
   return (
-    <div className="mr-auto max-w-3xl px-2 pt-28 pb-24">
+    <div className="pt-28 pb-24">
       <div
         aria-hidden="true"
         className="fixed inset-0 bg-white dark:bg-black pointer-events-none transition-opacity duration-500"
         style={{ zIndex: OVERLAY_Z_INDEX, opacity: overlayOpacity }}
       />
       <div className="relative" style={{ zIndex: CONTENT_Z_INDEX }}>
-        <h1 className="mb-8 text-6xl font-bold tracking-tight text-gray-900 dark:text-white text-center">{title}</h1>
-        <div className="text-xl">{children}</div>
+        <h1 className="mb-8 text-6xl font-bold tracking-tight text-gray-900 dark:text-white text-center w-full">
+          {title}
+        </h1>
+        <div className="mr-auto max-w-3xl px-2 text-xl">{children}</div>
       </div>
     </div>
   );
