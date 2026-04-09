@@ -278,8 +278,8 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   }, [darkMode]);
 
   return (
-    <div className="bg-white dark:bg-gray-900 min-h-screen">
-      <canvas ref={canvasRef} aria-hidden="true" className="fixed inset-0 z-0 pointer-events-none w-full h-full" />
+    <div className="bg-white dark:bg-black min-h-screen">
+      <canvas ref={canvasRef} aria-hidden="true" className="fixed inset-0 z-0 pointer-events-none w-full h-full" style={{ transition: "opacity 0.5s", opacity: "var(--canvas-slab-opacity, 1)" }} />
       <NavBar darkMode={darkMode} onToggle={() => setDarkMode((d) => !d)} />
       {children}
       <ChatWidget />
