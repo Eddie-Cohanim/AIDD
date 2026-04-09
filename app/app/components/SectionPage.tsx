@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 const OVERLAY_Z_INDEX = 1;
 const CONTENT_Z_INDEX = 2;
 const BACKGROUND_SECTION_COUNT = 4;
+const PARALLAX_SPEED = 0.1;
 
 interface SectionPageProps {
   title: string;
@@ -13,6 +14,7 @@ interface SectionPageProps {
 
 export default function SectionPage({ title, children }: SectionPageProps) {
   const [overlayOpacity, setOverlayOpacity] = useState(0);
+  const [parallaxY, setParallaxY] = useState(0);
 
   useEffect(() => {
     function handleScroll() {
@@ -24,6 +26,7 @@ export default function SectionPage({ title, children }: SectionPageProps) {
         BACKGROUND_SECTION_COUNT - 1
       );
       setOverlayOpacity(zone % 2 === 0 ? 0 : 1);
+      setParallaxY(window.scrollY * PARALLAX_SPEED);
     }
 
     handleScroll();
@@ -36,7 +39,7 @@ export default function SectionPage({ title, children }: SectionPageProps) {
       <div
         aria-hidden="true"
         className="fixed inset-0 bg-white dark:bg-black pointer-events-none transition-opacity duration-500"
-        style={{ zIndex: OVERLAY_Z_INDEX, opacity: overlayOpacity }}
+        style={{ zIndex: OVERLAY_Z_INDEX, opacity: overlayOpacity, transform: `translateY(${parallaxY}px)` }}
       />
       <div className="relative" style={{ zIndex: CONTENT_Z_INDEX }}>
         <h1 className="mb-8 text-6xl font-bold tracking-tight text-gray-900 dark:text-white text-center w-full">
