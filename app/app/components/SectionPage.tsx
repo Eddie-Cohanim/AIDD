@@ -37,7 +37,7 @@ export default function SectionPage({ title, children }: SectionPageProps) {
         <h1 className="mb-8 text-6xl font-bold tracking-tight text-gray-900 dark:text-white text-center w-full">
           {title}
         </h1>
-        <div className="mr-auto max-w-3xl px-2 text-xl">{children}</div>
+        <div className="w-full px-6 text-xl">{children}</div>
       </div>
     </div>
   );
