@@ -79,8 +79,12 @@ STRICT RULES:
     prompt += section("EDUCATION", formatEducation(data.education));
   }
 
-  if (!isTodoArray(data.army)) {
-    prompt += section("ARMY SERVICE", data.army.filter((a) => !isTodo(a)).map((a) => `- ${a}`).join("\n"));
+  const armyEntries = data.army.filter((a) => !isTodo(a.title));
+  if (armyEntries.length > 0) {
+    prompt += section(
+      "ARMY SERVICE",
+      armyEntries.map((a) => `- ${a.title} (${a.period}): ${a.description}`).join("\n")
+    );
   }
 
   const skillsText = formatSkills(data.skills);
