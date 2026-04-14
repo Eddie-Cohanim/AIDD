@@ -3,7 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
+import Image from "next/image";
 import { MAX_INPUT_CHARS } from "@/lib/constants";
+
+const AVATAR_SIZE = 28;
 
 const DOT_DELAY_MS_1 = 0;
 const DOT_DELAY_MS_2 = 150;
@@ -141,10 +144,19 @@ export default function Chat({ onClose }: ChatProps) {
           return (
             <div
               key={msg.id}
-              className={`flex ${role === "user" ? "justify-end" : "justify-start"}`}
+              className={`flex items-end gap-2 ${role === "user" ? "justify-end" : "justify-start"}`}
             >
+              {role === "assistant" && (
+                <Image
+                  src="/chatbot-avatar.png"
+                  alt="Eddie"
+                  width={AVATAR_SIZE}
+                  height={AVATAR_SIZE}
+                  className="rounded-full object-cover flex-shrink-0"
+                />
+              )}
               <div
-                className={`max-w-[85%] rounded-xl px-3 py-2 text-sm leading-relaxed ${
+                className={`max-w-[75%] rounded-xl px-3 py-2 text-sm leading-relaxed ${
                   role === "user"
                     ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900"
                     : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white"
@@ -160,7 +172,14 @@ export default function Chat({ onClose }: ChatProps) {
           );
         })}
         {isWaiting && (
-          <div className="flex justify-start">
+          <div className="flex items-end gap-2 justify-start">
+            <Image
+              src="/chatbot-avatar.png"
+              alt="Eddie"
+              width={AVATAR_SIZE}
+              height={AVATAR_SIZE}
+              className="rounded-full object-cover flex-shrink-0"
+            />
             <div className="bg-gray-100 dark:bg-gray-800 rounded-xl px-3 py-2">
               <span className="inline-flex gap-1 items-center h-4">
                 <span
