@@ -29,6 +29,12 @@ export interface ContactInfo {
   github: string;
 }
 
+export interface ArmyEntry {
+  title: string;
+  period: string;
+  description: string;
+}
+
 export interface LanguageEntry {
   language: string;
   level: string;
@@ -39,7 +45,7 @@ export interface SiteData {
   tagline: string;
   about: string[];
   experience: ExperienceEntry[];
-  army: string[];
+  army: ArmyEntry[];
   education: EducationEntry[];
   projects: ProjectEntry[];
   skills: SkillGroup[];
@@ -66,8 +72,16 @@ export const profileData: SiteData = {
     },
   ],
   army: [
-    "Infantry, IDF Reserves (November 2020 - Present): Prioritized goals and ensured critical outcomes were achieved while serving on the October 7th war.",
-    "Staff Sergeant, IDF Nahal Brigade (March 2018 - November 2020): Led over 40 soldiers and managed platoon operations and logistics in high-risk combat environments.",
+    {
+      title: "Infantry, IDF Reserves",
+      period: "November 2020 - Present",
+      description: "Prioritized goals and ensured critical outcomes were achieved while serving on the October 7th war.",
+    },
+    {
+      title: "Staff Sergeant, IDF Nahal Brigade",
+      period: "March 2018 - November 2020",
+      description: "Led over 40 soldiers and managed platoon operations and logistics in high-risk combat environments.",
+    },
   ],
   education: [
     {
