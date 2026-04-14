@@ -6,7 +6,8 @@ import { DefaultChatTransport } from "ai";
 import Image from "next/image";
 import { MAX_INPUT_CHARS } from "@/lib/constants";
 
-const AVATAR_SIZE = 28;
+const AVATAR_SIZE_HEADER = 40;
+const AVATAR_SIZE_MESSAGE = 36;
 
 const DOT_DELAY_MS_1 = 0;
 const DOT_DELAY_MS_2 = 150;
@@ -117,7 +118,16 @@ export default function Chat({ onClose }: ChatProps) {
 
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-        <span className="text-sm font-semibold text-gray-900 dark:text-white">Ask about Eddie</span>
+        <div className="flex items-center gap-2">
+          <Image
+            src="/chatbot-avatar.png"
+            alt="Eddie"
+            width={AVATAR_SIZE_HEADER}
+            height={AVATAR_SIZE_HEADER}
+            className="rounded-full object-cover flex-shrink-0"
+          />
+          <span className="text-sm font-semibold text-gray-900 dark:text-white">Ask me about Eddie</span>
+        </div>
         <button
           onClick={onClose}
           className="text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors text-lg leading-none"
@@ -150,8 +160,8 @@ export default function Chat({ onClose }: ChatProps) {
                 <Image
                   src="/chatbot-avatar.png"
                   alt="Eddie"
-                  width={AVATAR_SIZE}
-                  height={AVATAR_SIZE}
+                  width={AVATAR_SIZE_MESSAGE}
+                  height={AVATAR_SIZE_MESSAGE}
                   className="rounded-full object-cover flex-shrink-0"
                 />
               )}
