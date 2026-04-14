@@ -97,17 +97,38 @@ export const profileData: SiteData = {
   ],
   projects: [
     {
-      title: "Technion CS Hackathon - Finalist",
+      title: "Personal Portfolio Website",
       bullets: [
-        "Led a 4-person team to architect and implement a Chrome extension that leveraged advanced AI and large-language models to scan news websites in real time and highlight potential false statements.",
-        "Shortlisted as a finalist among all participating teams for innovation, technical execution, and real-world impact.",
+        "Designed and built a full-stack personal portfolio website using Next.js 16 (App Router) and TypeScript, hosted on Vercel with continuous deployment from GitHub.",
+        "Integrated an AI-powered chatbot using the Vercel AI SDK and Anthropic claude-3-haiku via Vercel AI Gateway, enabling visitors to interactively ask questions about my background and experience.",
+        "Applied AI-driven development (AIDD) techniques throughout the entire build — using Claude Code as a development assistant to architect features, write and review code, run static checks, and manage deployments.",
+        "Implemented a custom particle canvas animation, scroll-zone background cycling, and a parallax slab effect for a dynamic visual experience.",
+        "Established a structured Git workflow with dedicated feature branches, automated TypeScript type checking on every push, and security auditing via custom slash-command skills.",
+      ],
+    },
+    {
+      title: "Legit - AI News Credibility Verifier (Technion CS Hackathon Finalist)",
+      bullets: [
+        "Led a team to architect and implement a Chrome extension that used AI and large language models to scan news articles in real time and flag potential misinformation, earning a finalist placement among all competing teams.",
+        "Following the hackathon, the team collaborated closely to expand the concept into a fully-featured product, dividing responsibilities and iterating together through every stage of design, implementation, and testing.",
+        "Co-built a multi-agent AI analysis system deploying six specialized agents in parallel (source verification, author credibility, fact-checking, bias detection, writing quality, and headline accuracy), each contributing a weighted score to a final 0-100 credibility rating.",
+        "Implemented Smart Context Search (SIFT), where agents actively search for independent coverage of the article's claims to surface supporting and contradicting sources for transparent lateral reading.",
+        "Developed a fuzzy quote highlighting feature using the Levenshtein Distance algorithm, enabling the extension to locate and highlight suspicious claims directly within the article regardless of formatting differences.",
+        "Built the extension on a modular architecture (Chrome Manifest V3, Vanilla JavaScript) with a background service worker acting as an API proxy and caching layer for the Google Gemini API, and Readability.js for clean content extraction.",
+        "Published the finished extension to the Chrome Web Store, making it publicly available to users across all major Chromium-based browsers.",
       ],
     },
     {
       title: "Alcohol Type Identification",
       bullets: [
-        "Co-implemented a two-stage AI pipeline integrating YOLO for detection and a custom CNN, optimized through hyperparameter research, image augmentation, and custom pre/post-processing workflows.",
-        "Managed development via GitHub (version control) and Jira (task management).",
+        "Co-built a two-stage computer vision system classifying beer and wine types from images: a YOLO v11 object detection model for bounding-box localization, followed by a custom CNN classifier on the cropped regions.",
+        "Co-implemented the CNN architecture from scratch in PyTorch, with a fully configurable feature extractor (conv layers, batch norm, pooling, activation) and classifier head (fully-connected layers, dropout), all driven by a single config.json file with no hardcoded hyperparameters.",
+        "Constructed and curated the dataset end-to-end: collected and organized raw images, wrote a dataset splitting pipeline, and built a preprocessing pipeline with validation reporting to ensure structural integrity before training.",
+        "Designed a GPU-accelerated augmentation pipeline using Kornia (random flips, rotations, color jitter, Gaussian blur, perspective distortion, gamma correction) applied inline during training for effective data expansion without storing augmented copies to disk.",
+        "Conducted extensive hyperparameter research across multiple tracked experiment versions, tuning learning rate, weight decay, batch size, channel depth, dropout, pooling type, early stopping patience, and optimizer (Adam, AdamW, SGD).",
+        "Built a visualization pipeline to plot per-epoch training and validation loss/accuracy curves across all experiment versions for direct comparison.",
+        "Researched and benchmarked results against published papers and pretrained models, evaluating per-class precision, recall, F1, and confidence scores.",
+        "Managed development via GitHub for version control and Jira for task tracking.",
       ],
     },
     {
