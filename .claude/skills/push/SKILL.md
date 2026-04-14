@@ -1,6 +1,7 @@
 ---
 name: push
 description: Stage all changes, commit with a professional message, and push to the current branch on origin
+disableModelInvocation: true
 ---
 
 Before committing, run the `/static-checks` skill. If it returns `STATIC CHECKS FAILED`, stop immediately and do not proceed with staging, committing, or pushing. Inform the user of the failures so they can be fixed first.
