@@ -25,6 +25,7 @@ export interface ProjectEntry {
 export interface ContactInfo {
   email: string;
   phone: string;
+  whatsapp: string;
   linkedin: string;
   github: string;
 }
@@ -155,6 +156,7 @@ export const profileData: SiteData = {
   contact: {
     email: "eddieco19@gmail.com",
     phone: "+972-544742122",
+    whatsapp: "972544742122",
     linkedin: "TODO",
     github: "TODO",
   },

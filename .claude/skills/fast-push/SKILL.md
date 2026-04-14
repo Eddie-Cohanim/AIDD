@@ -1,6 +1,7 @@
 ---
 name: fast-push
 description: Stage all changes, commit with a professional message, and push to origin — skips static checks
+disableModelInvocation: true
 ---
 
 Stage all modified and untracked files (excluding those in .gitignore), then commit with a professional, descriptive commit message based on the changes, and push to the remote origin on the current branch.

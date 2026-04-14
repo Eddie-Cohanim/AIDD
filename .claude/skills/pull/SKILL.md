@@ -1,6 +1,7 @@
 ---
 name: pull
 description: Pull the latest changes from the remote origin main branch into the current local branch
+disableModelInvocation: true
 ---
 
 Pull the latest changes from the remote origin main branch into the current local branch.
