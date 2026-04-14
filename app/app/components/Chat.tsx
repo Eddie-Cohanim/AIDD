@@ -186,8 +186,8 @@ export default function Chat({ onClose }: ChatProps) {
             <Image
               src="/chatbot-avatar.png"
               alt="Eddie"
-              width={AVATAR_SIZE}
-              height={AVATAR_SIZE}
+              width={AVATAR_SIZE_MESSAGE}
+              height={AVATAR_SIZE_MESSAGE}
               className="rounded-full object-cover flex-shrink-0"
             />
             <div className="bg-gray-100 dark:bg-gray-800 rounded-xl px-3 py-2">
