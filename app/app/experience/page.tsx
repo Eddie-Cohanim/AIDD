@@ -6,7 +6,7 @@ export default function ExperiencePage() {
     <SectionPage title="Experience">
       <div className="space-y-4">
         {profileData.experience.map((entry, i) => (
-          <div key={i} className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-5">
+          <div key={i} className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 p-5">
             <div className="flex items-baseline justify-between mb-1">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{entry.title}</h3>
               <span className="text-sm text-gray-400 dark:text-gray-500">{entry.period}</span>

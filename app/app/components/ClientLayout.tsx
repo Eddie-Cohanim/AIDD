@@ -61,7 +61,6 @@ const navSections: NavSection[] = [
   { id: "army", label: "Army Service", href: "/army" },
   { id: "projects", label: "Projects", href: "/projects" },
   { id: "skills", label: "Skills", href: "/skills" },
-  { id: "languages", label: "Languages", href: "/languages" },
   { id: "hobbies", label: "Hobbies", href: "/hobbies" },
   { id: "recommendations", label: "Recommendations", href: "/recommendations" },
   { id: "contact", label: "Contact", href: "/contact" },
@@ -278,8 +277,10 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   }, [darkMode]);
 
   return (
-    <div className="bg-white dark:bg-black min-h-screen">
-      <canvas ref={canvasRef} aria-hidden="true" className="fixed inset-0 z-0 pointer-events-none w-full h-full" style={{ transition: "opacity 0.5s", opacity: "var(--canvas-slab-opacity, 1)" }} />
+    <div className="min-h-screen">
+      <div aria-hidden="true" className="fixed inset-0 bg-cover bg-center bg-no-repeat" style={{ zIndex: -1, backgroundImage: "url('/bg-wallpaper.jpg')" }} />
+      <div aria-hidden="true" className="fixed inset-0 bg-white dark:bg-black" style={{ zIndex: 0, transition: "opacity 0.5s", opacity: "var(--canvas-slab-opacity, 1)" }} />
+      <canvas ref={canvasRef} aria-hidden="true" className="fixed inset-0 pointer-events-none w-full h-full" style={{ zIndex: 1, transition: "opacity 0.5s", opacity: "var(--canvas-slab-opacity, 1)" }} />
       <NavBar darkMode={darkMode} onToggle={() => setDarkMode((d) => !d)} />
       {children}
       <ChatWidget />

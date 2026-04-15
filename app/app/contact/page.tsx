@@ -5,7 +5,7 @@ export default function ContactPage() {
   return (
     <SectionPage title="Contact">
       <div className="space-y-4">
-        <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-5">
+        <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 p-5">
           <p className="text-gray-600 dark:text-gray-300">
             Email:{" "}
             <a
@@ -16,10 +16,10 @@ export default function ContactPage() {
             </a>
           </p>
         </div>
-        <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-5">
+        <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 p-5">
           <p className="text-gray-600 dark:text-gray-300">Phone: {profileData.contact.phone}</p>
         </div>
-        <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-5">
+        <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 p-5">
           <p className="text-gray-600 dark:text-gray-300">
             WhatsApp:{" "}
             <a
@@ -32,10 +32,10 @@ export default function ContactPage() {
             </a>
           </p>
         </div>
-        <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-5">
+        <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 p-5">
           <p className="text-gray-600 dark:text-gray-300">LinkedIn: {profileData.contact.linkedin}</p>
         </div>
-        <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-5">
+        <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 p-5">
           <p className="text-gray-600 dark:text-gray-300">GitHub: {profileData.contact.github}</p>
         </div>
       </div>
