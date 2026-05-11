@@ -68,7 +68,11 @@ export const profileData: SiteData = {
       company: "Constrol",
       period: "September 2025 - Present",
       bullets: [
-        "Work within a six-person R&D team, closely integrated with annotators and civil engineers, developing pipelines and training models that transform architectural blueprints into 3D buildings.",
+        "Developed and optimized computer vision pipelines from pre-processing to inference, transforming architectural blueprints into 3D models.",
+        "Managed the full data lifecycle, including dataset preparation and technical oversight of annotation platforms, ensuring high-fidelity ground truth for model training.",
+        "Built interactive UI demos to showcase product capabilities to stakeholders.",
+        "Improved pipeline performance by parallelizing workloads, replacing bottleneck Python routines with inline C extensions, and migrating to GPU-accelerated libraries that fully utilized available hardware.",
+        "Acted as the primary owner for a critical product vertical, coordinating closely with civil engineers and annotators to bridge the gap between technical AI constraints and real-world engineering requirements.",
       ],
     },
   ],
