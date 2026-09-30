@@ -1,4 +1,6 @@
 import SectionPage from "../components/SectionPage";
+import ExpandableItem from "../components/ExpandableItem";
+import PhotoGallery from "../components/PhotoGallery";
 import { profileData } from "@/lib/profile";
 
 export default function EducationPage() {
@@ -12,13 +14,14 @@ export default function EducationPage() {
               <span className="text-sm text-gray-400 dark:text-gray-500">{entry.period}</span>
             </div>
             <p className="mb-3 text-sm font-medium text-gray-500 dark:text-gray-400">{entry.institution}</p>
-            {entry.honors.length > 0 && (
-              <ul className="space-y-1 list-disc list-inside">
-                {entry.honors.map((honor, j) => (
-                  <li key={j} className="text-gray-600 dark:text-gray-300">{honor}</li>
-                ))}
-              </ul>
-            )}
+            <div>
+              {entry.highlights.map((point) => (
+                <ExpandableItem key={point.heading} heading={point.heading}>
+                  <p>{point.detail}</p>
+                  {point.photos && <PhotoGallery photos={point.photos} />}
+                </ExpandableItem>
+              ))}
+            </div>
           </div>
         ))}
       </div>

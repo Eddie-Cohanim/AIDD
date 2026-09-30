@@ -60,6 +60,7 @@ const navSections: NavSection[] = [
   { id: "education", label: "Education", href: "/education" },
   { id: "army", label: "Army Service", href: "/army" },
   { id: "projects", label: "Projects", href: "/projects" },
+  { id: "hackathons", label: "Hackathons", href: "/hackathons" },
   { id: "skills", label: "Skills", href: "/skills" },
   { id: "hobbies", label: "Hobbies", href: "/hobbies" },
   { id: "recommendations", label: "Recommendations", href: "/recommendations" },
