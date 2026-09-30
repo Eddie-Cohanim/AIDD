@@ -5,6 +5,7 @@ import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import Image from "next/image";
 import { MAX_INPUT_CHARS } from "@/lib/constants";
+import { FOCUS_RING } from "@/lib/styles";
 
 const AVATAR_SIZE_HEADER = 40;
 const AVATAR_SIZE_MESSAGE = 36;
@@ -94,9 +95,9 @@ const ChatMessage = memo(function ChatMessage({ role, text }: ChatMessageProps) 
         />
       )}
       <div
-        className={`max-w-[75%] rounded-xl px-3 py-2 text-sm leading-relaxed ${
+        className={`max-w-[75%] rounded-2xl px-3 py-2 text-sm leading-relaxed ${
           role === "user"
-            ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900"
+            ? "bg-accent-solid text-white"
             : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white"
         }`}
       >
@@ -134,7 +135,7 @@ export default function Chat({ onClose }: ChatProps) {
   }
 
   return (
-    <div className="flex flex-col w-80 h-[480px] rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-2xl overflow-hidden">
+    <div className="flex flex-col w-80 h-[480px] rounded-3xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-2xl overflow-hidden">
 
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700">
@@ -150,7 +151,7 @@ export default function Chat({ onClose }: ChatProps) {
         </div>
         <button
           onClick={onClose}
-          className="text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors text-lg leading-none"
+          className={`rounded-lg text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors text-lg leading-none ${FOCUS_RING}`}
           aria-label="Close chat"
         >
           &times;
@@ -182,7 +183,7 @@ export default function Chat({ onClose }: ChatProps) {
               height={AVATAR_SIZE_MESSAGE}
               className="rounded-full object-cover flex-shrink-0"
             />
-            <div className="bg-gray-100 dark:bg-gray-800 rounded-xl px-3 py-2">
+            <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl px-3 py-2">
               <span className="inline-flex gap-1 items-center h-4">
                 <span
                   className="w-1 h-1 rounded-full bg-gray-400 dark:bg-gray-500 animate-bounce"
@@ -214,12 +215,12 @@ export default function Chat({ onClose }: ChatProps) {
             placeholder="Ask something..."
             disabled={isLoading}
             maxLength={MAX_INPUT_CHARS}
-            className="flex-1 text-sm rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 px-4 py-2 outline-none focus:border-gray-500 dark:focus:border-gray-400 disabled:opacity-50 transition-colors"
+            className="flex-1 text-sm rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 px-4 py-2 outline-none focus:border-accent dark:focus:border-accent disabled:opacity-50 transition-colors"
           />
           <button
             type="submit"
             disabled={isLoading || !input.trim()}
-            className="rounded-full bg-gray-900 dark:bg-white px-4 py-2 text-sm font-medium text-white dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-100 disabled:opacity-40 transition-colors"
+            className={`rounded-full bg-accent-solid px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-solid-hover disabled:opacity-40 ${FOCUS_RING}`}
           >
             Send
           </button>
