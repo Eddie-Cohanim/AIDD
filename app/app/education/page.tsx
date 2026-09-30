@@ -1,6 +1,6 @@
 import SectionPage from "../components/SectionPage";
 import ExpandableItem from "../components/ExpandableItem";
-import PhotoGallery from "../components/PhotoGallery";
+import DetailPointContent from "../components/DetailPointContent";
 import { profileData } from "@/lib/profile";
 
 export default function EducationPage() {
@@ -17,8 +17,7 @@ export default function EducationPage() {
             <div>
               {entry.highlights.map((point) => (
                 <ExpandableItem key={point.heading} heading={point.heading}>
-                  <p>{point.detail}</p>
-                  {point.photos && <PhotoGallery photos={point.photos} />}
+                  <DetailPointContent point={point} />
                 </ExpandableItem>
               ))}
             </div>

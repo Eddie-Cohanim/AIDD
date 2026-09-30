@@ -1,5 +1,6 @@
 import SectionPage from "../components/SectionPage";
 import ExpandableItem from "../components/ExpandableItem";
+import DetailPointContent from "../components/DetailPointContent";
 import { profileData } from "@/lib/profile";
 
 export default function ExperiencePage() {
@@ -16,7 +17,7 @@ export default function ExperiencePage() {
             <div>
               {entry.bullets.map((point) => (
                 <ExpandableItem key={point.heading} heading={point.heading}>
-                  <p>{point.detail}</p>
+                  <DetailPointContent point={point} />
                 </ExpandableItem>
               ))}
             </div>

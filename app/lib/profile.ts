@@ -6,6 +6,8 @@ export interface Photo {
 export interface DetailPoint {
   heading: string;
   detail: string;
+  bullets?: string[];
+  subpoints?: DetailPoint[];
   photos?: Photo[];
 }
 
@@ -105,21 +107,126 @@ export const profileData: SiteData = {
           heading: "Computer vision pipelines",
           detail:
             "Developed and optimized computer vision pipelines from pre-processing to inference, transforming architectural blueprints into 3D models.",
+          subpoints: [
+            {
+              heading: "Room identification",
+              detail:
+                "Built the production chain that turns an architectural and a structural floor plan into enclosed, typed rooms.",
+              bullets: [
+                "Both drawings are detected, the architectural plan is docked onto the structural one, and the combined walls are partitioned into rooms.",
+                "Room names come from tiled OCR in English and Hebrew and are assigned by zone priority, which also decides the specialized opening when a door serves two rooms.",
+                "Treated opening footprints as part of the wall mass. On one measured page, walls alone closed 18 rooms and matched 10 of 41 labels; adding the openings closed 47 rooms and matched 35 of 41.",
+              ],
+            },
+            {
+              heading: "Tiling for full-sheet inference",
+              detail:
+                "A full sheet at 400 DPI is orders of magnitude larger than YOLO's native 640 input, so each page is cut into tiles, predicted, and merged back to page level.",
+              bullets: [
+                "Tiles overlap by 20% so an opening cut by a tile edge still appears whole in the neighboring tile.",
+                "Raising the tile and training size from 640 to 1280 gave the model the surrounding context a blueprint needs to be read, improving detection results by about 5%.",
+              ],
+            },
+          ],
+        },
+        {
+          heading: "Opening detection models",
+          detail:
+            "Trained YOLO11 Large oriented-box models to separate nine opening types on architectural drawings: door, window, sliding door, mamad (safe room) door, mamad window, laundry-niche window, ventilation, opening location, and element mark.",
+          subpoints: [
+            {
+              heading: "Hyperparameter tuning",
+              detail:
+                "Tuned training for geometry-sensitive technical drawings, prioritizing fewer false positives.",
+              bullets: [
+                "Locked training to the tile size so inference does not silently downscale a 1280 tile back to 640.",
+                "Settled on SGD with a real learning rate of 0.003 (the automatic setting was ignoring the configured rate and using about 0.01), a longer warmup, and stronger regularization to cut false positives.",
+                "Turned mosaic and mixup off because the drawings are geometry-sensitive, capped rotation at 5 degrees after 15 degrees created false junctions, and kept copy-paste low for the same reason.",
+                "A score-threshold sweep put the best F1 at 0.25. Separate runs compared Adam, AdamW, and larger tile sizes.",
+              ],
+            },
+          ],
         },
         {
           heading: "Data lifecycle and annotation oversight",
           detail:
             "Managed the full data lifecycle, including dataset preparation and technical oversight of annotation platforms, ensuring high-fidelity ground truth for model training.",
+          subpoints: [
+            {
+              heading: "Opening datasets in V7",
+              detail:
+                "Managed the opening detection datasets in V7: about 1,140 sheets at 400 DPI, split 70/20/10.",
+              bullets: [
+                "Kept empty background tiles in proportion to the labeled ones so the model does not hallucinate openings on blank paper.",
+              ],
+            },
+          ],
         },
         {
-          heading: "Interactive stakeholder demos",
+          heading: "Model evaluation against ground truth",
           detail:
-            "Built interactive UI demos to showcase product capabilities to stakeholders.",
+            "Built a comparison tool that checks the pipeline's output against the modeler's ground-truth IFC model, since detection scores on tiles do not show whether the reconstructed building is right.",
+          bullets: [
+            "Registers the two models and matches walls and openings one to one.",
+            "Reports what matched, what deviates, what the pipeline added, and what it missed, as both metrics and a visual overlay.",
+            "Later extended with a revision diff through Autodesk (added, removed, and changed elements) and a Revit-to-IFC conversion so either model format can be loaded.",
+          ],
+        },
+        {
+          heading: "MLOps and model serving",
+          detail:
+            "Built the serving, versioning, and release infrastructure for the detection models behind the batch model-generation app.",
+          subpoints: [
+            {
+              heading: "Serving",
+              detail:
+                "Models are served by the detection pipeline on Modal by default (an L4 GPU that scales to zero), or on a single GPU VM or GKE when a long-running cluster is needed.",
+            },
+            {
+              heading: "Weight versioning and hot reload",
+              detail:
+                "Weights live in a versioned GCS bucket and are published by generation number.",
+              bullets: [
+                "A sidecar polls metadata and downloads only when a file changed, and the inference worker hot-reloads.",
+                "No image rebuild and no download on the job path.",
+              ],
+            },
+            {
+              heading: "Staging-to-production promotion",
+              detail:
+                "Staging and production buckets are separate, and promotion is one explicit copy of the files named in the model manifest.",
+              bullets: [
+                "The previous production weights are kept for rollback, so merging a code fix cannot ship an experimental checkpoint.",
+                "Each batch is pinned to staging or production so a run cannot drift between environments mid-flight.",
+              ],
+            },
+            {
+              heading: "Experiment tracking",
+              detail:
+                "Training runs are logged in Weights & Biases, including resumed runs and per-class metrics.",
+              bullets: [
+                "Cluster jobs on GKE with Ray write weights to durable GCS storage instead of treating the pod disk as the record.",
+              ],
+            },
+            {
+              heading: "Explorer preview endpoint",
+              detail:
+                "The app's 2D explorer calls a Modal preview endpoint that uses the same tile size and thresholds as production.",
+              bullets: [
+                "Caches the default preview and invalidates that cache when the architectural classifier changes (the 6-class cut, then the 9-class cut).",
+              ],
+            },
+          ],
         },
         {
           heading: "Pipeline performance optimization",
           detail:
             "Improved pipeline performance by parallelizing workloads, replacing bottleneck Python routines with inline C extensions, and migrating to GPU-accelerated libraries that fully utilized available hardware.",
+        },
+        {
+          heading: "Interactive stakeholder demos",
+          detail:
+            "Built interactive UI demos to showcase product capabilities to stakeholders.",
         },
         {
           heading: "Product vertical ownership",

@@ -10,7 +10,7 @@ import type {
 import { isTodo } from "./todo";
 
 const SECTION_SEPARATOR = "===";
-const MAX_EXPERIENCE_BULLETS_IN_PROMPT = 5;
+const MAX_EXPERIENCE_BULLETS_IN_PROMPT = 10;
 
 function isTodoArray(arr: string[]): boolean {
   return arr.length === 0 || arr.every(isTodo);
@@ -20,8 +20,18 @@ function section(title: string, content: string): string {
   return `${SECTION_SEPARATOR} ${title} ${SECTION_SEPARATOR}\n${content}\n\n`;
 }
 
-function formatDetailPoint(point: DetailPoint): string {
-  return `${point.heading}: ${point.detail}`;
+const NESTED_INDENT = "  ";
+
+function formatDetailPoint(point: DetailPoint, indent: string = ""): string {
+  const childIndent = indent + NESTED_INDENT;
+  const lines: string[] = [`${point.heading}: ${point.detail}`];
+  for (const bullet of point.bullets ?? []) {
+    lines.push(`${childIndent}- ${bullet}`);
+  }
+  for (const subpoint of point.subpoints ?? []) {
+    lines.push(`${childIndent}- ${formatDetailPoint(subpoint, childIndent)}`);
+  }
+  return lines.join("\n");
 }
 
 function formatExperience(entries: ExperienceEntry[]): string {
@@ -30,7 +40,7 @@ function formatExperience(entries: ExperienceEntry[]): string {
       const bullets = e.bullets
         .filter((b) => !isTodo(b.detail))
         .slice(0, MAX_EXPERIENCE_BULLETS_IN_PROMPT)
-        .map(formatDetailPoint);
+        .map((point) => formatDetailPoint(point));
       const bulletBlock =
         bullets.length > 0 ? bullets.map((b) => `- ${b}`).join("\n") : "";
       const period = isTodo(e.period) ? "" : `\nPeriod: ${e.period}`;
