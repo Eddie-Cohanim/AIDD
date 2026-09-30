@@ -79,6 +79,7 @@ export interface LanguageEntry {
 export interface SiteData {
   name: string;
   tagline: string;
+  summary: string;
   about: string[];
   experience: ExperienceEntry[];
   army: ArmyEntry[];
@@ -95,6 +96,8 @@ export interface SiteData {
 export const profileData: SiteData = {
   name: "Eddie Cohanim",
   tagline: "AI Engineer and Data Scientist",
+  summary:
+    "AI Engineer at Constrol, building computer vision pipelines that turn architectural blueprints into 3D models. B.Sc. in Mathematics and Computer Science from the Technion.",
   about: [
     "AI Engineer at Constrol with a B.Sc. in Mathematics and Computer Science from the Technion. Analytical, self-motivated professional with a sharp problem-solving mindset, excellent communication, and strong interpersonal skills. A fast learner who thrives in collaborative, high-performance environments, dedicated to delivering meaningful impact through innovative AI solutions.",
   ],
@@ -285,7 +288,7 @@ export const profileData: SiteData = {
         {
           heading: "Full-stack Next.js build",
           detail:
-            "Designed and built a full-stack personal portfolio website using Next.js 16 (App Router) and TypeScript, hosted on Vercel with continuous deployment from GitHub.",
+            "Designed and built a full-stack, single-page personal portfolio website using Next.js 16 (App Router) and TypeScript, hosted on Vercel with continuous deployment from GitHub.",
         },
         {
           heading: "AI chatbot integration",
@@ -300,7 +303,7 @@ export const profileData: SiteData = {
         {
           heading: "Custom visual effects",
           detail:
-            "Implemented a custom particle canvas animation, scroll-zone background cycling, and a parallax slab effect for a dynamic visual experience.",
+            "Implemented a custom particle canvas animation with a cursor-following gradient glow, tuned for both light and dark themes.",
         },
         {
           heading: "Git workflow and automation",

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useId, useState } from "react";
+import { FOCUS_RING } from "@/lib/styles";
 
 interface ExpandableItemProps {
   heading: React.ReactNode;
@@ -13,20 +14,20 @@ export default function ExpandableItem({ heading, children }: ExpandableItemProp
   const toggle = useCallback(() => setOpen((isOpen) => !isOpen), []);
 
   return (
-    <div className="border-b border-gray-200 dark:border-gray-700 last:border-b-0">
+    <div className="border-b border-gray-200 dark:border-gray-800 last:border-b-0">
       <button
         type="button"
         aria-expanded={open}
         aria-controls={panelId}
         onClick={toggle}
-        className="flex w-full items-center justify-between gap-4 py-3 text-left text-gray-800 dark:text-gray-100 transition-colors hover:text-gray-950 dark:hover:text-white"
+        className={`flex w-full items-center justify-between gap-4 rounded py-2 text-left text-sm font-medium text-gray-800 dark:text-gray-200 transition-colors hover:text-accent ${FOCUS_RING}`}
       >
-        <span className="font-medium">{heading}</span>
+        <span>{heading}</span>
         <svg
           aria-hidden="true"
           viewBox="0 0 20 20"
           fill="currentColor"
-          className={`h-5 w-5 shrink-0 text-gray-400 dark:text-gray-500 transition-transform ${open ? "rotate-180" : ""}`}
+          className={`h-4 w-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform ${open ? "rotate-180" : ""}`}
         >
           <path
             fillRule="evenodd"
@@ -35,7 +36,7 @@ export default function ExpandableItem({ heading, children }: ExpandableItemProp
           />
         </svg>
       </button>
-      <div id={panelId} hidden={!open} className="pb-4 text-lg text-gray-600 dark:text-gray-300">
+      <div id={panelId} hidden={!open} className="pb-3 text-sm">
         {children}
       </div>
     </div>
