@@ -13,7 +13,7 @@ export default function Section({ id, title, children }: SectionProps) {
       <div className="mx-auto max-w-4xl px-6">
         <h2
           id={headingId}
-          className="mb-8 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl"
+          className="mb-8 text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl"
         >
           {title}
         </h2>

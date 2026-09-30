@@ -1,4 +1,4 @@
-import DetailPointContent from "./DetailPointContent";
+import DetailPointItem from "./DetailPointItem";
 import type { DetailPoint } from "@/lib/profile";
 
 interface DetailPointListProps {
@@ -7,12 +7,9 @@ interface DetailPointListProps {
 
 export default function DetailPointList({ points }: DetailPointListProps) {
   return (
-    <ul className="space-y-5">
+    <ul className="divide-y divide-gray-200 dark:divide-gray-800">
       {points.map((point) => (
-        <li key={point.heading}>
-          <h4 className="mb-1 font-semibold text-gray-900 dark:text-white">{point.heading}</h4>
-          <DetailPointContent point={point} />
-        </li>
+        <DetailPointItem key={point.heading} point={point} />
       ))}
     </ul>
   );
