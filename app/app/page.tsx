@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import Hero from "./components/Hero";
+import SectionDivider from "./components/SectionDivider";
 import AboutSection from "./components/sections/AboutSection";
 import ExperienceSection from "./components/sections/ExperienceSection";
 import ProjectsSection from "./components/sections/ProjectsSection";
@@ -29,7 +30,10 @@ export default function HomePage() {
     <main className="relative pb-16" style={{ zIndex: CONTENT_Z_INDEX }}>
       <Hero />
       {SECTIONS.map((section) => (
-        <Fragment key={section.id}>{SECTION_RENDERERS[section.id](section)}</Fragment>
+        <Fragment key={section.id}>
+          <SectionDivider />
+          {SECTION_RENDERERS[section.id](section)}
+        </Fragment>
       ))}
     </main>
   );
