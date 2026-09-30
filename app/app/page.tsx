@@ -7,7 +7,7 @@ import ProjectsSection from "./components/sections/ProjectsSection";
 import EducationSection from "./components/sections/EducationSection";
 import SkillsSection from "./components/sections/SkillsSection";
 import HackathonsSection from "./components/sections/HackathonsSection";
-import ArmySection from "./components/sections/ArmySection";
+import MilitarySection from "./components/sections/MilitarySection";
 import RecommendationsSection from "./components/sections/RecommendationsSection";
 import ContactSection from "./components/sections/ContactSection";
 import { CONTENT_Z_INDEX } from "@/lib/constants";
@@ -20,7 +20,7 @@ const SECTION_RENDERERS: Record<SectionId, (link: SectionLink) => React.ReactNod
   education: (link) => <EducationSection {...link} />,
   skills: (link) => <SkillsSection {...link} />,
   hackathons: (link) => <HackathonsSection {...link} />,
-  army: (link) => <ArmySection {...link} />,
+  military: (link) => <MilitarySection {...link} />,
   recommendations: (link) => <RecommendationsSection {...link} />,
   contact: (link) => <ContactSection {...link} />,
 };

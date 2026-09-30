@@ -20,8 +20,9 @@
   --accent-solid: #b8361a;
   --accent-solid-hover: #9e2d14;
   --accent-contrast: #ffffff;
-  --accent-wash: rgb(184 54 26 / 0.1);
-  --accent-edge: rgb(184 54 26 / 0.35);
+  --pill-wash: #efe7d3;
+  --pill-edge: rgb(150 120 70 / 0.35);
+  --pill-ink: #0f2a44;
   --nav-bg: rgb(242 245 248 / 0.8);
   --nav-panel: #f2f5f8;
 
@@ -50,8 +51,9 @@
   --accent-solid: #ff8a65;
   --accent-solid-hover: #ffa285;
   --accent-contrast: #0b2540;
-  --accent-wash: rgb(255 138 101 / 0.14);
-  --accent-edge: rgb(255 138 101 / 0.4);
+  --pill-wash: rgb(240 234 214 / 0.14);
+  --pill-edge: rgb(240 234 214 / 0.5);
+  --pill-ink: #f0ead6;
   --nav-bg: rgb(11 37 64 / 0.72);
   --nav-panel: #0b2540;
 }
@@ -70,8 +72,9 @@
   --color-accent-solid: var(--accent-solid);
   --color-accent-solid-hover: var(--accent-solid-hover);
   --color-accent-contrast: var(--accent-contrast);
-  --color-accent-wash: var(--accent-wash);
-  --color-accent-edge: var(--accent-edge);
+  --color-pill-wash: var(--pill-wash);
+  --color-pill-edge: var(--pill-edge);
+  --color-pill-ink: var(--pill-ink);
   --color-nav: var(--nav-bg);
   --color-nav-panel: var(--nav-panel);
   --font-sans: var(--font-archivo);

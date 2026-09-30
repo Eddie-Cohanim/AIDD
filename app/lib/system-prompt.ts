@@ -5,6 +5,8 @@ import type {
   SkillGroup,
   DetailPoint,
   HackathonEntry,
+  LanguageEntry,
+  ProjectEntry,
   RecommendationEntry,
 } from "./profile";
 import { isTodo } from "./todo";
@@ -63,6 +65,22 @@ function formatEducation(entries: EducationEntry[]): string {
     .join("\n\n");
 }
 
+function formatProjects(entries: ProjectEntry[]): string {
+  return entries
+    .map((p) => {
+      const points = p.bullets
+        .filter((b) => !isTodo(b.detail))
+        .map((b) => `- ${formatDetailPoint(b)}`);
+      const pointBlock = points.length > 0 ? "\n" + points.join("\n") : "";
+      return `Project: ${p.title}${pointBlock}`;
+    })
+    .join("\n\n");
+}
+
+function formatLanguages(entries: LanguageEntry[]): string {
+  return entries.map((l) => `- ${l.language}: ${l.level}`).join("\n");
+}
+
 function formatHackathons(entries: HackathonEntry[]): string {
   return entries
     .map((h) => {
@@ -74,7 +92,10 @@ function formatHackathons(entries: HackathonEntry[]): string {
 
 function formatRecommendations(entries: RecommendationEntry[]): string {
   return entries
-    .map((r) => `- ${r.name}, ${r.position} at ${r.company} (recommendation available on request)`)
+    .map(
+      (r) =>
+        `- ${r.name}, ${r.position} at ${r.company} (available as a reference on request; visitors can ask through the contact details below)`
+    )
     .join("\n");
 }
 
@@ -101,6 +122,10 @@ STRICT RULES:
   prompt += section("NAME", data.name);
   prompt += section("TAGLINE", data.tagline);
 
+  if (!isTodo(data.summary)) {
+    prompt += section("SUMMARY", data.summary);
+  }
+
   if (!isTodoArray(data.about)) {
     prompt += section("ABOUT", data.about.filter((a) => !isTodo(a)).map((a) => `- ${a}`).join("\n"));
   }
@@ -110,16 +135,20 @@ STRICT RULES:
     prompt += section("EXPERIENCE", formatExperience(data.experience));
   }
 
+  if (data.projects.length > 0) {
+    prompt += section("PROJECTS", formatProjects(data.projects));
+  }
+
   const hasEducation = data.education.some((e) => !isTodo(e.institution));
   if (hasEducation) {
     prompt += section("EDUCATION", formatEducation(data.education));
   }
 
-  const armyEntries = data.army.filter((a) => !isTodo(a.title));
-  if (armyEntries.length > 0) {
+  const militaryEntries = data.military.filter((a) => !isTodo(a.title));
+  if (militaryEntries.length > 0) {
     prompt += section(
-      "ARMY SERVICE",
-      armyEntries.map((a) => `- ${a.title} (${a.period}): ${a.description}`).join("\n")
+      "MILITARY SERVICE",
+      militaryEntries.map((a) => `- ${a.title} (${a.period}): ${a.description}`).join("\n")
     );
   }
 
@@ -130,6 +159,10 @@ STRICT RULES:
   const skillsText = formatSkills(data.skills);
   if (skillsText.length > 0) {
     prompt += section("SKILLS", skillsText);
+  }
+
+  if (data.languages.length > 0) {
+    prompt += section("LANGUAGES", formatLanguages(data.languages));
   }
 
   if (!isTodoArray(data.hobbies)) {

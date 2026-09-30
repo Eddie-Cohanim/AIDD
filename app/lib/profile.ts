@@ -65,7 +65,7 @@ export interface ContactInfo {
   github: string;
 }
 
-export interface ArmyEntry {
+export interface MilitaryEntry {
   title: string;
   period: string;
   description: string;
@@ -82,7 +82,7 @@ export interface SiteData {
   summary: string;
   about: string[];
   experience: ExperienceEntry[];
-  army: ArmyEntry[];
+  military: MilitaryEntry[];
   education: EducationEntry[];
   projects: ProjectEntry[];
   hackathons: HackathonEntry[];
@@ -95,31 +95,31 @@ export interface SiteData {
 
 export const profileData: SiteData = {
   name: "Eddie Cohanim",
-  tagline: "AI Engineer and Data Scientist",
+  tagline: "AI Engineer and SW Developer",
   summary:
     "Building computer vision pipelines at Constrol that turn architectural blueprints into 3D models. B.Sc. in Mathematics and Computer Science from the Technion.",
   about: [
-    "AI Engineer at Constrol with a B.Sc. in Mathematics and Computer Science from the Technion. Analytical, self-motivated professional with a sharp problem-solving mindset, excellent communication, and strong interpersonal skills. A fast learner who thrives in collaborative, high-performance environments, dedicated to delivering meaningful impact through innovative AI solutions.",
+    "AI Engineer and SW Developer at Constrol with a B.Sc. in Mathematics and Computer Science from the Technion. Analytical, self-motivated professional with a sharp problem-solving mindset, excellent communication, and strong interpersonal skills. A fast learner who thrives in collaborative, high-performance environments, dedicated to delivering meaningful impact through innovative AI solutions.",
   ],
   experience: [
     {
-      title: "AI Engineering & SW Development",
+      title: "AI Engineer and SW Developer",
       company: "Constrol",
       period: "September 2025 - Present",
       bullets: [
         {
           heading: "Computer vision pipelines",
           detail:
-            "Developed and optimized computer vision pipelines from pre-processing to inference, transforming architectural blueprints into 3D models.",
+            "Developed and optimized pipeline stages from pre-processing to inference.",
           subpoints: [
             {
               heading: "Room identification",
               detail:
                 "Built the production chain that turns an architectural and a structural floor plan into enclosed, typed rooms.",
               bullets: [
-                "Both drawings are detected, the architectural plan is docked onto the structural one, and the combined walls are partitioned into rooms.",
-                "Room names come from tiled OCR in English and Hebrew and are assigned by zone priority, which also decides the specialized opening when a door serves two rooms.",
-                "Treated opening footprints as part of the wall mass. On one measured page, walls alone closed 18 rooms and matched 10 of 41 labels; adding the openings closed 47 rooms and matched 35 of 41.",
+                "The pipeline detects both drawings, aligns the architectural plan onto the structural one, and splits the combined walls into rooms.",
+                "Room names are read with OCR in English and Hebrew and resolved by a room-type priority order, which also decides the door type when one door connects two rooms (for example, a safe-room door).",
+                "Counted door and window footprints as part of the walls. On one measured page, walls alone closed 18 rooms and matched 10 of 41 labels; adding the openings closed 47 rooms and matched 35 of 41.",
               ],
             },
             {
@@ -141,30 +141,14 @@ export const profileData: SiteData = {
             {
               heading: "Hyperparameter tuning",
               detail:
-                "Tuned training for geometry-sensitive technical drawings, prioritizing fewer false positives.",
-              bullets: [
-                "Locked training to the tile size so inference does not silently downscale a 1280 tile back to 640.",
-                "Settled on SGD with a real learning rate of 0.003 (the automatic setting was ignoring the configured rate and using about 0.01), a longer warmup, and stronger regularization to cut false positives.",
-                "Turned mosaic and mixup off because the drawings are geometry-sensitive, capped rotation at 5 degrees after 15 degrees created false junctions, and kept copy-paste low for the same reason.",
-                "A score-threshold sweep put the best F1 at 0.25. Separate runs compared Adam, AdamW, and larger tile sizes.",
-              ],
+                "Tuned training for technical drawings to cut false positives: matched training to the tile size, fixed an optimizer setting that was overriding the learning rate, and turned off augmentations that distort geometry.",
             },
           ],
         },
         {
-          heading: "Data lifecycle and annotation oversight",
+          heading: "Datasets and annotation",
           detail:
-            "Managed the full data lifecycle, including dataset preparation and technical oversight of annotation platforms, ensuring high-fidelity ground truth for model training.",
-          subpoints: [
-            {
-              heading: "Opening datasets in V7",
-              detail:
-                "Managed the opening detection datasets in V7: about 1,140 sheets at 400 DPI, split 70/20/10.",
-              bullets: [
-                "Kept empty background tiles in proportion to the labeled ones so the model does not hallucinate openings on blank paper.",
-              ],
-            },
-          ],
+            "Managed the opening-detection datasets in V7 (about 1,140 sheets) and oversaw annotation, keeping empty tiles in proportion so the model does not hallucinate openings on blank paper.",
         },
         {
           heading: "Model evaluation against ground truth",
@@ -187,38 +171,14 @@ export const profileData: SiteData = {
                 "Models are served by the detection pipeline on Modal by default (an L4 GPU that scales to zero), or on a single GPU VM or GKE when a long-running cluster is needed.",
             },
             {
-              heading: "Weight versioning and hot reload",
+              heading: "Weight versioning and promotion",
               detail:
-                "Weights live in a versioned GCS bucket and are published by generation number.",
-              bullets: [
-                "A sidecar polls metadata and downloads only when a file changed, and the inference worker hot-reloads.",
-                "No image rebuild and no download on the job path.",
-              ],
-            },
-            {
-              heading: "Staging-to-production promotion",
-              detail:
-                "Staging and production buckets are separate, and promotion is one explicit copy of the files named in the model manifest.",
-              bullets: [
-                "The previous production weights are kept for rollback, so merging a code fix cannot ship an experimental checkpoint.",
-                "Each batch is pinned to staging or production so a run cannot drift between environments mid-flight.",
-              ],
+                "Weights are versioned in GCS, hot-reloaded without rebuilding the image, and promoted from staging to production with rollback.",
             },
             {
               heading: "Experiment tracking",
               detail:
                 "Training runs are logged in Weights & Biases, including resumed runs and per-class metrics.",
-              bullets: [
-                "Cluster jobs on GKE with Ray write weights to durable GCS storage instead of treating the pod disk as the record.",
-              ],
-            },
-            {
-              heading: "Explorer preview endpoint",
-              detail:
-                "The app's 2D explorer calls a Modal preview endpoint that uses the same tile size and thresholds as production.",
-              bullets: [
-                "Caches the default preview and invalidates that cache when the architectural classifier changes (the 6-class cut, then the 9-class cut).",
-              ],
             },
           ],
         },
@@ -228,23 +188,18 @@ export const profileData: SiteData = {
             "Improved pipeline performance by parallelizing workloads, replacing bottleneck Python routines with inline C extensions, and migrating to GPU-accelerated libraries that fully utilized available hardware.",
         },
         {
-          heading: "Interactive stakeholder demos",
-          detail:
-            "Built interactive UI demos to showcase product capabilities to stakeholders.",
-        },
-        {
           heading: "Product vertical ownership",
           detail:
-            "Acted as the primary owner for a critical product vertical, coordinating closely with civil engineers and annotators to bridge the gap between technical AI constraints and real-world engineering requirements.",
+            "Owned a key product vertical, working with civil engineers and annotators to align AI constraints with real engineering requirements, and built interactive demos to show its capabilities to stakeholders.",
         },
       ],
     },
   ],
-  army: [
+  military: [
     {
       title: "Infantry, IDF Reserves",
       period: "November 2020 - Present",
-      description: "Prioritized goals and ensured critical outcomes were achieved while serving on the October 7th war.",
+      description: "Serve as an infantry reservist, including active duty during the war that began on October 7, 2023.",
     },
     {
       title: "Staff Sergeant, IDF Nahal Brigade",
@@ -293,22 +248,17 @@ export const profileData: SiteData = {
         {
           heading: "AI chatbot integration",
           detail:
-            "Integrated an AI-powered chatbot using the Vercel AI SDK and Anthropic claude-3-haiku via Vercel AI Gateway, enabling visitors to interactively ask questions about my background and experience.",
+            "Integrated an AI-powered chatbot using the Vercel AI SDK and Anthropic Claude Haiku 4.5 via Vercel AI Gateway, enabling visitors to interactively ask questions about my background and experience.",
         },
         {
           heading: "AI-driven development (AIDD)",
           detail:
-            "Applied AI-driven development (AIDD) techniques throughout the entire build - using Claude Code as a development assistant to architect features, write and review code, run static checks, and manage deployments.",
+            "Used Claude Code throughout the build to architect features, write and review code, run static checks, and manage deployments, on a feature-branch Git workflow with TypeScript type checking on every push and security audits through custom slash-command skills.",
         },
         {
           heading: "Custom visual effects",
           detail:
             "Implemented a custom particle canvas animation with a cursor-following gradient glow, tuned for both light and dark themes.",
-        },
-        {
-          heading: "Git workflow and automation",
-          detail:
-            "Established a structured Git workflow with dedicated feature branches, automated TypeScript type checking on every push, and security auditing via custom slash-command skills.",
         },
       ],
     },
@@ -318,47 +268,42 @@ export const profileData: SiteData = {
         {
           heading: "Hackathon finalist extension",
           detail:
-            "Led a team to architect and implement a Chrome extension that used AI and large language models to scan news articles in real time and flag potential misinformation, earning a finalist placement among all competing teams.",
+            "Led a team to architect and implement a Chrome extension that uses large language models to scan news articles in real time and flag potential misinformation, earning a finalist placement among all competing teams.",
         },
         {
           heading: "From hackathon to product",
           detail:
-            "Following the hackathon, the team collaborated closely to expand the concept into a fully-featured product, dividing responsibilities and iterating together through every stage of design, implementation, and testing.",
+            "After the hackathon, the team developed the prototype into a complete product and published it on the Chrome Web Store, where it is available in all major Chromium-based browsers.",
         },
         {
           heading: "Multi-agent credibility scoring",
           detail:
-            "Co-built a multi-agent AI analysis system deploying six specialized agents in parallel (source verification, author credibility, fact-checking, bias detection, writing quality, and headline accuracy), each contributing a weighted score to a final 0-100 credibility rating.",
+            "Co-built a system of six specialized agents running in parallel (source verification, author credibility, fact-checking, bias detection, writing quality, and headline accuracy), each contributing a weighted score to a final 0-100 credibility rating.",
         },
         {
           heading: "Smart Context Search (SIFT)",
           detail:
-            "Implemented Smart Context Search (SIFT), where agents actively search for independent coverage of the article's claims to surface supporting and contradicting sources for transparent lateral reading.",
+            "Implemented agents that search for independent coverage of the article's claims, surfacing supporting and contradicting sources for lateral reading.",
         },
         {
           heading: "Fuzzy quote highlighting",
           detail:
-            "Developed a fuzzy quote highlighting feature using the Levenshtein Distance algorithm, enabling the extension to locate and highlight suspicious claims directly within the article regardless of formatting differences.",
+            "Used Levenshtein distance to locate and highlight suspicious claims directly in the article, even when the formatting differs from the quoted text.",
         },
         {
           heading: "Modular extension architecture",
           detail:
-            "Built the extension on a modular architecture (Chrome Manifest V3, Vanilla JavaScript) with a background service worker acting as an API proxy and caching layer for the Google Gemini API, and Readability.js for clean content extraction.",
-        },
-        {
-          heading: "Chrome Web Store release",
-          detail:
-            "Published the finished extension to the Chrome Web Store, making it publicly available to users across all major Chromium-based browsers.",
+            "Built on Chrome Manifest V3 and vanilla JavaScript, with a background service worker that proxies and caches Google Gemini API calls, and Readability.js for clean content extraction.",
         },
       ],
     },
     {
-      title: "Alcohol Type Identification",
+      title: "Beer and Wine Image Classifier",
       bullets: [
         {
           heading: "Two-stage detection and classification",
           detail:
-            "Co-built a two-stage computer vision system classifying beer and wine types from images: a YOLO v11 object detection model for bounding-box localization, followed by a custom CNN classifier on the cropped regions.",
+            "Co-built a two-stage computer vision system classifying beer and wine types from images: a YOLO11 object detection model for bounding-box localization, followed by a custom CNN classifier on the cropped regions.",
         },
         {
           heading: "Configurable CNN from scratch",
@@ -381,29 +326,9 @@ export const profileData: SiteData = {
             "Conducted extensive hyperparameter research across multiple tracked experiment versions, tuning learning rate, weight decay, batch size, channel depth, dropout, pooling type, early stopping patience, and optimizer (Adam, AdamW, SGD).",
         },
         {
-          heading: "Training visualization",
-          detail:
-            "Built a visualization pipeline to plot per-epoch training and validation loss/accuracy curves across all experiment versions for direct comparison.",
-        },
-        {
           heading: "Benchmarking against published work",
           detail:
             "Researched and benchmarked results against published papers and pretrained models, evaluating per-class precision, recall, F1, and confidence scores.",
-        },
-        {
-          heading: "Project management",
-          detail:
-            "Managed development via GitHub for version control and Jira for task tracking.",
-        },
-      ],
-    },
-    {
-      title: "Local Server",
-      bullets: [
-        {
-          heading: "Multi-threaded C server",
-          detail:
-            "Programmed a working server in C capable of running and interacting with multiple threads simultaneously.",
         },
       ],
     },
@@ -414,7 +339,7 @@ export const profileData: SiteData = {
       event: "Technion CS Hackathon",
       year: "2025",
       description:
-        "Led a team that built Legit, a Chrome extension that uses AI and large language models to scan news articles in real time and flag potential misinformation, earning a finalist placement among all competing teams.",
+        "Led a team that built Legit, a Chrome extension that uses large language models to scan news articles in real time and flag potential misinformation, earning a finalist placement among all competing teams.",
       postUrl:
         "https://www.linkedin.com/posts/eddie-cohanim_thrilled-to-have-competed-in-the-technion-ugcPost-7330967386482692096-99N0/",
       photos: [],
@@ -436,8 +361,12 @@ export const profileData: SiteData = {
   ],
   skills: [
     {
-      category: "Coding Languages",
+      category: "Programming Languages",
       items: ["C", "C++", "Python", "Assembly", "Bash"],
+    },
+    {
+      category: "Cloud and Infrastructure",
+      items: ["GCP", "GKE", "Modal"],
     },
     {
       category: "Fields of Knowledge",
@@ -447,10 +376,9 @@ export const profileData: SiteData = {
         "Data Structures",
         "OS (multi-threading, multi-processing)",
         "Linux",
-        "Version Control",
+        "Git",
         "Algorithms",
         "OOP",
-        "Python Libraries",
       ],
     },
   ],
