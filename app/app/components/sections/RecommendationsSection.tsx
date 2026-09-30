@@ -21,7 +21,7 @@ export default function RecommendationsSection({ id, label }: SectionLink) {
               {links.length > 0 ? (
                 <ul className="mt-3 space-y-1 text-sm">
                   {links.map((link) => (
-                    <li key={link.label} className="text-gray-600 dark:text-gray-300">
+                    <li key={link.label} className="text-ink-muted">
                       {link.label}:{" "}
                       <a
                         href={link.href}
@@ -35,7 +35,7 @@ export default function RecommendationsSection({ id, label }: SectionLink) {
                   ))}
                 </ul>
               ) : (
-                <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">
+                <p className="mt-3 text-sm text-ink-faint">
                   Contact details coming soon.
                 </p>
               )}

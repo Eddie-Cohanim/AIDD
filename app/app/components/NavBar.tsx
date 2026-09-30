@@ -63,7 +63,7 @@ function ThemeToggle({ onToggle }: { onToggle: () => void }) {
       type="button"
       onClick={onToggle}
       aria-label="Toggle color theme"
-      className={`rounded-full border border-gray-300 dark:border-gray-700 px-3 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 transition-colors hover:border-accent hover:text-accent ${FOCUS_RING}`}
+      className={`rounded-full border border-line-strong px-3 py-1 text-xs font-medium text-ink-muted transition-colors hover:border-accent hover:text-accent ${FOCUS_RING}`}
     >
       <span className="dark:hidden">Dark</span>
       <span className="hidden dark:inline">Light</span>
@@ -88,19 +88,19 @@ export default function NavBar({ onToggleTheme }: NavBarProps) {
     const state =
       id === activeId
         ? "text-accent font-medium"
-        : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white";
+        : "text-ink-muted hover:text-ink";
     return `rounded-lg transition-colors ${state} ${FOCUS_RING}`;
   }
 
   return (
     <nav
       aria-label="Primary"
-      className="fixed top-0 left-0 right-0 z-50 border-b border-nav-border bg-nav backdrop-blur-md"
+      className="fixed top-0 left-0 right-0 z-50 border-b border-line bg-nav backdrop-blur-md"
     >
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
         <a
           href={`/#${HERO_ID}`}
-          className={`rounded-lg font-semibold tracking-tight text-gray-900 dark:text-white ${FOCUS_RING}`}
+          className={`rounded-lg font-bold font-stretch-expanded tracking-tight text-ink ${FOCUS_RING}`}
         >
           EC
         </a>
@@ -125,7 +125,7 @@ export default function NavBar({ onToggleTheme }: NavBarProps) {
             aria-expanded={menuOpen}
             aria-controls={MOBILE_MENU_ID}
             onClick={() => setMenuOpen((open) => !open)}
-            className={`rounded-lg p-1 text-gray-700 dark:text-gray-300 hover:text-accent ${FOCUS_RING}`}
+            className={`rounded-lg p-1 text-ink-muted hover:text-accent ${FOCUS_RING}`}
           >
             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-6 w-6">
               {menuOpen ? (
@@ -140,7 +140,7 @@ export default function NavBar({ onToggleTheme }: NavBarProps) {
       <div
         id={MOBILE_MENU_ID}
         hidden={!menuOpen}
-        className="border-t border-nav-border bg-nav-panel lg:hidden"
+        className="border-t border-line bg-nav-panel lg:hidden"
       >
         <ul className="mx-auto flex max-w-5xl flex-col px-6 py-3 text-base">
           {SECTIONS.map((section) => (

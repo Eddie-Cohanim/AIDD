@@ -22,7 +22,7 @@ export default function PhotoGallery({ photos }: PhotoGalleryProps) {
           width={PHOTO_INTRINSIC_WIDTH}
           height={PHOTO_INTRINSIC_HEIGHT}
           sizes={PHOTO_SIZES}
-          className="aspect-[4/3] w-full rounded-2xl border border-gray-200 dark:border-gray-800 object-cover"
+          className="aspect-[4/3] w-full rounded-2xl border border-line object-cover"
         />
       ))}
     </div>

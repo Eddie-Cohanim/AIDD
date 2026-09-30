@@ -12,8 +12,8 @@ export function hasExtraContent(point: DetailPoint): boolean {
 
 function Subpoint({ point }: DetailPointExtraProps) {
   return (
-    <div className="rounded-2xl bg-gray-50/80 dark:bg-white/5 p-4">
-      <h5 className="font-semibold text-gray-900 dark:text-white">{point.heading}</h5>
+    <div className="rounded-2xl bg-sunken p-4">
+      <h5 className="font-semibold text-ink">{point.heading}</h5>
       <p className={`mt-1 ${BODY_TEXT}`}>{point.detail}</p>
       <DetailPointExtra point={point} />
     </div>

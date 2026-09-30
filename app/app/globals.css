@@ -2,52 +2,173 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Light theme: navy ink and redline on cool drafting paper. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --accent: #4f46e5;
-  --accent-solid: #4f46e5;
-  --accent-solid-hover: #4338ca;
-  --nav-bg: rgb(238 242 255 / 0.85);
-  --nav-panel: #eef2ff;
-  --nav-border: #e0e7ff;
+  --paper: #f2f5f8;
+  --sheet: rgb(255 255 255 / 0.85);
+  --sheet-solid: #ffffff;
+  --sunken: rgb(15 42 68 / 0.04);
+  --ink: #0f2a44;
+  --ink-muted: #3e5a76;
+  --ink-faint: #54708b;
+  --line: rgb(15 42 68 / 0.14);
+  --line-strong: rgb(15 42 68 / 0.28);
+  --grid: rgb(15 42 68 / 0.05);
+  --grid-major: rgb(15 42 68 / 0.09);
+  --extrude: #9db3c8;
+  --accent: #b8361a;
+  --accent-solid: #b8361a;
+  --accent-solid-hover: #9e2d14;
+  --accent-contrast: #ffffff;
+  --nav-bg: rgb(242 245 248 / 0.8);
+  --nav-panel: #f2f5f8;
+
+  --grid-minor-size: 24px;
+  --grid-major-size: 120px;
+  --hero-guide-dash: 2000;
+  --hero-outline-dash: 1600;
+  --hero-extrude-step: 1px;
+}
+
+/* Dark theme: chalk linework and redline on blueprint paper. */
+.dark {
+  --paper: #0b2540;
+  --sheet: rgb(15 46 79 / 0.85);
+  --sheet-solid: #0f2e4f;
+  --sunken: rgb(255 255 255 / 0.05);
+  --ink: #e8f0f8;
+  --ink-muted: #a9c0d6;
+  --ink-faint: #7e98b3;
+  --line: rgb(232 240 248 / 0.14);
+  --line-strong: rgb(232 240 248 / 0.28);
+  --grid: rgb(232 240 248 / 0.06);
+  --grid-major: rgb(232 240 248 / 0.11);
+  --extrude: #2b5f92;
+  --accent: #ff8a65;
+  --accent-solid: #ff8a65;
+  --accent-solid-hover: #ffa285;
+  --accent-contrast: #0b2540;
+  --nav-bg: rgb(11 37 64 / 0.72);
+  --nav-panel: #0b2540;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-paper: var(--paper);
+  --color-sheet: var(--sheet);
+  --color-sheet-solid: var(--sheet-solid);
+  --color-sunken: var(--sunken);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
   --color-accent: var(--accent);
   --color-accent-solid: var(--accent-solid);
   --color-accent-solid-hover: var(--accent-solid-hover);
+  --color-accent-contrast: var(--accent-contrast);
   --color-nav: var(--nav-bg);
   --color-nav-panel: var(--nav-panel);
-  --color-nav-border: var(--nav-border);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-.dark {
-  --background: #000000;
-  --foreground: #ededed;
-  --accent: #a5b4fc;
-  --accent-solid: #4f46e5;
-  --accent-solid-hover: #6366f1;
-  --nav-bg: rgb(30 27 75 / 0.55);
-  --nav-panel: #100f29;
-  --nav-border: rgb(99 102 241 / 0.25);
+  --font-sans: var(--font-archivo);
 }
 
 html {
   scroll-behavior: smooth;
 }
 
+body {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+/* Hero: drafting grid that fades out toward the edges. */
+.hero-grid {
+  background-image:
+    linear-gradient(var(--grid-major) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:
+    var(--grid-major-size) var(--grid-major-size),
+    var(--grid-major-size) var(--grid-major-size),
+    var(--grid-minor-size) var(--grid-minor-size),
+    var(--grid-minor-size) var(--grid-minor-size);
+  mask-image: radial-gradient(ellipse at 35% 50%, black 25%, transparent 72%);
+}
+
+/* Hero name: construction lines draw first, then the outline, then the oblique extrusion. */
+.hero-guide {
+  stroke: var(--ink);
+  stroke-width: 1;
+  opacity: 0.2;
+  animation: hero-guide-draw 0.9s ease-out both;
+}
+
+.hero-face {
+  fill: var(--ink);
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  animation:
+    hero-outline-draw 1.4s cubic-bezier(0.4, 0, 0.2, 1) 0.3s both,
+    hero-fill-in 0.6s ease-out 1.6s both;
+}
+
+.hero-layer {
+  fill: var(--extrude);
+  transform: translate(
+    calc(var(--layer) * var(--hero-extrude-step)),
+    calc(var(--layer) * var(--hero-extrude-step))
+  );
+  animation:
+    hero-layer-show 0.2s linear 1.6s both,
+    hero-extrude 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 1.6s both;
+}
+
+@keyframes hero-guide-draw {
+  from {
+    stroke-dasharray: 0 var(--hero-guide-dash);
+    opacity: 0.45;
+  }
+  to {
+    stroke-dasharray: var(--hero-guide-dash) 0;
+  }
+}
+
+@keyframes hero-outline-draw {
+  from {
+    stroke-dasharray: 0 var(--hero-outline-dash);
+  }
+  to {
+    stroke-dasharray: var(--hero-outline-dash) 0;
+  }
+}
+
+@keyframes hero-fill-in {
+  from {
+    fill-opacity: 0;
+  }
+}
+
+@keyframes hero-layer-show {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes hero-extrude {
+  from {
+    transform: translate(0, 0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
+  .hero-guide,
+  .hero-face,
+  .hero-layer {
+    animation: none;
+  }
 }

@@ -7,7 +7,7 @@ interface DetailPointListProps {
 
 export default function DetailPointList({ points }: DetailPointListProps) {
   return (
-    <ul className="divide-y divide-gray-200 dark:divide-gray-800 pl-4 sm:pl-6">
+    <ul className="divide-y divide-line pl-4 sm:pl-6">
       {points.map((point) => (
         <DetailPointItem key={point.heading} point={point} />
       ))}

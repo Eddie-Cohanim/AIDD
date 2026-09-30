@@ -14,7 +14,7 @@ export default function ChatWidget() {
       )}
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className={`rounded-full bg-accent-solid px-5 py-3 text-sm font-medium text-white shadow-lg transition-colors hover:bg-accent-solid-hover ${FOCUS_RING}`}
+        className={`rounded-full bg-accent-solid px-5 py-3 text-sm font-semibold text-accent-contrast shadow-lg transition-colors hover:bg-accent-solid-hover ${FOCUS_RING}`}
       >
         {isOpen ? "Close" : "Chat"}
       </button>
