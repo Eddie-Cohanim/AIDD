@@ -2,7 +2,7 @@ export const FOCUS_RING =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-black";
 
 export const CARD_SURFACE =
-  "rounded-xl border border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-950/80 backdrop-blur-sm";
+  "rounded-3xl border border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-950/80 backdrop-blur-sm";
 
 export const TEXT_LINK = `text-accent underline-offset-4 hover:underline ${FOCUS_RING}`;
 

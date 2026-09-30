@@ -20,7 +20,7 @@ export default function ExpandableItem({ heading, children }: ExpandableItemProp
         aria-expanded={open}
         aria-controls={panelId}
         onClick={toggle}
-        className={`flex w-full items-center justify-between gap-4 rounded py-2 text-left text-sm font-medium text-gray-800 dark:text-gray-200 transition-colors hover:text-accent ${FOCUS_RING}`}
+        className={`flex w-full items-center justify-between gap-4 rounded-lg py-2 text-left text-sm font-medium text-gray-800 dark:text-gray-200 transition-colors hover:text-accent ${FOCUS_RING}`}
       >
         <span>{heading}</span>
         <svg

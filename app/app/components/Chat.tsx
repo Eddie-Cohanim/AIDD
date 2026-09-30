@@ -95,7 +95,7 @@ const ChatMessage = memo(function ChatMessage({ role, text }: ChatMessageProps) 
         />
       )}
       <div
-        className={`max-w-[75%] rounded-xl px-3 py-2 text-sm leading-relaxed ${
+        className={`max-w-[75%] rounded-2xl px-3 py-2 text-sm leading-relaxed ${
           role === "user"
             ? "bg-accent-solid text-white"
             : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white"
@@ -135,7 +135,7 @@ export default function Chat({ onClose }: ChatProps) {
   }
 
   return (
-    <div className="flex flex-col w-80 h-[480px] rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-2xl overflow-hidden">
+    <div className="flex flex-col w-80 h-[480px] rounded-3xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-2xl overflow-hidden">
 
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700">
@@ -151,7 +151,7 @@ export default function Chat({ onClose }: ChatProps) {
         </div>
         <button
           onClick={onClose}
-          className={`rounded text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors text-lg leading-none ${FOCUS_RING}`}
+          className={`rounded-lg text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors text-lg leading-none ${FOCUS_RING}`}
           aria-label="Close chat"
         >
           &times;
@@ -183,7 +183,7 @@ export default function Chat({ onClose }: ChatProps) {
               height={AVATAR_SIZE_MESSAGE}
               className="rounded-full object-cover flex-shrink-0"
             />
-            <div className="bg-gray-100 dark:bg-gray-800 rounded-xl px-3 py-2">
+            <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl px-3 py-2">
               <span className="inline-flex gap-1 items-center h-4">
                 <span
                   className="w-1 h-1 rounded-full bg-gray-400 dark:bg-gray-500 animate-bounce"

@@ -89,7 +89,7 @@ export default function NavBar({ onToggleTheme }: NavBarProps) {
       id === activeId
         ? "text-accent font-medium"
         : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white";
-    return `rounded transition-colors ${state} ${FOCUS_RING}`;
+    return `rounded-lg transition-colors ${state} ${FOCUS_RING}`;
   }
 
   return (
@@ -100,7 +100,7 @@ export default function NavBar({ onToggleTheme }: NavBarProps) {
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
         <a
           href={`/#${HERO_ID}`}
-          className={`rounded font-semibold tracking-tight text-gray-900 dark:text-white ${FOCUS_RING}`}
+          className={`rounded-lg font-semibold tracking-tight text-gray-900 dark:text-white ${FOCUS_RING}`}
         >
           EC
         </a>
@@ -125,7 +125,7 @@ export default function NavBar({ onToggleTheme }: NavBarProps) {
             aria-expanded={menuOpen}
             aria-controls={MOBILE_MENU_ID}
             onClick={() => setMenuOpen((open) => !open)}
-            className={`rounded p-1 text-gray-700 dark:text-gray-300 hover:text-accent ${FOCUS_RING}`}
+            className={`rounded-lg p-1 text-gray-700 dark:text-gray-300 hover:text-accent ${FOCUS_RING}`}
           >
             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-6 w-6">
               {menuOpen ? (
