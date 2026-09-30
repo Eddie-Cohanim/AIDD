@@ -2,7 +2,7 @@ import Section from "../Section";
 import Card from "../Card";
 import EntryHeader from "../EntryHeader";
 import { profileData } from "@/lib/profile";
-import type { SectionLink } from "@/lib/sections";
+import { sectionHref, type SectionLink } from "@/lib/sections";
 import { buildRecommenderLinks } from "@/lib/contact-links";
 import { BODY_TEXT, TEXT_LINK } from "@/lib/styles";
 
@@ -15,10 +15,18 @@ export default function RecommendationsSection({ id, label }: SectionLink) {
           return (
             <Card key={rec.name}>
               <EntryHeader title={rec.name} subtitle={`${rec.position}, ${rec.company}`} />
-              <p className={BODY_TEXT}>
-                Recommendation available on request. Please contact {rec.name} directly.
-              </p>
               {links.length > 0 ? (
+                <p className={BODY_TEXT}>Available as a reference. You can reach {rec.name} directly:</p>
+              ) : (
+                <p className={BODY_TEXT}>
+                  Available as a reference on request.{" "}
+                  <a href={sectionHref("contact")} className={TEXT_LINK}>
+                    Get in touch
+                  </a>{" "}
+                  and I will put you in contact.
+                </p>
+              )}
+              {links.length > 0 && (
                 <ul className="mt-3 space-y-1 text-sm">
                   {links.map((link) => (
                     <li key={link.label} className="text-ink-muted">
@@ -34,10 +42,6 @@ export default function RecommendationsSection({ id, label }: SectionLink) {
                     </li>
                   ))}
                 </ul>
-              ) : (
-                <p className="mt-3 text-sm text-ink-faint">
-                  Contact details coming soon.
-                </p>
               )}
             </Card>
           );

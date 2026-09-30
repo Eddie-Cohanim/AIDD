@@ -5,7 +5,7 @@ export type SectionId =
   | "education"
   | "skills"
   | "hackathons"
-  | "army"
+  | "military"
   | "recommendations"
   | "contact";
 
@@ -23,7 +23,7 @@ export const SECTIONS: readonly SectionLink[] = [
   { id: "education", label: "Education" },
   { id: "hackathons", label: "Hackathons" },
   { id: "skills", label: "Skills" },
-  { id: "army", label: "Army Service" },
+  { id: "military", label: "Military Service" },
   { id: "recommendations", label: "Recommendations" },
   { id: "contact", label: "Contact" },
 ];

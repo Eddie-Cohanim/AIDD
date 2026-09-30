@@ -5,11 +5,11 @@ import { profileData } from "@/lib/profile";
 import type { SectionLink } from "@/lib/sections";
 import { BODY_TEXT } from "@/lib/styles";
 
-export default function ArmySection({ id, label }: SectionLink) {
+export default function MilitarySection({ id, label }: SectionLink) {
   return (
     <Section id={id} title={label}>
       <div className="space-y-6">
-        {profileData.army.map((entry) => (
+        {profileData.military.map((entry) => (
           <Card key={entry.title}>
             <EntryHeader title={entry.title} meta={entry.period} />
             <p className={BODY_TEXT}>{entry.description}</p>

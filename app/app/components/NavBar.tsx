@@ -126,7 +126,7 @@ export default function NavBar({ onToggleTheme }: NavBarProps) {
   function linkClass(id: SectionId): string {
     const state =
       id === activeId
-        ? "text-accent font-medium"
+        ? "text-pill-ink font-medium"
         : "text-ink-muted hover:text-ink";
     return `rounded-lg transition-colors ${state} ${FOCUS_RING}`;
   }
@@ -147,7 +147,7 @@ export default function NavBar({ onToggleTheme }: NavBarProps) {
           <div ref={trackRef} className="relative flex items-center">
             <span
               aria-hidden="true"
-              className={`pointer-events-none absolute inset-y-0 left-0 rounded-full border border-accent-edge bg-accent-wash transition-[transform,width,opacity] duration-300 ease-out motion-reduce:transition-none ${
+              className={`pointer-events-none absolute inset-y-0 left-0 rounded-full border border-pill-edge bg-pill-wash transition-[transform,width,opacity] duration-300 ease-out motion-reduce:transition-none ${
                 visible ? "opacity-100" : "opacity-0"
               }`}
               style={{ width: box.width, transform: `translateX(${box.left}px)` }}
@@ -198,7 +198,7 @@ export default function NavBar({ onToggleTheme }: NavBarProps) {
                 aria-current={section.id === activeId ? "location" : undefined}
                 onClick={() => setMenuOpen(false)}
                 className={`block px-3 py-2 ${linkClass(section.id)} ${
-                  section.id === activeId ? "bg-accent-wash" : ""
+                  section.id === activeId ? "bg-pill-wash" : ""
                 }`}
               >
                 {section.label}
