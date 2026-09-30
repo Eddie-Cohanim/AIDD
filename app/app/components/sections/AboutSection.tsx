@@ -14,15 +14,9 @@ export default function AboutSection({ id, label }: SectionLink) {
           <p key={paragraph}>{paragraph}</p>
         ))}
       </div>
-      <div className="mt-10 grid gap-8 sm:grid-cols-2">
-        <div>
-          <h3 className={`mb-3 ${EYEBROW}`}>Languages</h3>
-          <ChipList items={LANGUAGE_CHIPS} />
-        </div>
-        <div>
-          <h3 className={`mb-3 ${EYEBROW}`}>Outside work</h3>
-          <ChipList items={profileData.hobbies} />
-        </div>
+      <div className="mt-10">
+        <h3 className={`mb-3 ${EYEBROW}`}>Languages</h3>
+        <ChipList items={LANGUAGE_CHIPS} />
       </div>
     </Section>
   );

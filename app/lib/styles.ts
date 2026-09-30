@@ -11,6 +11,6 @@ export const BUTTON_PRIMARY = `inline-flex items-center rounded-full bg-accent-s
 export const BUTTON_SECONDARY = `inline-flex items-center rounded-full border border-gray-300 dark:border-gray-700 px-6 py-3 text-sm font-medium text-gray-800 dark:text-gray-200 transition-colors hover:border-accent hover:text-accent ${FOCUS_RING}`;
 
 export const EYEBROW =
-  "text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400";
+  "text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400";
 
 export const BODY_TEXT = "leading-relaxed text-gray-600 dark:text-gray-300";
