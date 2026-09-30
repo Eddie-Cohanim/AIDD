@@ -40,6 +40,7 @@ export interface HackathonEntry {
   event: string;
   year: string;
   description: string;
+  postUrl: string;
   photos: Photo[];
 }
 
@@ -408,17 +409,21 @@ export const profileData: SiteData = {
     {
       role: "Participant - Finalist",
       event: "Technion CS Hackathon",
-      year: "TODO",
+      year: "2025",
       description:
         "Led a team that built Legit, a Chrome extension that uses AI and large language models to scan news articles in real time and flag potential misinformation, earning a finalist placement among all competing teams.",
+      postUrl:
+        "https://www.linkedin.com/posts/eddie-cohanim_thrilled-to-have-competed-in-the-technion-ugcPost-7330967386482692096-99N0/",
       photos: [],
     },
     {
       role: "Mentor",
       event: "Technion CS Hackathon",
-      year: "TODO",
+      year: "2026",
       description:
         "Returned the following year as a mentor, supporting the participating teams throughout the hackathon.",
+      postUrl:
+        "https://www.linkedin.com/posts/eddie-cohanim_i-had-the-incredible-pleasure-of-participating-ugcPost-7472594355250393088-Kjby/",
       photos: [],
     },
   ],

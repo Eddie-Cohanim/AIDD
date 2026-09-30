@@ -26,6 +26,18 @@ export default function HackathonsPage() {
               }
             >
               <p>{entry.description}</p>
+              {!isTodo(entry.postUrl) && (
+                <p className="mt-2">
+                  <a
+                    href={entry.postUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline hover:text-gray-900 dark:hover:text-white"
+                  >
+                    View LinkedIn post
+                  </a>
+                </p>
+              )}
               <PhotoGallery photos={entry.photos} />
             </ExpandableItem>
           </div>
