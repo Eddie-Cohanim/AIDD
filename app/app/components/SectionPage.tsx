@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
+import { CONTENT_Z_INDEX } from "@/lib/constants";
 
-const CONTENT_Z_INDEX = 2;
 const BACKGROUND_SECTION_COUNT = 4;
 
 interface SectionPageProps {

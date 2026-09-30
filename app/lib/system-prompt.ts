@@ -1,12 +1,16 @@
-import type { SiteData, ExperienceEntry, EducationEntry, SkillGroup } from "./profile";
+import type {
+  SiteData,
+  ExperienceEntry,
+  EducationEntry,
+  SkillGroup,
+  DetailPoint,
+  HackathonEntry,
+  RecommendationEntry,
+} from "./profile";
+import { isTodo } from "./todo";
 
-const TODO_SENTINELS: ReadonlySet<string> = new Set(["TODO", "TBD"]);
 const SECTION_SEPARATOR = "===";
-const MAX_EXPERIENCE_BULLETS_IN_PROMPT = 5;
-
-function isTodo(value: string): boolean {
-  return TODO_SENTINELS.has(value);
-}
+const MAX_EXPERIENCE_BULLETS_IN_PROMPT = 10;
 
 function isTodoArray(arr: string[]): boolean {
   return arr.length === 0 || arr.every(isTodo);
@@ -16,12 +20,27 @@ function section(title: string, content: string): string {
   return `${SECTION_SEPARATOR} ${title} ${SECTION_SEPARATOR}\n${content}\n\n`;
 }
 
+const NESTED_INDENT = "  ";
+
+function formatDetailPoint(point: DetailPoint, indent: string = ""): string {
+  const childIndent = indent + NESTED_INDENT;
+  const lines: string[] = [`${point.heading}: ${point.detail}`];
+  for (const bullet of point.bullets ?? []) {
+    lines.push(`${childIndent}- ${bullet}`);
+  }
+  for (const subpoint of point.subpoints ?? []) {
+    lines.push(`${childIndent}- ${formatDetailPoint(subpoint, childIndent)}`);
+  }
+  return lines.join("\n");
+}
+
 function formatExperience(entries: ExperienceEntry[]): string {
   return entries
     .map((e) => {
       const bullets = e.bullets
-        .filter((b) => !isTodo(b))
-        .slice(0, MAX_EXPERIENCE_BULLETS_IN_PROMPT);
+        .filter((b) => !isTodo(b.detail))
+        .slice(0, MAX_EXPERIENCE_BULLETS_IN_PROMPT)
+        .map((point) => formatDetailPoint(point));
       const bulletBlock =
         bullets.length > 0 ? bullets.map((b) => `- ${b}`).join("\n") : "";
       const period = isTodo(e.period) ? "" : `\nPeriod: ${e.period}`;
@@ -34,12 +53,29 @@ function formatEducation(entries: EducationEntry[]): string {
   return entries
     .map((e) => {
       const period = isTodo(e.period) ? "" : `\nPeriod: ${e.period}`;
-      const honors = e.honors.filter((h) => !isTodo(h));
-      const honorBlock =
-        honors.length > 0 ? "\nHonors: " + honors.join(", ") : "";
-      return `Degree: ${e.degree}\nInstitution: ${e.institution}${period}${honorBlock}`;
+      const highlights = e.highlights
+        .filter((h) => !isTodo(h.detail))
+        .map((h) => `- ${formatDetailPoint(h)}`);
+      const highlightBlock =
+        highlights.length > 0 ? "\n" + highlights.join("\n") : "";
+      return `Degree: ${e.degree}\nInstitution: ${e.institution}${period}${highlightBlock}`;
     })
     .join("\n\n");
+}
+
+function formatHackathons(entries: HackathonEntry[]): string {
+  return entries
+    .map((h) => {
+      const year = isTodo(h.year) ? "" : ` (${h.year})`;
+      return `- ${h.role}, ${h.event}${year}: ${h.description}`;
+    })
+    .join("\n");
+}
+
+function formatRecommendations(entries: RecommendationEntry[]): string {
+  return entries
+    .map((r) => `- ${r.name}, ${r.position} at ${r.company} (recommendation available on request)`)
+    .join("\n");
 }
 
 function formatSkills(groups: SkillGroup[]): string {
@@ -87,6 +123,10 @@ STRICT RULES:
     );
   }
 
+  if (data.hackathons.length > 0) {
+    prompt += section("HACKATHONS", formatHackathons(data.hackathons));
+  }
+
   const skillsText = formatSkills(data.skills);
   if (skillsText.length > 0) {
     prompt += section("SKILLS", skillsText);
@@ -94,6 +134,10 @@ STRICT RULES:
 
   if (!isTodoArray(data.hobbies)) {
     prompt += section("HOBBIES", data.hobbies.filter((h) => !isTodo(h)).map((h) => `- ${h}`).join("\n"));
+  }
+
+  if (data.recommendations.length > 0) {
+    prompt += section("RECOMMENDATIONS", formatRecommendations(data.recommendations));
   }
 
   const contactLines: string[] = [];

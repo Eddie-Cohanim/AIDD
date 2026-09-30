@@ -10,6 +10,7 @@ import { MAX_CHAT_MESSAGES, MAX_INPUT_CHARS } from "@/lib/constants";
 export const runtime = "nodejs";
 
 const ANTHROPIC_MODEL = "anthropic/claude-3-haiku";
+const SYSTEM_PROMPT = buildSystemPrompt(profileData);
 
 export async function POST(request: Request): Promise<Response> {
   try {
@@ -40,11 +41,9 @@ export async function POST(request: Request): Promise<Response> {
       return new Response("Message too long", { status: 400 });
     }
 
-    const systemPrompt = buildSystemPrompt(profileData);
-
     const result = streamText({
       model: ANTHROPIC_MODEL,
-      system: systemPrompt,
+      system: SYSTEM_PROMPT,
       messages: convertToCoreMessages(trimmed),
     });
 

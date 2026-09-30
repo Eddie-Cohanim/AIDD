@@ -1,4 +1,6 @@
 import SectionPage from "../components/SectionPage";
+import ExpandableItem from "../components/ExpandableItem";
+import DetailPointContent from "../components/DetailPointContent";
 import { profileData } from "@/lib/profile";
 
 export default function ExperiencePage() {
@@ -12,11 +14,13 @@ export default function ExperiencePage() {
               <span className="text-sm text-gray-400 dark:text-gray-500">{entry.period}</span>
             </div>
             <p className="mb-3 text-sm font-medium text-gray-500 dark:text-gray-400">{entry.company}</p>
-            <ul className="space-y-1 list-disc list-inside">
-              {entry.bullets.map((b, j) => (
-                <li key={j} className="text-gray-600 dark:text-gray-300">{b}</li>
+            <div>
+              {entry.bullets.map((point) => (
+                <ExpandableItem key={point.heading} heading={point.heading}>
+                  <DetailPointContent point={point} />
+                </ExpandableItem>
               ))}
-            </ul>
+            </div>
           </div>
         ))}
       </div>
