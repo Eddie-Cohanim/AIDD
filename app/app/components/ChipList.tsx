@@ -8,7 +8,7 @@ export default function ChipList({ items }: ChipListProps) {
       {items.map((item) => (
         <li
           key={item}
-          className="rounded-full border border-gray-200 dark:border-gray-800 bg-gray-50/80 dark:bg-gray-900/80 px-3 py-1 text-sm text-gray-700 dark:text-gray-300"
+          className="rounded-full border border-line bg-sunken px-3 py-1 text-sm text-ink-muted"
         >
           {item}
         </li>

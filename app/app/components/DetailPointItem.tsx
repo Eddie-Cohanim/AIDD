@@ -39,14 +39,14 @@ export default function DetailPointItem({ point }: DetailPointItemProps) {
           aria-expanded={open}
           aria-controls={summaryId}
           onClick={toggleOpen}
-          className={`flex w-full items-center justify-between gap-4 rounded-lg py-3 text-left text-lg font-semibold text-gray-900 dark:text-white transition-colors hover:text-accent ${FOCUS_RING}`}
+          className={`flex w-full items-center justify-between gap-4 rounded-lg py-3 text-left text-lg font-semibold text-ink transition-colors hover:text-accent ${FOCUS_RING}`}
         >
           <span>{point.heading}</span>
           <svg
             aria-hidden="true"
             viewBox="0 0 20 20"
             fill="currentColor"
-            className={`h-5 w-5 shrink-0 text-gray-400 dark:text-gray-500 transition-transform ${open ? "rotate-180" : ""}`}
+            className={`h-5 w-5 shrink-0 text-ink-faint transition-transform ${open ? "rotate-180" : ""}`}
           >
             <path
               fillRule="evenodd"

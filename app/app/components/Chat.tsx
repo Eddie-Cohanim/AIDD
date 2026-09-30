@@ -97,8 +97,8 @@ const ChatMessage = memo(function ChatMessage({ role, text }: ChatMessageProps) 
       <div
         className={`max-w-[75%] rounded-2xl px-3 py-2 text-sm leading-relaxed ${
           role === "user"
-            ? "bg-accent-solid text-white"
-            : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white"
+            ? "bg-accent-solid text-accent-contrast"
+            : "bg-sunken text-ink"
         }`}
       >
         {role === "assistant" ? <div>{renderMarkdown(text)}</div> : text}
@@ -135,10 +135,10 @@ export default function Chat({ onClose }: ChatProps) {
   }
 
   return (
-    <div className="flex flex-col w-80 h-[480px] rounded-3xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-2xl overflow-hidden">
+    <div className="flex flex-col w-80 h-[480px] rounded-3xl border border-line bg-sheet-solid shadow-2xl overflow-hidden">
 
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-line">
         <div className="flex items-center gap-2">
           <Image
             src="/chatbot-avatar.png"
@@ -147,11 +147,11 @@ export default function Chat({ onClose }: ChatProps) {
             height={AVATAR_SIZE_HEADER}
             className="rounded-full object-cover flex-shrink-0"
           />
-          <span className="text-sm font-semibold text-gray-900 dark:text-white">Ask me about Eddie</span>
+          <span className="text-sm font-semibold text-ink">Ask me about Eddie</span>
         </div>
         <button
           onClick={onClose}
-          className={`rounded-lg text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors text-lg leading-none ${FOCUS_RING}`}
+          className={`rounded-lg text-ink-faint hover:text-ink transition-colors text-lg leading-none ${FOCUS_RING}`}
           aria-label="Close chat"
         >
           &times;
@@ -161,7 +161,7 @@ export default function Chat({ onClose }: ChatProps) {
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
         {messages.length === 0 && (
-          <p className="text-sm text-gray-400 dark:text-gray-500 text-center mt-8">
+          <p className="text-sm text-ink-faint text-center mt-8">
             Ask me anything about Eddie
           </p>
         )}
@@ -183,18 +183,18 @@ export default function Chat({ onClose }: ChatProps) {
               height={AVATAR_SIZE_MESSAGE}
               className="rounded-full object-cover flex-shrink-0"
             />
-            <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl px-3 py-2">
+            <div className="bg-sunken rounded-2xl px-3 py-2">
               <span className="inline-flex gap-1 items-center h-4">
                 <span
-                  className="w-1 h-1 rounded-full bg-gray-400 dark:bg-gray-500 animate-bounce"
+                  className="w-1 h-1 rounded-full bg-ink-faint animate-bounce"
                   style={{ animationDelay: `${DOT_DELAY_MS_1}ms` }}
                 />
                 <span
-                  className="w-1 h-1 rounded-full bg-gray-400 dark:bg-gray-500 animate-bounce"
+                  className="w-1 h-1 rounded-full bg-ink-faint animate-bounce"
                   style={{ animationDelay: `${DOT_DELAY_MS_2}ms` }}
                 />
                 <span
-                  className="w-1 h-1 rounded-full bg-gray-400 dark:bg-gray-500 animate-bounce"
+                  className="w-1 h-1 rounded-full bg-ink-faint animate-bounce"
                   style={{ animationDelay: `${DOT_DELAY_MS_3}ms` }}
                 />
               </span>
@@ -205,7 +205,7 @@ export default function Chat({ onClose }: ChatProps) {
       </div>
 
       {/* Input */}
-      <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-700">
+      <div className="px-4 py-3 border-t border-line">
         <form onSubmit={handleSubmit} className="flex gap-2">
           <input
             type="text"
@@ -215,12 +215,12 @@ export default function Chat({ onClose }: ChatProps) {
             placeholder="Ask something..."
             disabled={isLoading}
             maxLength={MAX_INPUT_CHARS}
-            className="flex-1 text-sm rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 px-4 py-2 outline-none focus:border-accent dark:focus:border-accent disabled:opacity-50 transition-colors"
+            className="flex-1 text-sm rounded-full border border-line-strong bg-paper text-ink placeholder-ink-faint px-4 py-2 outline-none focus:border-accent disabled:opacity-50 transition-colors"
           />
           <button
             type="submit"
             disabled={isLoading || !input.trim()}
-            className={`rounded-full bg-accent-solid px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-solid-hover disabled:opacity-40 ${FOCUS_RING}`}
+            className={`rounded-full bg-accent-solid px-4 py-2 text-sm font-semibold text-accent-contrast transition-colors hover:bg-accent-solid-hover disabled:opacity-40 ${FOCUS_RING}`}
           >
             Send
           </button>
@@ -232,7 +232,7 @@ export default function Chat({ onClose }: ChatProps) {
                 ? "text-red-500"
                 : charWarning
                 ? "text-orange-400"
-                : "text-gray-400 dark:text-gray-500"
+                : "text-ink-faint"
             }`}
           >
             {charCount} / {MAX_INPUT_CHARS}

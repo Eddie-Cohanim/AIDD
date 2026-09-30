@@ -97,7 +97,7 @@ export const profileData: SiteData = {
   name: "Eddie Cohanim",
   tagline: "AI Engineer and Data Scientist",
   summary:
-    "AI Engineer at Constrol, building computer vision pipelines that turn architectural blueprints into 3D models. B.Sc. in Mathematics and Computer Science from the Technion.",
+    "Building computer vision pipelines at Constrol that turn architectural blueprints into 3D models. B.Sc. in Mathematics and Computer Science from the Technion.",
   about: [
     "AI Engineer at Constrol with a B.Sc. in Mathematics and Computer Science from the Technion. Analytical, self-motivated professional with a sharp problem-solving mindset, excellent communication, and strong interpersonal skills. A fast learner who thrives in collaborative, high-performance environments, dedicated to delivering meaningful impact through innovative AI solutions.",
   ],

@@ -18,23 +18,21 @@ const PARTICLE_ORBIT_SPRING = 0.012;
 const PARTICLE_ORBIT_TANGENTIAL = 0.020;
 const PARTICLE_HORIZONTAL_DAMPING = 0.06;
 const PARTICLE_VERTICAL_DAMPING = 0.04;
-const PARTICLE_ALPHA_DARK = 0.55;
-const PARTICLE_ALPHA_LIGHT = 0.50;
-const PARTICLE_COLOR_R = 148;
-const PARTICLE_COLOR_G = 150;
-const PARTICLE_COLOR_B = 255;
-const PARTICLE_FILL_DARK = `rgba(${PARTICLE_COLOR_R}, ${PARTICLE_COLOR_G}, ${PARTICLE_COLOR_B}, ${PARTICLE_ALPHA_DARK})`;
-const PARTICLE_FILL_LIGHT = `rgba(${PARTICLE_COLOR_R}, ${PARTICLE_COLOR_G}, ${PARTICLE_COLOR_B}, ${PARTICLE_ALPHA_LIGHT})`;
+// Dark theme draws chalk-colored particles on blueprint; light theme draws navy ink on paper.
+const PARTICLE_RGB_DARK = "207, 224, 242";
+const PARTICLE_RGB_LIGHT = "31, 78, 121";
+const PARTICLE_ALPHA_DARK = 0.45;
+const PARTICLE_ALPHA_LIGHT = 0.35;
+const PARTICLE_FILL_DARK = `rgba(${PARTICLE_RGB_DARK}, ${PARTICLE_ALPHA_DARK})`;
+const PARTICLE_FILL_LIGHT = `rgba(${PARTICLE_RGB_LIGHT}, ${PARTICLE_ALPHA_LIGHT})`;
 
 const GRADIENT_RADIUS = 100;
 const GRADIENT_SPRING_STRENGTH = 0.055;
 const GRADIENT_SPRING_DAMPING = 0.80;
-const GRADIENT_ALPHA_DARK = 0.16;
-const GRADIENT_ALPHA_LIGHT = 0.14;
-const GRADIENT_COLOR_R = 99;
-const GRADIENT_COLOR_G = 102;
-const GRADIENT_COLOR_B = 241;
-const GRADIENT_RGB = `${GRADIENT_COLOR_R}, ${GRADIENT_COLOR_G}, ${GRADIENT_COLOR_B}`;
+const GRADIENT_ALPHA_DARK = 0.14;
+const GRADIENT_ALPHA_LIGHT = 0.10;
+const GRADIENT_RGB_DARK = "120, 170, 230";
+const GRADIENT_RGB_LIGHT = "47, 111, 176";
 const GRADIENT_TRANSPARENT = "rgba(0,0,0,0)";
 
 const TRAIL_LENGTH = 8;
@@ -77,10 +75,11 @@ function drawGradientLobe(
   x: number,
   y: number,
   radius: number,
-  alpha: number
+  alpha: number,
+  rgb: string
 ) {
   const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
-  gradient.addColorStop(0, `rgba(${GRADIENT_RGB}, ${alpha})`);
+  gradient.addColorStop(0, `rgba(${rgb}, ${alpha})`);
   gradient.addColorStop(1, GRADIENT_TRANSPARENT);
   ctx.fillStyle = gradient;
   const diameter = radius * DIAMETER_PER_RADIUS;
@@ -176,6 +175,7 @@ export default function BackgroundCanvas({ darkMode }: BackgroundCanvasProps) {
 
       const isDark = darkModeRef.current;
       const gradAlpha = isDark ? GRADIENT_ALPHA_DARK : GRADIENT_ALPHA_LIGHT;
+      const gradRgb = isDark ? GRADIENT_RGB_DARK : GRADIENT_RGB_LIGHT;
 
       const trailCount = trail.length;
       for (let i = 0; i < trailCount; i++) {
@@ -183,13 +183,14 @@ export default function BackgroundCanvas({ darkMode }: BackgroundCanvasProps) {
         const trailAlpha = gradAlpha * progress * TRAIL_ALPHA_SCALE;
         const trailRadius = GRADIENT_RADIUS * (TRAIL_RADIUS_MIN_SCALE + (1 - TRAIL_RADIUS_MIN_SCALE) * progress);
         const { x, y } = trail[i];
-        drawGradientLobe(cx, x + primaryDx, y + primaryDy, trailRadius, trailAlpha);
+        drawGradientLobe(cx, x + primaryDx, y + primaryDy, trailRadius, trailAlpha, gradRgb);
         drawGradientLobe(
           cx,
           x + secondaryDx,
           y + secondaryDy,
           trailRadius * BLOB_LOBE_RADIUS_SCALE,
-          trailAlpha * BLOB_LOBE_ALPHA_SCALE
+          trailAlpha * BLOB_LOBE_ALPHA_SCALE,
+          gradRgb
         );
       }
 
@@ -248,7 +249,7 @@ export default function BackgroundCanvas({ darkMode }: BackgroundCanvasProps) {
     <>
       <div
         aria-hidden="true"
-        className="fixed inset-0 bg-white dark:bg-black"
+        className="fixed inset-0 bg-paper"
         style={{ zIndex: BACKDROP_Z_INDEX }}
       />
       <canvas
