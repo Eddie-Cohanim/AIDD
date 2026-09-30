@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import Image from "next/image";
@@ -76,6 +76,36 @@ function renderMarkdown(text: string): React.ReactNode[] {
 
 const chatTransport = new DefaultChatTransport({ api: "/api/chat" });
 
+interface ChatMessageProps {
+  role: "user" | "assistant";
+  text: string;
+}
+
+const ChatMessage = memo(function ChatMessage({ role, text }: ChatMessageProps) {
+  return (
+    <div className={`flex items-end gap-2 ${role === "user" ? "justify-end" : "justify-start"}`}>
+      {role === "assistant" && (
+        <Image
+          src="/chatbot-avatar.png"
+          alt="Eddie"
+          width={AVATAR_SIZE_MESSAGE}
+          height={AVATAR_SIZE_MESSAGE}
+          className="rounded-full object-cover flex-shrink-0"
+        />
+      )}
+      <div
+        className={`max-w-[75%] rounded-xl px-3 py-2 text-sm leading-relaxed ${
+          role === "user"
+            ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900"
+            : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white"
+        }`}
+      >
+        {role === "assistant" ? <div>{renderMarkdown(text)}</div> : text}
+      </div>
+    </div>
+  );
+});
+
 export default function Chat({ onClose }: ChatProps) {
   const [input, setInput] = useState<string>("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -101,16 +131,6 @@ export default function Chat({ onClose }: ChatProps) {
     if (!trimmed || isLoading) return;
     sendMessage({ role: "user", parts: [{ type: "text", text: trimmed }] });
     setInput("");
-  }
-
-  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      const trimmed = input.trim().slice(0, MAX_INPUT_CHARS);
-      if (!trimmed || isLoading) return;
-      sendMessage({ role: "user", parts: [{ type: "text", text: trimmed }] });
-      setInput("");
-    }
   }
 
   return (
@@ -151,35 +171,7 @@ export default function Chat({ onClose }: ChatProps) {
             .map((p) => p.text)
             .join("");
 
-          return (
-            <div
-              key={msg.id}
-              className={`flex items-end gap-2 ${role === "user" ? "justify-end" : "justify-start"}`}
-            >
-              {role === "assistant" && (
-                <Image
-                  src="/chatbot-avatar.png"
-                  alt="Eddie"
-                  width={AVATAR_SIZE_MESSAGE}
-                  height={AVATAR_SIZE_MESSAGE}
-                  className="rounded-full object-cover flex-shrink-0"
-                />
-              )}
-              <div
-                className={`max-w-[75%] rounded-xl px-3 py-2 text-sm leading-relaxed ${
-                  role === "user"
-                    ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900"
-                    : "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white"
-                }`}
-              >
-                {role === "assistant" ? (
-                  <div>{renderMarkdown(text)}</div>
-                ) : (
-                  text
-                )}
-              </div>
-            </div>
-          );
+          return <ChatMessage key={msg.id} role={role} text={text} />;
         })}
         {isWaiting && (
           <div className="flex items-end gap-2 justify-start">
@@ -219,7 +211,6 @@ export default function Chat({ onClose }: ChatProps) {
             aria-label="Message input"
             value={input}
             onChange={(e) => setInput(e.target.value.slice(0, MAX_INPUT_CHARS))}
-            onKeyDown={handleKeyDown}
             placeholder="Ask something..."
             disabled={isLoading}
             maxLength={MAX_INPUT_CHARS}

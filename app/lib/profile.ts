@@ -473,7 +473,7 @@ export const profileData: SiteData = {
     email: "eddieco19@gmail.com",
     phone: "+972-544742122",
     whatsapp: "972544742122",
-    linkedin: "TODO",
+    linkedin: "https://www.linkedin.com/in/eddie-cohanim/",
     github: "TODO",
   },
 };

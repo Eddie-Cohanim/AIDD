@@ -25,6 +25,8 @@ const PARTICLE_ALPHA_LIGHT = 0.50;
 const PARTICLE_COLOR_R = 148;
 const PARTICLE_COLOR_G = 150;
 const PARTICLE_COLOR_B = 255;
+const PARTICLE_FILL_DARK = `rgba(${PARTICLE_COLOR_R}, ${PARTICLE_COLOR_G}, ${PARTICLE_COLOR_B}, ${PARTICLE_ALPHA_DARK})`;
+const PARTICLE_FILL_LIGHT = `rgba(${PARTICLE_COLOR_R}, ${PARTICLE_COLOR_G}, ${PARTICLE_COLOR_B}, ${PARTICLE_ALPHA_LIGHT})`;
 
 const GRADIENT_RADIUS = 100;
 const GRADIENT_SPRING_STRENGTH = 0.055;
@@ -34,6 +36,8 @@ const GRADIENT_ALPHA_LIGHT = 0.14;
 const GRADIENT_COLOR_R = 99;
 const GRADIENT_COLOR_G = 102;
 const GRADIENT_COLOR_B = 241;
+const GRADIENT_RGB = `${GRADIENT_COLOR_R}, ${GRADIENT_COLOR_G}, ${GRADIENT_COLOR_B}`;
+const GRADIENT_TRANSPARENT = "rgba(0,0,0,0)";
 
 const TRAIL_LENGTH = 8;
 const TRAIL_ALPHA_SCALE = 0.5;
@@ -43,10 +47,34 @@ const BLOB_OSCILLATION_SPEED = 0.018;
 const BLOB_LOBE_OFFSET = 15;
 const BLOB_LOBE_RADIUS_SCALE = 0.72;
 const BLOB_LOBE_ALPHA_SCALE = 0.45;
+const BLOB_PRIMARY_LOBE_FREQ_X = 0.7;
+const BLOB_PRIMARY_LOBE_FREQ_Y = 0.5;
+const BLOB_SECONDARY_LOBE_FREQ_X = 0.4;
+const BLOB_SECONDARY_LOBE_PHASE_X = 1.0;
+const BLOB_SECONDARY_LOBE_FREQ_Y = 0.9;
+const BLOB_SECONDARY_LOBE_PHASE_Y = 2.0;
 
 const CANVAS_RESOLUTION_SCALE = 0.5;
 const MOUSE_INITIAL_OFFSET = -1000;
 const DARK_MODE_STORAGE_KEY = "darkMode";
+const RANDOM_CENTER_OFFSET = 0.5;
+const DIAMETER_PER_RADIUS = 2;
+const FULL_CIRCLE_RADIANS = 2 * Math.PI;
+
+function drawGradientLobe(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  radius: number,
+  alpha: number
+) {
+  const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
+  gradient.addColorStop(0, `rgba(${GRADIENT_RGB}, ${alpha})`);
+  gradient.addColorStop(1, GRADIENT_TRANSPARENT);
+  ctx.fillStyle = gradient;
+  const diameter = radius * DIAMETER_PER_RADIUS;
+  ctx.fillRect(x - radius, y - radius, diameter, diameter);
+}
 
 interface NavSection {
   id: string;
@@ -106,6 +134,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     return stored !== null ? stored === "true" : true;
   });
 
+  const darkModeRef = useRef(darkMode);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: MOUSE_INITIAL_OFFSET, y: MOUSE_INITIAL_OFFSET });
   const posRef = useRef({ x: 0, y: 0 });
@@ -114,6 +143,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const timeRef = useRef(0);
 
   useEffect(() => {
+    darkModeRef.current = darkMode;
     if (darkMode) {
       document.documentElement.classList.add("dark");
     } else {
@@ -163,7 +193,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       return {
         x: Math.random() * w,
         y: fromTop ? -Math.random() * PARTICLE_SPAWN_TOP_OFFSET : Math.random() * h,
-        vx: (Math.random() - 0.5) * PARTICLE_HORIZONTAL_SPREAD,
+        vx: (Math.random() - RANDOM_CENTER_OFFSET) * PARTICLE_HORIZONTAL_SPREAD,
         vy: baseVy,
         size: PARTICLE_MIN_SIZE + Math.random() * PARTICLE_SIZE_RANGE,
         baseVy,
@@ -197,31 +227,28 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
       timeRef.current += BLOB_OSCILLATION_SPEED;
       const t = timeRef.current;
+      const primaryDx = Math.sin(t * BLOB_PRIMARY_LOBE_FREQ_X) * BLOB_LOBE_OFFSET;
+      const primaryDy = Math.cos(t * BLOB_PRIMARY_LOBE_FREQ_Y) * BLOB_LOBE_OFFSET;
+      const secondaryDx = Math.sin(t * BLOB_SECONDARY_LOBE_FREQ_X + BLOB_SECONDARY_LOBE_PHASE_X) * BLOB_LOBE_OFFSET;
+      const secondaryDy = Math.cos(t * BLOB_SECONDARY_LOBE_FREQ_Y + BLOB_SECONDARY_LOBE_PHASE_Y) * BLOB_LOBE_OFFSET;
 
-      const gradAlpha = darkMode ? GRADIENT_ALPHA_DARK : GRADIENT_ALPHA_LIGHT;
-      const gc = `${GRADIENT_COLOR_R}, ${GRADIENT_COLOR_G}, ${GRADIENT_COLOR_B}`;
-
-      function drawBlob(x: number, y: number, radius: number, alpha: number) {
-        const lobes = [
-          { dx: Math.sin(t * 0.7) * BLOB_LOBE_OFFSET, dy: Math.cos(t * 0.5) * BLOB_LOBE_OFFSET, r: radius },
-          { dx: Math.sin(t * 0.4 + 1.0) * BLOB_LOBE_OFFSET, dy: Math.cos(t * 0.9 + 2.0) * BLOB_LOBE_OFFSET, r: radius * BLOB_LOBE_RADIUS_SCALE },
-        ];
-        for (const lobe of lobes) {
-          const lobeAlpha = lobe.r < radius ? alpha * BLOB_LOBE_ALPHA_SCALE : alpha;
-          const g = cx.createRadialGradient(x + lobe.dx, y + lobe.dy, 0, x + lobe.dx, y + lobe.dy, lobe.r);
-          g.addColorStop(0, `rgba(${gc}, ${lobeAlpha})`);
-          g.addColorStop(1, "rgba(0,0,0,0)");
-          cx.fillStyle = g;
-          cx.fillRect(0, 0, screenW, screenH);
-        }
-      }
+      const isDark = darkModeRef.current;
+      const gradAlpha = isDark ? GRADIENT_ALPHA_DARK : GRADIENT_ALPHA_LIGHT;
 
       const trailCount = trail.length;
       for (let i = 0; i < trailCount; i++) {
         const progress = trailCount > 1 ? i / (trailCount - 1) : 1;
         const trailAlpha = gradAlpha * progress * TRAIL_ALPHA_SCALE;
         const trailRadius = GRADIENT_RADIUS * (TRAIL_RADIUS_MIN_SCALE + (1 - TRAIL_RADIUS_MIN_SCALE) * progress);
-        drawBlob(trail[i].x, trail[i].y, trailRadius, trailAlpha);
+        const { x, y } = trail[i];
+        drawGradientLobe(cx, x + primaryDx, y + primaryDy, trailRadius, trailAlpha);
+        drawGradientLobe(
+          cx,
+          x + secondaryDx,
+          y + secondaryDy,
+          trailRadius * BLOB_LOBE_RADIUS_SCALE,
+          trailAlpha * BLOB_LOBE_ALPHA_SCALE
+        );
       }
 
       const mx = mouseRef.current.x;
@@ -257,12 +284,11 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         }
       }
 
-      const particleAlpha = darkMode ? PARTICLE_ALPHA_DARK : PARTICLE_ALPHA_LIGHT;
-      cx.fillStyle = `rgba(${PARTICLE_COLOR_R}, ${PARTICLE_COLOR_G}, ${PARTICLE_COLOR_B}, ${particleAlpha})`;
+      cx.fillStyle = isDark ? PARTICLE_FILL_DARK : PARTICLE_FILL_LIGHT;
       cx.beginPath();
       for (const p of particles) {
         cx.moveTo(p.x + p.size, p.y);
-        cx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        cx.arc(p.x, p.y, p.size, 0, FULL_CIRCLE_RADIANS);
       }
       cx.fill();
 
@@ -275,7 +301,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       window.removeEventListener("resize", resize);
       cancelAnimationFrame(animId);
     };
-  }, [darkMode]);
+  }, []);
 
   return (
     <div className="min-h-screen">
