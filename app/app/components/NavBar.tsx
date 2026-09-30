@@ -95,7 +95,7 @@ export default function NavBar({ onToggleTheme }: NavBarProps) {
   return (
     <nav
       aria-label="Primary"
-      className="fixed top-0 left-0 right-0 z-50 border-b border-gray-200/80 dark:border-gray-800/80 bg-white/80 dark:bg-black/70 backdrop-blur-md"
+      className="fixed top-0 left-0 right-0 z-50 border-b border-nav-border bg-nav backdrop-blur-md"
     >
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
         <a
@@ -140,7 +140,7 @@ export default function NavBar({ onToggleTheme }: NavBarProps) {
       <div
         id={MOBILE_MENU_ID}
         hidden={!menuOpen}
-        className="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-black lg:hidden"
+        className="border-t border-nav-border bg-nav-panel lg:hidden"
       >
         <ul className="mx-auto flex max-w-5xl flex-col px-6 py-3 text-base">
           {SECTIONS.map((section) => (

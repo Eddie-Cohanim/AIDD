@@ -8,7 +8,7 @@ export default function Hero() {
 
   return (
     <section id={HERO_ID} aria-label="Introduction" className="flex min-h-screen flex-col justify-center">
-      <div className="mx-auto w-full max-w-3xl px-6">
+      <div className="mx-auto w-full max-w-4xl px-6">
         <p className="text-sm font-semibold uppercase tracking-widest text-accent">
           {profileData.tagline}
         </p>
