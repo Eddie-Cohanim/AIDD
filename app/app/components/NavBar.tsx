@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HERO_ID, SECTIONS, sectionHref, type SectionId } from "@/lib/sections";
 import { FOCUS_RING } from "@/lib/styles";
 
@@ -11,6 +11,13 @@ const MOBILE_MENU_ID = "mobile-nav";
 interface NavBarProps {
   onToggleTheme: () => void;
 }
+
+interface IndicatorBox {
+  left: number;
+  width: number;
+}
+
+const HIDDEN_INDICATOR: IndicatorBox = { left: 0, width: 0 };
 
 function useActiveSection(): SectionId | null {
   const [activeId, setActiveId] = useState<SectionId | null>(null);
@@ -57,6 +64,37 @@ function useActiveSection(): SectionId | null {
   return activeId;
 }
 
+// Tracks the active link's position so a single pill can glide between links.
+function useActiveIndicator(activeId: SectionId | null) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [box, setBox] = useState<IndicatorBox>(HIDDEN_INDICATOR);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    function measure() {
+      const link = track?.querySelector<HTMLAnchorElement>("a[aria-current]");
+      // Keep the last position when no link is active so the pill fades out in place.
+      if (!track || !link) return;
+      const linkRect = link.getBoundingClientRect();
+      const next = {
+        left: linkRect.left - track.getBoundingClientRect().left,
+        width: linkRect.width,
+      };
+      setBox((prev) => (prev.left === next.left && prev.width === next.width ? prev : next));
+    }
+
+    measure();
+    // Re-measure when fonts load, the window resizes, or the desktop links are revealed.
+    const observer = new ResizeObserver(measure);
+    observer.observe(track);
+    return () => observer.disconnect();
+  }, [activeId]);
+
+  return { trackRef, box, visible: activeId !== null };
+}
+
 function ThemeToggle({ onToggle }: { onToggle: () => void }) {
   return (
     <button
@@ -73,6 +111,7 @@ function ThemeToggle({ onToggle }: { onToggle: () => void }) {
 
 export default function NavBar({ onToggleTheme }: NavBarProps) {
   const activeId = useActiveSection();
+  const { trackRef, box, visible } = useActiveIndicator(activeId);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -104,17 +143,26 @@ export default function NavBar({ onToggleTheme }: NavBarProps) {
         >
           EC
         </a>
-        <div className="hidden items-center gap-5 text-sm lg:flex">
-          {SECTIONS.map((section) => (
-            <a
-              key={section.id}
-              href={sectionHref(section.id)}
-              aria-current={section.id === activeId ? "location" : undefined}
-              className={linkClass(section.id)}
-            >
-              {section.label}
-            </a>
-          ))}
+        <div className="hidden items-center gap-4 text-sm lg:flex">
+          <div ref={trackRef} className="relative flex items-center">
+            <span
+              aria-hidden="true"
+              className={`pointer-events-none absolute inset-y-0 left-0 rounded-full border border-accent-edge bg-accent-wash transition-[transform,width,opacity] duration-300 ease-out motion-reduce:transition-none ${
+                visible ? "opacity-100" : "opacity-0"
+              }`}
+              style={{ width: box.width, transform: `translateX(${box.left}px)` }}
+            />
+            {SECTIONS.map((section) => (
+              <a
+                key={section.id}
+                href={sectionHref(section.id)}
+                aria-current={section.id === activeId ? "location" : undefined}
+                className={`relative px-2.5 py-1.5 ${linkClass(section.id)}`}
+              >
+                {section.label}
+              </a>
+            ))}
+          </div>
           <ThemeToggle onToggle={onToggleTheme} />
         </div>
         <div className="flex items-center gap-3 lg:hidden">
@@ -149,7 +197,9 @@ export default function NavBar({ onToggleTheme }: NavBarProps) {
                 href={sectionHref(section.id)}
                 aria-current={section.id === activeId ? "location" : undefined}
                 onClick={() => setMenuOpen(false)}
-                className={`block px-2 py-2 ${linkClass(section.id)}`}
+                className={`block px-3 py-2 ${linkClass(section.id)} ${
+                  section.id === activeId ? "bg-accent-wash" : ""
+                }`}
               >
                 {section.label}
               </a>
