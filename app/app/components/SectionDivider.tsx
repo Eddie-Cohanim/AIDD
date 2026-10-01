@@ -1,5 +1,6 @@
 const SPINDLE_LENGTH = 100;
-const SPINDLE_HEIGHT = 6;
+// Odd height so the centered 1px line fills exactly one pixel row instead of blurring across two.
+const SPINDLE_HEIGHT = 7;
 const SPINDLE_MID = SPINDLE_HEIGHT / 2;
 // Where along the spindle the single line splits into two branches.
 const SPINDLE_SPLIT = 55;
@@ -9,14 +10,15 @@ const SPINDLE_BEND = 85;
 const SPINDLE_SPREAD = 2;
 const SPINDLE_STROKE = 1;
 
-const RING_SIZE = 16;
+// Odd size, matching the spindle, so both share a half-pixel center line.
+const RING_SIZE = 17;
 const RING_CENTER = RING_SIZE / 2;
 const RING_STROKE = 1.5;
 const RING_RADIUS = RING_CENTER - RING_STROKE;
 
-const SPINDLE_PATH = [
-  `M0 ${SPINDLE_MID}`,
-  `L${SPINDLE_SPLIT} ${SPINDLE_MID}`,
+const STRAIGHT_PATH = `M0 ${SPINDLE_MID} L${SPINDLE_SPLIT} ${SPINDLE_MID}`;
+const BRANCH_PATH = [
+  `M${SPINDLE_SPLIT} ${SPINDLE_MID}`,
   `Q${SPINDLE_BEND} ${SPINDLE_MID} ${SPINDLE_LENGTH} ${SPINDLE_MID - SPINDLE_SPREAD}`,
   `M${SPINDLE_SPLIT} ${SPINDLE_MID}`,
   `Q${SPINDLE_BEND} ${SPINDLE_MID} ${SPINDLE_LENGTH} ${SPINDLE_MID + SPINDLE_SPREAD}`,
@@ -28,11 +30,13 @@ function Spindle({ mirrored = false }: { mirrored?: boolean }) {
     <svg
       viewBox={`0 0 ${SPINDLE_LENGTH} ${SPINDLE_HEIGHT}`}
       preserveAspectRatio="none"
-      className={`spindle-fade h-1.5 flex-1 stroke-ink-faint ${mirrored ? "-scale-x-100" : ""}`}
+      className={`spindle-fade h-1.75 flex-1 stroke-ink-faint ${mirrored ? "-scale-x-100" : ""}`}
       fill="none"
       strokeWidth={SPINDLE_STROKE}
     >
-      <path d={SPINDLE_PATH} vectorEffect="non-scaling-stroke" />
+      {/* Snapped to the pixel grid so the long straight run stays sharp at any zoom level. */}
+      <path d={STRAIGHT_PATH} shapeRendering="crispEdges" vectorEffect="non-scaling-stroke" />
+      <path d={BRANCH_PATH} vectorEffect="non-scaling-stroke" />
     </svg>
   );
 }
@@ -43,7 +47,7 @@ export default function SectionDivider() {
       <Spindle />
       <svg
         viewBox={`0 0 ${RING_SIZE} ${RING_SIZE}`}
-        className="relative -mx-0.5 h-4 w-4 shrink-0 fill-paper stroke-ink-faint"
+        className="relative -mx-0.5 h-4.25 w-4.25 shrink-0 fill-paper stroke-ink-faint"
         strokeWidth={RING_STROKE}
       >
         <circle cx={RING_CENTER} cy={RING_CENTER} r={RING_RADIUS} />

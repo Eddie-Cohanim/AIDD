@@ -116,17 +116,29 @@ export const profileData: SiteData = {
               heading: "Room identification",
               detail:
                 "Built the production chain that turns an architectural and a structural floor plan into enclosed, typed rooms.",
-              bullets: [
-                "The pipeline detects both drawings, aligns the architectural plan onto the structural one, and then applies graph theory: walls and openings are defined as edges and their intersections as vertices, and every loop in the graph that contains no smaller loop is identified as a room.",
+              subpoints: [
+                {
+                  heading: "Graph-based room detection",
+                  detail:
+                    "The pipeline detects both drawings, aligns the architectural plan onto the structural one, and then applies graph theory: walls and openings are defined as edges and their intersections as vertices, and every loop in the graph that contains no smaller loop is identified as a room.",
+                },
               ],
             },
             {
               heading: "Tiling for full-sheet inference",
               detail:
                 "A full sheet at 400 DPI is orders of magnitude larger than YOLO's native 640 input, so each page is cut into tiles, predicted, and merged back to page level.",
-              bullets: [
-                "Tiles overlap by 20% so an opening cut by a tile edge still appears whole in the neighboring tile.",
-                "Proposed raising the tile and training size from 640 to 1280 after realizing that too much context from the surrounding area was lost at 640. The larger tiles gave the model the context a blueprint needs to be read, improving detection results by about 5%.",
+              subpoints: [
+                {
+                  heading: "Overlapping tiles",
+                  detail:
+                    "Tiles overlap by 20% so an opening cut by a tile edge still appears whole in the neighboring tile.",
+                },
+                {
+                  heading: "Larger tiles for more context",
+                  detail:
+                    "Proposed raising the tile and training size from 640 to 1280 after realizing that too much context from the surrounding area was lost at 640. The larger tiles gave the model the context a blueprint needs to be read, improving detection results by about 5%.",
+                },
               ],
             },
             {
@@ -157,10 +169,21 @@ export const profileData: SiteData = {
           heading: "Model evaluation against ground truth",
           detail:
             "On my own initiative, built a comparison tool that checks the pipeline's output against the modeler's ground-truth IFC/RVT model. It made the testing phase streamlined and scalable, giving a better improvement curve and fewer bugs reaching production.",
-          bullets: [
-            "Registers the two models and matches walls and openings one to one.",
-            "Reports what matched, what deviates, what the pipeline added, and what it missed as metrics.",
-            "Created a visualization that overlays the two models, making the review process faster and easier.",
+          subpoints: [
+            {
+              heading: "One-to-one matching",
+              detail: "The tool registers the two models and matches walls and openings one to one.",
+            },
+            {
+              heading: "Metrics report",
+              detail:
+                "The tool reports what matched, what deviates, what the pipeline added, and what it missed as metrics.",
+            },
+            {
+              heading: "Overlay visualization",
+              detail:
+                "Created a visualization that overlays the two models, making the review process faster and easier.",
+            },
           ],
         },
         {
@@ -236,12 +259,12 @@ export const profileData: SiteData = {
   ],
   projects: [
     {
-      title: "Personal Portfolio Website",
+      title: "This Website",
       bullets: [
         {
           heading: "Full-stack Next.js build",
           detail:
-            "Designed and built a full-stack, single-page personal portfolio website using Next.js 16 (App Router) and TypeScript, hosted on Vercel with continuous deployment from GitHub.",
+            "Designed and built this full-stack, single-page website using Next.js 16 (App Router) and TypeScript, hosted on Vercel with continuous deployment from GitHub.",
         },
         {
           heading: "AI chatbot integration",
@@ -251,12 +274,12 @@ export const profileData: SiteData = {
         {
           heading: "AI-driven development (AIDD)",
           detail:
-            "Used Claude Code throughout the build to architect features, write and review code, run static checks, and manage deployments, on a feature-branch Git workflow with TypeScript type checking on every push and security audits through custom slash-command skills.",
+            "Used Claude Code throughout the build to architect features, write and review code, run static checks, and manage deployments, extended with MCP servers such as Playwright for in-browser testing. Worked on a feature-branch Git workflow with TypeScript type checking on every push and security audits through custom slash-command skills.",
         },
         {
           heading: "Custom visual effects",
           detail:
-            "Implemented a custom particle canvas animation with a cursor-following gradient glow, tuned for both light and dark themes.",
+            "Designed a blueprint-inspired visual identity: the hero name draws itself as construction lines, an outline, and a 3D extrusion over a drafting grid, alongside a particle canvas with a spring-animated cursor glow and a sliding navigation indicator, all tuned for light and dark themes.",
         },
       ],
     },
@@ -264,14 +287,9 @@ export const profileData: SiteData = {
       title: "Legit - AI News Credibility Verifier (Technion CS Hackathon Finalist)",
       bullets: [
         {
-          heading: "Hackathon finalist extension",
+          heading: "From hackathon finalist to published product",
           detail:
-            "Led a team to architect and implement a Chrome extension that uses large language models to scan news articles in real time and flag potential misinformation, earning a finalist placement among all competing teams.",
-        },
-        {
-          heading: "From hackathon to product",
-          detail:
-            "After the hackathon, the team developed the prototype into a complete product and published it on the Chrome Web Store, where it is available in all major Chromium-based browsers.",
+            "Led a team that built a Chrome extension using large language models to scan news articles in real time and flag potential misinformation, reaching the hackathon finals. The team then developed the prototype into a complete product, published on the Chrome Web Store for all major Chromium-based browsers.",
         },
         {
           heading: "Multi-agent credibility scoring",
@@ -287,11 +305,6 @@ export const profileData: SiteData = {
           heading: "Fuzzy quote highlighting",
           detail:
             "Used Levenshtein distance to locate and highlight suspicious claims directly in the article, even when the formatting differs from the quoted text.",
-        },
-        {
-          heading: "Modular extension architecture",
-          detail:
-            "Built on Chrome Manifest V3 and vanilla JavaScript, with a background service worker that proxies and caches Google Gemini API calls, and Readability.js for clean content extraction.",
         },
       ],
     },
