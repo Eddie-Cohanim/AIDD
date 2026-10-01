@@ -17,7 +17,7 @@ export interface SectionLink {
 }
 
 export const SECTIONS: readonly SectionLink[] = [
-  { id: "about", label: "About" },
+  { id: "about", label: "Who am I?" },
   { id: "experience", label: "Experience" },
   { id: "projects", label: "Projects" },
   { id: "education", label: "Education" },

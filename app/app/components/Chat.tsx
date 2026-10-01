@@ -17,6 +17,7 @@ const CHAR_WARN_THRESHOLD = 0.9;
 const SCROLL_BEHAVIOR = "smooth" as const;
 const BOLD_PATTERN = /\*\*(.+?)\*\*/g;
 const BULLET_PREFIX = "- ";
+const ERROR_MESSAGE = "Sorry, I couldn't answer right now. Please try again in a moment.";
 
 interface ChatProps {
   onClose: () => void;
@@ -111,16 +112,17 @@ export default function Chat({ onClose }: ChatProps) {
   const [input, setInput] = useState<string>("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const { messages, sendMessage, status } = useChat({
+  const { messages, sendMessage, regenerate, status } = useChat({
     transport: chatTransport,
   });
 
   const isLoading = status === "streaming" || status === "submitted";
   const isWaiting = status === "submitted";
+  const hasError = status === "error";
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: SCROLL_BEHAVIOR });
-  }, [messages]);
+  }, [messages, hasError]);
 
   const charCount = input.length;
   const charWarning = charCount >= MAX_INPUT_CHARS * CHAR_WARN_THRESHOLD;
@@ -172,8 +174,31 @@ export default function Chat({ onClose }: ChatProps) {
             .map((p) => p.text)
             .join("");
 
+          // A failed reply can leave an assistant message with no text; skip the empty bubble.
+          if (!text) return null;
           return <ChatMessage key={msg.id} role={role} text={text} />;
         })}
+        {hasError && (
+          <div role="alert" className="flex items-end gap-2 justify-start">
+            <Image
+              src="/chatbot-avatar.png"
+              alt="Eddie"
+              width={AVATAR_SIZE_MESSAGE}
+              height={AVATAR_SIZE_MESSAGE}
+              className="rounded-full object-cover flex-shrink-0"
+            />
+            <div className="max-w-[75%] rounded-2xl bg-sunken px-3 py-2 text-sm leading-relaxed text-ink">
+              <p className="mb-1">{ERROR_MESSAGE}</p>
+              <button
+                type="button"
+                onClick={() => regenerate()}
+                className={`rounded-lg font-semibold text-accent underline-offset-4 hover:underline ${FOCUS_RING}`}
+              >
+                Try again
+              </button>
+            </div>
+          </div>
+        )}
         {isWaiting && (
           <div className="flex items-end gap-2 justify-start">
             <Image
