@@ -1,6 +1,9 @@
 export interface Photo {
   src: string;
   alt: string;
+  // Intrinsic pixel size, so the photo renders at its own aspect ratio without cropping.
+  width: number;
+  height: number;
 }
 
 export interface DetailPoint {
@@ -237,7 +240,14 @@ export const profileData: SiteData = {
         {
           heading: "Dean's List - Spring 2024",
           detail: "Awarded for academic excellence and maintaining a high GPA.",
-          photos: [],
+          photos: [
+            {
+              src: "/certificates/deans-list-spring-2024.jpg",
+              alt: "Technion Faculty of Mathematics Dean's List certificate awarded to Eddie Cohanim for the Spring 2023/2024 semester",
+              width: 800,
+              height: 1130,
+            },
+          ],
         },
         {
           heading: "Dean's List - Winter 2025",
@@ -292,19 +302,26 @@ export const profileData: SiteData = {
             "Led a team that built a Chrome extension using large language models to scan news articles in real time and flag potential misinformation, reaching the hackathon finals. The team then developed the prototype into a complete product, published on the Chrome Web Store for all major Chromium-based browsers.",
         },
         {
-          heading: "Multi-agent credibility scoring",
+          heading: "Multi-agent analysis",
           detail:
-            "Co-built a system of six specialized agents running in parallel (source verification, author credibility, fact-checking, bias detection, writing quality, and headline accuracy), each contributing a weighted score to a final 0-100 credibility rating.",
-        },
-        {
-          heading: "Smart Context Search (SIFT)",
-          detail:
-            "Implemented agents that search for independent coverage of the article's claims, surfacing supporting and contradicting sources for lateral reading.",
+            "Co-built a multi-agent system in which specialized agents analyze each article in parallel.",
+          subpoints: [
+            {
+              heading: "Credibility scoring",
+              detail:
+                "Six agents (source verification, author credibility, fact-checking, bias detection, writing quality, and headline accuracy) each contribute a weighted score to a final 0-100 credibility rating.",
+            },
+            {
+              heading: "Smart Context Search (SIFT)",
+              detail:
+                "Search agents look for independent coverage of the article's claims, surfacing supporting and contradicting sources for lateral reading.",
+            },
+          ],
         },
         {
           heading: "Fuzzy quote highlighting",
           detail:
-            "Used Levenshtein distance to locate and highlight suspicious claims directly in the article, even when the formatting differs from the quoted text.",
+            "Co-built a feature that uses Levenshtein distance to locate and highlight suspicious claims directly in the article, even when the formatting differs from the quoted text.",
         },
       ],
     },
@@ -315,31 +332,47 @@ export const profileData: SiteData = {
           heading: "Two-stage detection and classification",
           detail:
             "Co-built a two-stage computer vision system classifying beer and wine types from images: a YOLO11 object detection model for bounding-box localization, followed by a custom CNN classifier on the cropped regions.",
+          subpoints: [
+            {
+              heading: "Configurable CNN from scratch",
+              detail:
+                "Co-implemented the CNN architecture from scratch in PyTorch, with a fully configurable feature extractor (conv layers, batch norm, pooling, activation) and classifier head (fully-connected layers, dropout), all driven by a single config.json file with no hardcoded hyperparameters.",
+            },
+          ],
         },
         {
-          heading: "Configurable CNN from scratch",
+          heading: "Data pipeline",
           detail:
-            "Co-implemented the CNN architecture from scratch in PyTorch, with a fully configurable feature extractor (conv layers, batch norm, pooling, activation) and classifier head (fully-connected layers, dropout), all driven by a single config.json file with no hardcoded hyperparameters.",
+            "Built the data pipeline from raw image collection through augmentation during training.",
+          subpoints: [
+            {
+              heading: "End-to-end dataset construction",
+              detail:
+                "Constructed and curated the dataset end-to-end: collected and organized raw images, wrote a dataset splitting pipeline, and built a preprocessing pipeline with validation reporting to ensure structural integrity before training.",
+            },
+            {
+              heading: "GPU-accelerated augmentation",
+              detail:
+                "Designed a GPU-accelerated augmentation pipeline using Kornia (random flips, rotations, color jitter, Gaussian blur, perspective distortion, gamma correction) applied inline during training for effective data expansion without storing augmented copies to disk.",
+            },
+          ],
         },
         {
-          heading: "End-to-end dataset construction",
+          heading: "Training and evaluation",
           detail:
-            "Constructed and curated the dataset end-to-end: collected and organized raw images, wrote a dataset splitting pipeline, and built a preprocessing pipeline with validation reporting to ensure structural integrity before training.",
-        },
-        {
-          heading: "GPU-accelerated augmentation",
-          detail:
-            "Designed a GPU-accelerated augmentation pipeline using Kornia (random flips, rotations, color jitter, Gaussian blur, perspective distortion, gamma correction) applied inline during training for effective data expansion without storing augmented copies to disk.",
-        },
-        {
-          heading: "Hyperparameter research",
-          detail:
-            "Conducted extensive hyperparameter research across multiple tracked experiment versions, tuning learning rate, weight decay, batch size, channel depth, dropout, pooling type, early stopping patience, and optimizer (Adam, AdamW, SGD).",
-        },
-        {
-          heading: "Benchmarking against published work",
-          detail:
-            "Researched and benchmarked results against published papers and pretrained models, evaluating per-class precision, recall, F1, and confidence scores.",
+            "Tuned the model across tracked experiments and measured it against published results.",
+          subpoints: [
+            {
+              heading: "Hyperparameter research",
+              detail:
+                "Conducted extensive hyperparameter research across multiple tracked experiment versions, tuning learning rate, weight decay, batch size, channel depth, dropout, pooling type, early stopping patience, and optimizer (Adam, AdamW, SGD).",
+            },
+            {
+              heading: "Benchmarking against published work",
+              detail:
+                "Researched and benchmarked results against published papers and pretrained models, evaluating per-class precision, recall, F1, and confidence scores.",
+            },
+          ],
         },
       ],
     },

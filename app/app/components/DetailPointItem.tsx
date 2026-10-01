@@ -1,12 +1,9 @@
 "use client";
 
-import { useId, useRef, useState } from "react";
-import { flushSync } from "react-dom";
-import DetailPointExtra, { hasExtraContent } from "./DetailPointExtra";
+import { useId, useState } from "react";
+import { ExpandableDetail } from "./DetailPointExtra";
 import type { DetailPoint } from "@/lib/profile";
 import { BODY_TEXT, FOCUS_RING } from "@/lib/styles";
-
-const INLINE_TOGGLE = `rounded-lg font-medium text-accent underline-offset-4 hover:underline ${FOCUS_RING}`;
 
 interface DetailPointItemProps {
   point: DetailPoint;
@@ -16,19 +13,11 @@ export default function DetailPointItem({ point }: DetailPointItemProps) {
   const [open, setOpen] = useState(false);
   const [showMore, setShowMore] = useState(false);
   const summaryId = useId();
-  const moreId = useId();
-  const moreButtonRef = useRef<HTMLButtonElement>(null);
-  const hasMore = hasExtraContent(point);
 
   function toggleOpen() {
     const next = !open;
     setOpen(next);
     if (!next) setShowMore(false);
-  }
-
-  function showLess() {
-    flushSync(() => setShowMore(false));
-    moreButtonRef.current?.focus();
   }
 
   return (
@@ -57,38 +46,12 @@ export default function DetailPointItem({ point }: DetailPointItemProps) {
         </button>
       </h4>
       <div id={summaryId} hidden={!open} className="pb-4">
-        <p className={BODY_TEXT}>
-          {point.detail}
-          {hasMore && !showMore && (
-            <>
-              {" "}
-              <button
-                ref={moreButtonRef}
-                type="button"
-                aria-expanded={false}
-                aria-controls={moreId}
-                onClick={() => setShowMore(true)}
-                className={INLINE_TOGGLE}
-              >
-                more<span className="sr-only"> about {point.heading}</span>
-              </button>
-            </>
-          )}
-        </p>
-        {hasMore && (
-          <div id={moreId} hidden={!showMore}>
-            <DetailPointExtra point={point} />
-            <button
-              type="button"
-              aria-expanded={true}
-              aria-controls={moreId}
-              onClick={showLess}
-              className={`mt-3 ${INLINE_TOGGLE}`}
-            >
-              less<span className="sr-only"> about {point.heading}</span>
-            </button>
-          </div>
-        )}
+        <ExpandableDetail
+          point={point}
+          expanded={showMore}
+          onExpandedChange={setShowMore}
+          className={BODY_TEXT}
+        />
       </div>
     </li>
   );
