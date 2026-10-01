@@ -252,12 +252,26 @@ export const profileData: SiteData = {
         {
           heading: "Dean's List - Winter 2025",
           detail: "Awarded for academic excellence and maintaining a high GPA.",
-          photos: [],
+          photos: [
+            {
+              src: "/certificates/deans-list-winter-2025.jpg",
+              alt: "Technion Faculty of Mathematics Dean's List certificate awarded to Eddie Cohanim for the Winter 2024/2025 semester",
+              width: 800,
+              height: 1130,
+            },
+          ],
         },
         {
           heading: "Graduation",
           detail: "Graduated with a B.Sc. in Mathematics and Computer Science from the Technion.",
-          photos: [],
+          photos: [
+            {
+              src: "/certificates/graduation-diploma.jpg",
+              alt: "Technion Bachelor of Science diploma in Mathematics with Computer Science awarded to Eddie Cohanim in June 2026",
+              width: 1200,
+              height: 744,
+            },
+          ],
         },
         {
           heading: "Relevant Coursework",
