@@ -104,6 +104,11 @@ body {
   mask-image: radial-gradient(ellipse at 35% 50%, black 25%, transparent 72%);
 }
 
+/* Section divider: each hairline fades out toward its outer end. */
+.spindle-fade {
+  mask-image: linear-gradient(to right, transparent, black 35%);
+}
+
 /* Hero name: construction lines draw first, then the outline, then the oblique extrusion. */
 .hero-guide {
   stroke: var(--ink);
