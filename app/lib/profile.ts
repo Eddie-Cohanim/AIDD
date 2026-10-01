@@ -117,9 +117,7 @@ export const profileData: SiteData = {
               detail:
                 "Built the production chain that turns an architectural and a structural floor plan into enclosed, typed rooms.",
               bullets: [
-                "The pipeline detects both drawings, aligns the architectural plan onto the structural one, and splits the combined walls into rooms.",
-                "Room names are read with OCR in English and Hebrew and resolved by a room-type priority order, which also decides the door type when one door connects two rooms (for example, a safe-room door).",
-                "Counted door and window footprints as part of the walls. On one measured page, walls alone closed 18 rooms and matched 10 of 41 labels; adding the openings closed 47 rooms and matched 35 of 41.",
+                "The pipeline detects both drawings, aligns the architectural plan onto the structural one, and then applies graph theory: walls and openings are defined as edges and their intersections as vertices, and every loop in the graph that contains no smaller loop is identified as a room.",
               ],
             },
             {
@@ -128,36 +126,41 @@ export const profileData: SiteData = {
                 "A full sheet at 400 DPI is orders of magnitude larger than YOLO's native 640 input, so each page is cut into tiles, predicted, and merged back to page level.",
               bullets: [
                 "Tiles overlap by 20% so an opening cut by a tile edge still appears whole in the neighboring tile.",
-                "Raising the tile and training size from 640 to 1280 gave the model the surrounding context a blueprint needs to be read, improving detection results by about 5%.",
+                "Proposed raising the tile and training size from 640 to 1280 after realizing that too much context from the surrounding area was lost at 640. The larger tiles gave the model the context a blueprint needs to be read, improving detection results by about 5%.",
               ],
             },
-          ],
-        },
-        {
-          heading: "Opening detection models",
-          detail:
-            "Trained YOLO11 Large oriented-box models to separate nine opening types on architectural drawings: door, window, sliding door, mamad (safe room) door, mamad window, laundry-niche window, ventilation, opening location, and element mark.",
-          subpoints: [
             {
-              heading: "Hyperparameter tuning",
+              heading: "Opening detection models",
               detail:
-                "Tuned training for technical drawings to cut false positives: matched training to the tile size, fixed an optimizer setting that was overriding the learning rate, and turned off augmentations that distort geometry.",
+                "Trained YOLO11 Large models using both polygons and oriented bounding boxes (OBBs) to separate nine opening types on architectural drawings: door, window, sliding door, mamad (safe room) door, mamad window, laundry-niche window, ventilation, opening location, and element mark.",
+              subpoints: [
+                {
+                  heading: "Hyperparameter tuning",
+                  detail:
+                    "Tuned training for technical drawings to improve results, covering the learning rate, augmentations, image size, optimizers, filtering, and the use of background annotations.",
+                },
+              ],
+            },
+            {
+              heading: "Datasets and annotation",
+              detail:
+                "Managed the dataset in both V7 Darwin and Label Studio, while overseeing that annotations were done correctly and accurately to ensure correct training.",
+            },
+            {
+              heading: "Pipeline performance optimization",
+              detail:
+                "Improved pipeline performance by parallelizing workloads, replacing bottleneck Python routines with inline C extensions, and migrating to GPU-accelerated libraries that fully utilized available hardware.",
             },
           ],
-        },
-        {
-          heading: "Datasets and annotation",
-          detail:
-            "Managed the opening-detection datasets in V7 (about 1,140 sheets) and oversaw annotation, keeping empty tiles in proportion so the model does not hallucinate openings on blank paper.",
         },
         {
           heading: "Model evaluation against ground truth",
           detail:
-            "Built a comparison tool that checks the pipeline's output against the modeler's ground-truth IFC model, since detection scores on tiles do not show whether the reconstructed building is right.",
+            "On my own initiative, built a comparison tool that checks the pipeline's output against the modeler's ground-truth IFC/RVT model. It made the testing phase streamlined and scalable, giving a better improvement curve and fewer bugs reaching production.",
           bullets: [
             "Registers the two models and matches walls and openings one to one.",
-            "Reports what matched, what deviates, what the pipeline added, and what it missed, as both metrics and a visual overlay.",
-            "Later extended with a revision diff through Autodesk (added, removed, and changed elements) and a Revit-to-IFC conversion so either model format can be loaded.",
+            "Reports what matched, what deviates, what the pipeline added, and what it missed as metrics.",
+            "Created a visualization that overlays the two models, making the review process faster and easier.",
           ],
         },
         {
@@ -181,11 +184,6 @@ export const profileData: SiteData = {
                 "Training runs are logged in Weights & Biases, including resumed runs and per-class metrics.",
             },
           ],
-        },
-        {
-          heading: "Pipeline performance optimization",
-          detail:
-            "Improved pipeline performance by parallelizing workloads, replacing bottleneck Python routines with inline C extensions, and migrating to GPU-accelerated libraries that fully utilized available hardware.",
         },
         {
           heading: "Product vertical ownership",

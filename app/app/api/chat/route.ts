@@ -45,6 +45,10 @@ export async function POST(request: Request): Promise<Response> {
       model: ANTHROPIC_MODEL,
       system: SYSTEM_PROMPT,
       messages: convertToCoreMessages(trimmed),
+      // Model failures happen mid-stream, after this handler has returned, so log them here.
+      onError({ error }) {
+        console.error("[/api/chat] model request failed:", error);
+      },
     });
 
     return result.toUIMessageStreamResponse();
