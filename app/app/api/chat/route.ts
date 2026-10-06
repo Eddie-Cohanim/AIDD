@@ -9,7 +9,8 @@ import { MAX_CHAT_MESSAGES, MAX_INPUT_CHARS } from "@/lib/constants";
 // - Local with `next dev`: Run `vc env pull` first to pull VERCEL_OIDC_TOKEN into .env.local
 export const runtime = "nodejs";
 
-const ANTHROPIC_MODEL = "anthropic/claude-haiku-4.5";
+// Vercel AI Gateway free tier restricts newer models; claude-haiku-4.5 requires paid credits.
+const ANTHROPIC_MODEL = "anthropic/claude-3-haiku";
 const SYSTEM_PROMPT = buildSystemPrompt(profileData);
 
 export async function POST(request: Request): Promise<Response> {

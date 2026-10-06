@@ -18,7 +18,11 @@
   },
   "overrides": {
     "postcss": "8.5.28",
-    "undici": "^6.29.0"
+    "undici": "^6.29.0",
+    "source-map-js": "^1.2.2",
+    "@next/eslint-plugin-next": {
+      "fast-glob": "npm:tinyglobby@^0.2.17"
+    }
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
