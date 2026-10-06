@@ -13,7 +13,7 @@ export default function PhotoGallery({ photos }: PhotoGalleryProps) {
   if (photos.length === 0) return null;
 
   return (
-    <div className="mt-4 flex flex-wrap items-start gap-4">
+    <div className="mt-4 flex flex-wrap items-start justify-center gap-4">
       {photos.map((photo) => (
         <a
           key={photo.src}
