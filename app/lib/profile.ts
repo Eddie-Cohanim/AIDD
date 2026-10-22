@@ -100,7 +100,7 @@ export const profileData: SiteData = {
   name: "Eddie Cohanim",
   tagline: "AI Engineer and SW Developer",
   summary:
-    "Building computer vision pipelines at Constrol that turn architectural blueprints into 3D models. B.Sc. in Mathematics and Computer Science from the Technion.",
+    "AI Engineer with a B.Sc. in Mathematics and Computer Science from the Technion (2x Dean's List). Experienced in production computer vision pipelines, MLOps orchestration on GCP/Modal, and building end-to-end autonomous agents.",
   about: [
     "AI Engineer and SW Developer at Constrol with a B.Sc. in Mathematics and Computer Science from the Technion. Analytical, self-motivated professional with a sharp problem-solving mindset, excellent communication, and strong interpersonal skills. A fast learner who thrives in collaborative, high-performance environments, dedicated to delivering meaningful impact through innovative AI solutions.",
   ],
@@ -113,7 +113,7 @@ export const profileData: SiteData = {
         {
           heading: "Computer vision pipelines",
           detail:
-            "Developed and optimized pipeline stages from pre-processing to inference.",
+            "Developed computer vision pipelines that turn architectural blueprints into 3D building models, in a six-person R&D team working closely with civil engineers and annotators, and optimized their stages from pre-processing to inference.",
           subpoints: [
             {
               heading: "Room identification",
@@ -167,6 +167,11 @@ export const profileData: SiteData = {
                 "Improved pipeline performance by parallelizing workloads, replacing bottleneck Python routines with inline C extensions, and migrating to GPU-accelerated libraries that fully utilized available hardware.",
             },
           ],
+        },
+        {
+          heading: "Autonomous R&D agent",
+          detail:
+            "Engineered an end-to-end autonomous agent tailored to internal R&D workflows, orchestrating multi-step blueprint validation and spatial triage via OpenAI GPT tool-calling and structured outputs.",
         },
         {
           heading: "Model evaluation against ground truth",
@@ -223,7 +228,7 @@ export const profileData: SiteData = {
     {
       title: "Infantry, IDF Reserves",
       period: "November 2020 - Present",
-      description: "Serve as an infantry reservist, including active duty during the war that began on October 7, 2023.",
+      description: "Served on active reserve duty during the war that began on October 7, 2023.",
     },
     {
       title: "Staff Sergeant, IDF Nahal Brigade",
@@ -293,7 +298,7 @@ export const profileData: SiteData = {
         {
           heading: "AI chatbot integration",
           detail:
-            "Integrated an AI-powered chatbot using the Vercel AI SDK and Anthropic Claude Haiku 4.5 via Vercel AI Gateway, enabling visitors to interactively ask questions about my background and experience.",
+            "Integrated an AI-powered chatbot that streams Anthropic Claude Haiku 4.5 replies through the Anthropic TypeScript SDK into a Vercel AI SDK chat interface, enabling visitors to interactively ask questions about my background and experience.",
         },
         {
           heading: "AI-driven development (AIDD)",
@@ -308,12 +313,12 @@ export const profileData: SiteData = {
       ],
     },
     {
-      title: "Legit - AI News Credibility Verifier (Technion CS Hackathon Finalist)",
+      title: "Legit - AI News Credibility Verifier (Technion CS Hackathon Finalist 2025, Mentor 2026)",
       bullets: [
         {
           heading: "From hackathon finalist to published product",
           detail:
-            "Led a team that built a Chrome extension using large language models to scan news articles in real time and flag potential misinformation, reaching the hackathon finals. The team then developed the prototype into a complete product, published on the Chrome Web Store for all major Chromium-based browsers.",
+            "Led a 4-person team that built a Chrome extension using large language models to scan news articles in real time and flag potential misinformation, reaching the hackathon finals. The team then developed the prototype into a complete product, published on the Chrome Web Store for all major Chromium-based browsers.",
         },
         {
           heading: "Multi-agent analysis",
@@ -397,7 +402,7 @@ export const profileData: SiteData = {
       event: "Technion CS Hackathon",
       year: "2025",
       description:
-        "Led a team that built Legit, a Chrome extension that uses large language models to scan news articles in real time and flag potential misinformation, earning a finalist placement among all competing teams.",
+        "Led a 4-person team that built Legit, a Chrome extension that uses large language models to scan news articles in real time and flag potential misinformation, earning a finalist placement among all competing teams.",
       postUrl:
         "https://www.linkedin.com/posts/eddie-cohanim_thrilled-to-have-competed-in-the-technion-ugcPost-7330967386482692096-99N0/",
       photos: [],
@@ -420,11 +425,20 @@ export const profileData: SiteData = {
   skills: [
     {
       category: "Programming Languages",
-      items: ["C", "C++", "Python", "Assembly", "Bash"],
+      items: ["Python", "C++", "C", "Bash", "Assembly"],
     },
     {
-      category: "Cloud and Infrastructure",
-      items: ["GCP", "GKE", "Modal"],
+      category: "AI/ML & Infrastructure",
+      items: [
+        "PyTorch",
+        "YOLO",
+        "Kornia",
+        "Weights & Biases",
+        "GCP (GKE, GCS)",
+        "Modal",
+        "Linux",
+        "Git",
+      ],
     },
     {
       category: "Fields of Knowledge",
@@ -433,8 +447,6 @@ export const profileData: SiteData = {
         "Deep Learning",
         "Data Structures",
         "OS (multi-threading, multi-processing)",
-        "Linux",
-        "Git",
         "Algorithms",
         "OOP",
       ],

@@ -6,6 +6,12 @@ const CHAT_MODEL = "claude-haiku-4-5";
 // Replies are meant to be short, so this caps what a single answer can cost.
 const MAX_REPLY_TOKENS = 1024;
 const REPLY_PART_ID = "reply";
+const TODAY_FORMAT: Intl.DateTimeFormatOptions = {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+  timeZone: "UTC",
+};
 
 function messageText(message: UIMessage): string {
   return message.parts
@@ -31,6 +37,12 @@ export class ChatAssistant {
     return params;
   }
 
+  // The model has no clock, so every request states today's date for questions about durations.
+  private systemPromptFor(now: Date): string {
+    const today = now.toLocaleDateString("en-US", TODAY_FORMAT);
+    return `${this.systemPrompt}\n\nToday's date is ${today}. Use it when working out how long ago something happened or how long a role has lasted.`;
+  }
+
   // Streams Claude's reply into the chat widget's message stream as a single text part.
   async streamReply(
     messages: Anthropic.MessageParam[],
@@ -41,7 +53,7 @@ export class ChatAssistant {
       {
         model: CHAT_MODEL,
         max_tokens: MAX_REPLY_TOKENS,
-        system: this.systemPrompt,
+        system: this.systemPromptFor(new Date()),
         messages,
       },
       // Stops generation, and billing, when the visitor closes the chat mid-reply.
